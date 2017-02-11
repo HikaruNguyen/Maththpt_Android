@@ -1,0 +1,321 @@
+package com.app.maththpt.activity;
+
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.app.maththpt.R;
+import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.database.QuestionDBHelper;
+import com.app.maththpt.databinding.ActivityQuestionBinding;
+import com.app.maththpt.eventbus.ShareQuestionEvent;
+import com.app.maththpt.eventbus.XemDapAnEvent;
+import com.app.maththpt.fragment.QuestionWVFragment;
+import com.app.maththpt.model.Category;
+import com.app.maththpt.model.Question;
+import com.app.maththpt.utils.CLog;
+import com.app.maththpt.viewmodel.BaseViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+public class QuestionActivity extends BaseActivity {
+    private static final String TAG = QuestionActivity.class.getSimpleName();
+    private static final String FORMAT = "%02d:%02d:%02d";
+    private ViewPager viewPager;
+    public List<Question> list;
+    private int type;
+    private String title;
+    private int cateID;
+    private LinearLayout lnErrorView;
+    private int positionCurrent = 0;
+    private List<Category> listCategory;
+    private int soCau;
+    private long time;
+    private CountDownTimer countDownTimer;
+    private LinearLayout pager_indicator;
+    private int dotsCount;
+    private ImageView[] dots;
+    private List<Fragment> fragmentList;
+    private ActivityQuestionBinding activityQuestionBinding;
+    private BaseViewModel baseViewModel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activityQuestionBinding = DataBindingUtil.setContentView(this, R.layout.activity_question);
+        getData();
+        initUI();
+        setSupportActionBar(activityQuestionBinding.toolbar);
+        activityQuestionBinding.setMytoolbar(baseViewModel);
+        bindData();
+        event();
+        if (type == Configuaration.TYPE_KIEMTRA && list != null && list.size() > 0) {
+            countDown();
+        }
+    }
+
+    private void event() {
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                positionCurrent = position;
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+                }
+
+                dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+
+//                if (position + 1 == dotsCount) {
+//                    btnNext.setVisibility(View.GONE);
+//                    btnFinish.setVisibility(View.VISIBLE);
+//                } else {
+//                    btnNext.setVisibility(View.VISIBLE);
+//                    btnFinish.setVisibility(View.GONE);
+//                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void getData() {
+        Intent intent = getIntent();
+        type = intent.getIntExtra("type", Configuaration.TYPE_ONTAP);
+        if (type == Configuaration.TYPE_ONTAP) {
+            title = intent.getStringExtra("title");
+            cateID = intent.getIntExtra("cateID", 0);
+        } else if (type == Configuaration.TYPE_KIEMTRA) {
+            title = getString(R.string.exam);
+            cateID = 0;
+            listCategory = intent.getParcelableArrayListExtra("listCate");
+            CLog.d(TAG, "listCategory SIZE:" + listCategory.size());
+            soCau = intent.getIntExtra("soCau", 5);
+            time = intent.getIntExtra("time", (int) (0.5 * 60 * 1000));
+        }
+        baseViewModel = new BaseViewModel(this, title);
+    }
+
+    private void countDown() {
+        countDownTimer = new CountDownTimer(time, 1000) { // adjust the milli seconds here
+
+            public void onTick(long millisUntilFinished) {
+
+//                setTitleToolbar("" + String.format(FORMAT,
+//                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+//                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+//                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                baseViewModel.title = "" + String.format(FORMAT,
+                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                baseViewModel.notifyChange();
+            }
+
+            public void onFinish() {
+//                setTitleToolbar(getString(R.string.hetGio));
+                baseViewModel.title = getString(R.string.hetGio);
+                baseViewModel.notifyChange();
+                nopBai();
+            }
+        };
+        countDownTimer.start();
+
+    }
+
+    ViewPagerAdapter pagerAdapter;
+
+    private void bindData() {
+        list = new ArrayList<>();
+        if (type == Configuaration.TYPE_ONTAP) {
+            list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
+        } else if (type == Configuaration.TYPE_KIEMTRA) {
+            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
+            if (list.size() > 0) {
+                Collections.shuffle(list);
+            }
+        }
+//        for (int i = 0; i < 45; i++) {
+//            list.add(list.get(0));
+//        }
+        if (list != null && list.size() > 0) {
+            fragmentList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
+            }
+            pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setOffscreenPageLimit(list.size());
+            setUiPageViewController();
+        } else {
+            lnErrorView.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void setUiPageViewController() {
+
+        dotsCount = pagerAdapter.getCount();
+        dots = new ImageView[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+
+            pager_indicator.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+    }
+
+    private void initUI() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
+        lnErrorView = (LinearLayout) findViewById(R.id.lnErrorView);
+        setBackButtonToolbar();
+//        setTitleToolbar(title);
+
+    }
+
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragmentList = new ArrayList<>();
+        private boolean isXemKQ;
+
+        ViewPagerAdapter(FragmentManager manager, List<Fragment> fragmentList, boolean isXemKQ) {
+            super(manager);
+            this.isXemKQ = isXemKQ;
+            this.fragmentList = fragmentList;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+//            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "";
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if (type == Configuaration.TYPE_ONTAP) {
+            getMenuInflater().inflate(R.menu.menu_quiz, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_kiemtra, menu);
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        } else if (id == R.id.action_xemDA) {
+            if (list != null && list.size() > 0)
+                EventBus.getDefault().post(new XemDapAnEvent(positionCurrent + 1));
+        } else if (id == R.id.action_Share) {
+            if (list != null && list.size() > 0) {
+                EventBus.getDefault().post(new ShareQuestionEvent(positionCurrent + 1));
+            }
+        } else if (id == R.id.action_nopBai) {
+            if (list != null && list.size() > 0) {
+                if (countDownTimer != null)
+                    countDownTimer.cancel();
+                nopBai();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void nopBai() {
+        for (int i = 0; i < list.size(); i++) {
+            QuestionWVFragment fragment = (QuestionWVFragment) pagerAdapter.getItem(i);
+            if (list.get(i).answerList.get(0).isCorrect) {
+                if (fragment.webView.answer == 1) {
+                    list.get(i).isCorrect = true;
+                } else {
+                    list.get(i).isCorrect = false;
+                }
+            } else if (list.get(i).answerList.get(1).isCorrect) {
+                if (fragment.webView.answer == 2) {
+                    list.get(i).isCorrect = true;
+                } else {
+                    list.get(i).isCorrect = false;
+                }
+            } else if (list.get(i).answerList.get(2).isCorrect) {
+                if (fragment.webView.answer == 3) {
+                    list.get(i).isCorrect = true;
+                } else {
+                    list.get(i).isCorrect = false;
+                }
+            } else if (list.get(i).answerList.get(3).isCorrect) {
+                if (fragment.webView.answer == 4) {
+                    list.get(i).isCorrect = true;
+                } else {
+                    list.get(i).isCorrect = false;
+                }
+            }
+
+        }
+        Intent intent = new Intent(this, ChamDiemActivity.class);
+        intent.putParcelableArrayListExtra("listAnswer", (ArrayList<? extends Parcelable>) list);
+        intent.putParcelableArrayListExtra("listCate", (ArrayList<? extends Parcelable>) listCategory);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer != null)
+            countDownTimer.cancel();
+    }
+}

@@ -1,0 +1,127 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/svQuestion"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.app.maththpt.fragment.HomeFragment">
+
+    <LinearLayout
+        android:id="@+id/lnQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <com.app.maththpt.widget.MathView
+            android:id="@+id/tv_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            auto:engine="MathJax"
+            auto:text="" />
+
+        <com.app.maththpt.widget.ResizableImageViewByWidth
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp" />
+
+        <LinearLayout
+            android:id="@+id/lnA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="A."
+                android:textStyle="bold" />
+
+            <com.app.maththpt.widget.MathView
+                android:id="@+id/tv_answerA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                auto:engine="MathJax"
+                auto:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="B."
+                android:textStyle="bold" />
+
+            <com.app.maththpt.widget.MathView
+                android:id="@+id/tv_answerB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                auto:engine="MathJax"
+                auto:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="C."
+                android:textStyle="bold" />
+
+            <com.app.maththpt.widget.MathView
+                android:id="@+id/tv_answerC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                auto:engine="MathJax"
+                auto:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="D."
+                android:textStyle="bold" />
+
+            <com.app.maththpt.widget.MathView
+                android:id="@+id/tv_answerD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                auto:engine="MathJax"
+                auto:text="" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.app.quizmanhnd.activity.MainActivity">
+    <item
+        android:id="@+id/action_Share"
+        android:icon="@mipmap/ic_share"
+        android:orderInCategory="100"
+        android:title="@string/share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_xemDA"
+        android:icon="@mipmap/ic_check"
+        android:orderInCategory="100"
+        android:title="@string/xemDapAn"
+        app:showAsAction="always" />
+</menu>

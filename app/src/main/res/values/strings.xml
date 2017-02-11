@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">MathTHPT</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Trang chủ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chuyenDe">Chuyên đề</string>
+    <string name="leoNui">Leo núi</string>
+    <string name="exam">Kiểm tra</string>
+    <string name="error_connect">Kiểm tra kết nội mạng và thử lại!</string>
+    <string name="questionNo">Câu</string>
+    <string name="no_data">Chưa có dữ liệu</string>
+    <string name="xemDapAn">Xem đáp án</string>
+    <string name="login">Đăng nhập</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="facebook_app_id">257230331370072</string>
+    <string name="share">Chia sẽ</string>
+    <string name="reqKT">Vui lòng chọn câu hỏi và thời gian kiểm tra</string>
+    <string name="soCauKT">Số Câu Hỏi Kiểm Tra</string>
+    <string name="thoiGianLamBai">Thời gian làm bài</string>
+    <string name="chonChuDe">Chọn chủ đề</string>
+    <string name="lamBai">Làm bài</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Thoát</string>
+    <string name="question">Câu hỏi</string>
+    <string name="banChuaChonChuDe">Bạn chưa chọn chủ đề</string>
+    <string name="nopBai">Nộp bài</string>
+    <string name="yourPoint">Điểm của bạn</string>
+    <string name="hetGio">Hết giờ</string>
+    <string name="chiTiet">Chi tiết</string>
+    <string name="loading">Đang tải, vui lòng đợi trong giây lát</string>
+    <string name="loginFB">Đăng nhập Facebook</string>
+    <string name="logout">Đăng xuất</string>
+</resources>
