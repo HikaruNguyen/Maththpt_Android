@@ -5,16 +5,16 @@ android {
         config {
             keyAlias 'maththptAndroid'
             keyPassword 'maththptAndroid'
-            storeFile file('E:/HOCTAP/DOAN/project/MyApplication/keystore.jks')
+            storeFile file("${project.rootDir}/keystore.jks")
             storePassword 'maththptAndroid'
         }
     }
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.app.maththpt"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -40,17 +40,17 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/chunk-templates-3.0.1.jar')
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
 //    compile 'io.github.kexanie.library:MathView:0.0.6'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:support-v4:25.1.1'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support:support-annotations:25.0.0'
+    androidTestCompile 'com.android.support:support-annotations:25.1.1'
+//    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 }
