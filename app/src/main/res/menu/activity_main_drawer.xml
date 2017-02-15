@@ -13,6 +13,10 @@
             android:icon="@mipmap/ic_ontap"
             android:title="@string/chuyenDe" />
         <item
+            android:id="@+id/nav_boDe"
+            android:icon="@mipmap/ic_ontap"
+            android:title="@string/boDe" />
+        <item
             android:id="@+id/nav_kiemTra"
             android:icon="@mipmap/ic_exam"
             android:title="@string/exam" />
@@ -27,16 +31,16 @@
     </group>
 
     <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:icon="@drawable/ic_menu_share"-->
-                <!--android:title="Share" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
-        <!--</menu>-->
+    <!--<menu>-->
+    <!--<item-->
+    <!--android:id="@+id/nav_share"-->
+    <!--android:icon="@drawable/ic_menu_share"-->
+    <!--android:title="Share" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_send"-->
+    <!--android:icon="@drawable/ic_menu_send"-->
+    <!--android:title="Send" />-->
+    <!--</menu>-->
     <!--</item>-->
 
 </menu>

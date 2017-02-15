@@ -95,8 +95,11 @@ public class CustomeWebView extends WebView {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 //            prbLoading.setVisibility(View.GONE);
-            if (HomeFragment.progressDialog != null && HomeFragment.progressDialog.isShowing())
-                HomeFragment.progressDialog.dismiss();
+            if (HomeFragment.progressDialog != null && HomeFragment.progressDialog.isShowing()) {
+                if (getContext() != null)
+                    HomeFragment.progressDialog.dismiss();
+            }
+
         }
 
 

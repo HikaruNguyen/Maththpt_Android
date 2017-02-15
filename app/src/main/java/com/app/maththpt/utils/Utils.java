@@ -29,29 +29,6 @@ public class Utils {
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
-    public static String getAvatarFBFromAddress(String address) {
-        URL url;
-        String newLocation = null;
-        try {
-            url = new URL(address);
-            HttpURLConnection.setFollowRedirects(false); //Do _not_ follow redirects!
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            newLocation = connection.getHeaderField("Location");
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return newLocation;
-    }
-
-    public static String addressAvatarFB(String name_or_idUser) {
-        return "http://graph.facebook.com/" + name_or_idUser + "/picture?type=large";
-    }
-
     public static Bitmap loadBitmapFromView(View v, int width, int height) {
         Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);

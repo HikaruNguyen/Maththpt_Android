@@ -37,4 +37,6 @@
     <string name="loading">Đang tải, vui lòng đợi trong giây lát</string>
     <string name="loginFB">Đăng nhập Facebook</string>
     <string name="logout">Đăng xuất</string>
+    <string name="boDe">Bộ đề</string>
+    <string name="user_profile">Thông tin cá nhân</string>
 </resources>

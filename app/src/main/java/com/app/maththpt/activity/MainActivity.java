@@ -34,6 +34,8 @@ import com.app.maththpt.databinding.NavHeaderMainBinding;
 import com.app.maththpt.fragment.CategoryFragment;
 import com.app.maththpt.fragment.KiemTraFragment;
 import com.app.maththpt.model.ItemMenu;
+import com.app.maththpt.utils.CLog;
+import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.MainViewModel;
 import com.app.maththpt.viewmodel.NavHeaderMainViewModel;
 import com.app.maththpt.widget.CRecyclerView;
@@ -44,18 +46,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import static com.facebook.AccessToken.getCurrentAccessToken;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int LOGIN_CODE = 11;
-    private CRecyclerView rvSlide;
-    private NavigationAdapter navigationAdapter;
-    private List<ItemMenu> itemMenus;
-    private boolean isClicked = false;
-    private LinearLayout lnHeader;
     private SharedPreferences sharedPreferences;
-    //    private ImageView imgAvatar;
-//    private TextView tvName, tvEmail;
     private MainViewModel mainViewModel;
     ActivityMainBinding activityMainBinding;
     private NavHeaderMainBinding navHeaderMainBinding;
@@ -67,72 +64,88 @@ public class MainActivity extends AppCompatActivity
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainViewModel = new MainViewModel(this);
         activityMainBinding.setViewModelMain(mainViewModel);
+        sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         initUI();
         bindData();
         event();
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    BuildConfig.APPLICATION_ID,
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+        if (BuildConfig.DEBUG) {
+            try {
+                PackageInfo info = getPackageManager().getPackageInfo(
+                        BuildConfig.APPLICATION_ID,
+                        PackageManager.GET_SIGNATURES);
+                for (Signature signature : info.signatures) {
+                    MessageDigest md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                }
+            } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+                e.printStackTrace();
             }
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
+
     }
 
     private void event() {
         navHeaderMainBinding.lnHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, LOGIN_CODE);
+                if (!FacebookUtils.getFacebookID().isEmpty()) {
+                    Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_CODE);
+                }
+
             }
         });
     }
 
     private void bindData() {
+        if (FacebookUtils.isExpires()) {
+            LoginManager.getInstance().logOut();
+            sharedPreferences.edit().clear().commit();
+        }
         changeFragment(new CategoryFragment());
         bindNav();
 
     }
 
     private void bindNav() {
-        sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
-        String id = sharedPreferences.getString(Configuaration.KEY_IDFB, "");
+
         String name = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
-        String avatar = sharedPreferences.getString(Configuaration.KEY_AVATAR, "");
-        if (!id.isEmpty()) {
+        if (!FacebookUtils.getFacebookID().isEmpty()) {
 
             if (!name.isEmpty()) {
-//                tvName.setText(name);
                 navHeaderMainViewModel.getUserName = name;
             }
             if (!email.isEmpty()) {
-//                tvEmail.setText(email);
                 navHeaderMainViewModel.getEmail = email;
             }
-            if (!avatar.isEmpty()) {
-//                Picasso.with(MainActivity.this).load(avatar).placeholder(R.mipmap.ic_avatar).into(imgAvatar);
-                navHeaderMainViewModel.getUserAvatar = avatar;
+            if (!FacebookUtils.getAvatarFBFromId().isEmpty()) {
+                navHeaderMainViewModel.getUserAvatar = FacebookUtils.getAvatarFBFromId();
             }
             navHeaderMainViewModel.notifyChange();
+            activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(true);
         } else {
             navHeaderMainViewModel.getUserName = getString(R.string.login);
             navHeaderMainViewModel.getEmail = getString(R.string.app_name);
             navHeaderMainViewModel.getUserAvatar = "";
             navHeaderMainViewModel.notifyChange();
+            activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(false);
         }
+
     }
 
     @BindingAdapter("android:srcUrl")
     public static void setImageUrl(ImageView view, String url) {
-        if (url != null && !url.trim().isEmpty())
+        if (url != null && !url.trim().isEmpty()) {
             Picasso.with(view.getContext()).load(url).placeholder(R.mipmap.ic_avatar).into(view);
+        } else {
+            Picasso.with(view.getContext()).load(R.mipmap.ic_avatar).into(view);
+        }
+
     }
 
     private void changeFragment(Fragment targetFragment) {
@@ -149,25 +162,6 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupNavigation();
-
-        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-//        rvSlide = (CRecyclerView) findViewById(R.id.rvSlide);
-//        navigationAdapter = new NavigationAdapter(this, new ArrayList<ItemMenu>());
-//        rvSlide.setAdapter(navigationAdapter);
-        View headerView = getLayoutInflater().inflate(R.layout.nav_header_main, navigationView, false);
-        navigationView.addHeaderView(headerView);
-        lnHeader = (LinearLayout) headerView.findViewById(R.id.lnHeader);
-        tvName = (TextView) headerView.findViewById(R.id.tvName);
-        tvEmail = (TextView) headerView.findViewById(R.id.tvEmail);
-        imgAvatar = (ImageView) headerView.findViewById(R.id.imgAvatar);*/
-
     }
 
     private void setupNavigation() {
@@ -187,27 +181,27 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -286,22 +280,7 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == LOGIN_CODE) {
-                String name = sharedPreferences.getString(Configuaration.KEY_NAME, "");
-                String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
-                String avatar = sharedPreferences.getString(Configuaration.KEY_AVATAR, "");
-                if (!name.isEmpty()) {
-//                tvName.setText(name);
-                    navHeaderMainViewModel.getUserName = name;
-                }
-                if (!email.isEmpty()) {
-//                tvEmail.setText(email);
-                    navHeaderMainViewModel.getEmail = email;
-                }
-                if (!avatar.isEmpty()) {
-//                Picasso.with(MainActivity.this).load(avatar).placeholder(R.mipmap.ic_avatar).into(imgAvatar);
-                    navHeaderMainViewModel.getUserAvatar = avatar;
-                }
-                navHeaderMainViewModel.notifyChange();
+                bindNav();
             }
         }
     }

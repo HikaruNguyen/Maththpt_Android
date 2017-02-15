@@ -13,6 +13,10 @@ public class BaseViewModel extends BaseObservable {
     public String title;
     private Activity activity;
 
+    public BaseViewModel() {
+
+    }
+
     public BaseViewModel(Activity activity, String title) {
         this.activity = activity;
         this.title = title;

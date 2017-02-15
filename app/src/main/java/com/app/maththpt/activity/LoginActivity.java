@@ -2,6 +2,8 @@ package com.app.maththpt.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
+import android.databinding.tool.DataBindingBuilder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,10 @@ import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.databinding.ActivityLoginBinding;
+import com.app.maththpt.utils.CLog;
+import com.app.maththpt.utils.Utils;
+import com.app.maththpt.viewmodel.LoginViewModel;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,17 +27,24 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import static com.facebook.AccessToken.getCurrentAccessToken;
+
 public class LoginActivity extends BaseActivity {
-    private Button btnLoginFB;
+    private static String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager callbackManager;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private ActivityLoginBinding loginBinding;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initUI();
+        loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        loginViewModel = new LoginViewModel(this, getString(R.string.login));
+        setSupportActionBar(loginBinding.toolbar);
+        loginBinding.setLoginViewModel(loginViewModel);
+        setBackButtonToolbar();
         bindData();
         event();
     }
@@ -53,10 +66,7 @@ public class LoginActivity extends BaseActivity {
                                     String email = object.optString("email");
                                     String name = object.optString("name");
                                     String fbid = object.optString("id");
-//                                    String avatar = Utils.addressAvatarFB(fbid);
-                                    editor.putString(Configuaration.KEY_IDFB, fbid);
                                     editor.putString(Configuaration.KEY_NAME, name);
-//                                    editor.putString(Configuaration.KEY_AVATAR, avatar);
                                     editor.putString(Configuaration.KEY_EMAIL, email);
                                     editor.commit();
                                     setResult(RESULT_OK);
@@ -97,7 +107,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void event() {
-        btnLoginFB.setOnClickListener(new View.OnClickListener() {
+        loginBinding.btnLoginFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends", "email"));
@@ -105,11 +115,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void initUI() {
-        setBackButtonToolbar();
-        setTitleToolbar(getString(R.string.login));
-        btnLoginFB = (Button) findViewById(R.id.btnLoginFB);
-    }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
