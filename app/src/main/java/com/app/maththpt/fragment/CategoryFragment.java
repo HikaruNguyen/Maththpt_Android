@@ -12,7 +12,6 @@ import com.app.maththpt.R;
 import com.app.maththpt.adapter.CategoryAdapter;
 import com.app.maththpt.databinding.FragmentCategoryBinding;
 import com.app.maththpt.model.Category;
-import com.app.maththpt.widget.CRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,9 @@ import java.util.List;
  */
 public class CategoryFragment extends Fragment {
 
-    private CRecyclerView rvChuyenDe;
     private CategoryAdapter adapter;
     private List<Category> list;
+    private FragmentCategoryBinding categoryBinding;
 
     public CategoryFragment() {
         // Required empty public constructor
@@ -35,9 +34,9 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 //        View view = inflater.inflate(R.layout.fragment_category, container, false);
-        FragmentCategoryBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
-        View view = binding.getRoot();
-        initUI(view);
+        categoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
+        View view = categoryBinding.getRoot();
+        initUI();
         bindData();
         return view;
     }
@@ -60,12 +59,11 @@ public class CategoryFragment extends Fragment {
         category = new Category(7, "Phương pháp tọa độ trong không gian Oxyz", R.mipmap.ic_oxyz);
         list.add(category);
         adapter.addAll(list);
-        rvChuyenDe.setAdapter(adapter);
+        categoryBinding.rvChuyenDe.setAdapter(adapter);
     }
 
-    private void initUI(View view) {
-        rvChuyenDe = (CRecyclerView) view.findViewById(R.id.rvChuyenDe);
-        rvChuyenDe.setDivider();
+    private void initUI() {
+        categoryBinding.rvChuyenDe.setDivider();
     }
 
 }

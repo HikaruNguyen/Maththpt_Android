@@ -5,8 +5,7 @@ package com.app.maththpt.config;
  */
 
 public class Configuaration {
-    public static int oldPostionProvince = 1;
-    public static String Pref = "Pref";
+    public static final String Pref = "Pref";
     public static final String KEY_NAME = "name_pref";
     public static final String KEY_ID = "id_pref";
     public static final String KEY_EMAIL = "email";

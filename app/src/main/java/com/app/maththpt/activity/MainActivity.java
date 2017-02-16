@@ -19,34 +19,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.app.maththpt.BuildConfig;
 import com.app.maththpt.R;
-import com.app.maththpt.adapter.NavigationAdapter;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.ActivityMainBinding;
 import com.app.maththpt.databinding.NavHeaderMainBinding;
 import com.app.maththpt.fragment.CategoryFragment;
 import com.app.maththpt.fragment.KiemTraFragment;
-import com.app.maththpt.model.ItemMenu;
-import com.app.maththpt.utils.CLog;
+import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.MainViewModel;
 import com.app.maththpt.viewmodel.NavHeaderMainViewModel;
-import com.app.maththpt.widget.CRecyclerView;
 import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
-import static com.facebook.AccessToken.getCurrentAccessToken;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -106,7 +98,7 @@ public class MainActivity extends AppCompatActivity
             LoginManager.getInstance().logOut();
             sharedPreferences.edit().clear().commit();
         }
-        changeFragment(new CategoryFragment());
+        changeFragment(new TestsFragment());
         bindNav();
 
     }
@@ -209,11 +201,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_home) {
-//            clearBackStack(getSupportFragmentManager());
-//            changeFragment(new HomeFragment());
-//        } else
-        if (id == R.id.nav_chuyenDe) {
+        if (id == R.id.nav_boDe) {
+            clearBackStack(getSupportFragmentManager());
+            changeFragment(new TestsFragment());
+        } else if (id == R.id.nav_chuyenDe) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new CategoryFragment());
         } else if (id == R.id.nav_kiemTra) {
@@ -221,7 +212,7 @@ public class MainActivity extends AppCompatActivity
             changeFragment(new KiemTraFragment());
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
-            sharedPreferences.edit().clear().commit();
+            sharedPreferences.edit().clear().apply();
             bindNav();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
