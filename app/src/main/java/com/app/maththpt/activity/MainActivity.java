@@ -29,6 +29,7 @@ import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.ActivityMainBinding;
 import com.app.maththpt.databinding.NavHeaderMainBinding;
 import com.app.maththpt.fragment.CategoryFragment;
+import com.app.maththpt.fragment.HistoryFragment;
 import com.app.maththpt.fragment.KiemTraFragment;
 import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
@@ -120,12 +121,14 @@ public class MainActivity extends AppCompatActivity
             }
             navHeaderMainViewModel.notifyChange();
             activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            activityMainBinding.navView.getMenu().findItem(R.id.nav_history).setVisible(true);
         } else {
             navHeaderMainViewModel.getUserName = getString(R.string.login);
             navHeaderMainViewModel.getEmail = getString(R.string.app_name);
             navHeaderMainViewModel.getUserAvatar = "";
             navHeaderMainViewModel.notifyChange();
             activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+            activityMainBinding.navView.getMenu().findItem(R.id.nav_history).setVisible(false);
         }
 
     }
@@ -210,6 +213,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_kiemTra) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new KiemTraFragment());
+        } else if (id == R.id.nav_history) {
+            clearBackStack(getSupportFragmentManager());
+            changeFragment(new HistoryFragment());
         } else if (id == R.id.nav_logout) {
             LoginManager.getInstance().logOut();
             sharedPreferences.edit().clear().apply();

@@ -39,4 +39,6 @@
     <string name="logout">Đăng xuất</string>
     <string name="boDe">Bộ đề</string>
     <string name="user_profile">Thông tin cá nhân</string>
+    <string name="email">Email</string>
+    <string name="lich_su_lam_bai">Lịch sử làm bài</string>
 </resources>

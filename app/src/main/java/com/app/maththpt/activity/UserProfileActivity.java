@@ -14,15 +14,22 @@ public class UserProfileActivity extends BaseActivity {
     private ActivityUserProfileBinding userProfileBinding;
     private UserProfileViewModel userProfileViewModel;
     private SharedPreferences sharedPreferences;
+    private String userName;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
         sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
-        userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile));
+        userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
+        email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
         setSupportActionBar(userProfileBinding.toolbar);
-        userProfileBinding.setUserProfileViewModel(userProfileViewModel);
         setBackButtonToolbar();
+        userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile), userName, email);
+
+        userProfileBinding.setUserProfileViewModel(userProfileViewModel);
+
+//        setBackButtonToolbar();
     }
 }
