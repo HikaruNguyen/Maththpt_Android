@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="test"
-            type="com.app.maththpt.model.Tests" />
+            name="point"
+            type="com.app.maththpt.model.Point" />
     </data>
 
     <LinearLayout
@@ -16,17 +16,17 @@
         android:padding="@dimen/activity_horizontal_margin">
 
         <TextView
-            android:id="@+id/tvName"
+            android:id="@+id/tvPoint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{test.displayname}"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            app:displayPoint="@{point.point}" />
 
         <TextView
-            android:id="@+id/tvAuthor"
+            android:id="@+id/tvDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{test.author}"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:displayDate="@{point.time}" />
     </LinearLayout>
 </layout>

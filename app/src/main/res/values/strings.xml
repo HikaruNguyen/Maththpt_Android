@@ -41,4 +41,6 @@
     <string name="user_profile">Thông tin cá nhân</string>
     <string name="email">Email</string>
     <string name="lich_su_lam_bai">Lịch sử làm bài</string>
+    <string name="datetime">Thời gian</string>
+    <string name="gotoHistory">Xem lịch sử</string>
 </resources>

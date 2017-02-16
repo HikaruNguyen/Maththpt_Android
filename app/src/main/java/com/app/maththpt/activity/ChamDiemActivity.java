@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.ChiTietDiemAdapter;
+import com.app.maththpt.database.HistoryDBHelper;
 import com.app.maththpt.databinding.ActivityChamDiemBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
@@ -50,6 +50,7 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
     int soCauDung = 0;
     private ActivityChamDiemBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
+    private HistoryDBHelper.HistoryDatabase historyDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +156,10 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
                 }
             }
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
+            historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
+            historyDatabase.open();
+            historyDatabase.addPointToHistory(String.valueOf(soCauDung * 10 / list.size()));
+            historyDatabase.close();
         }
 
     }

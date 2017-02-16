@@ -5,10 +5,10 @@ package com.app.maththpt.model;
  */
 
 public class Point {
-    public float point;
+    public String point;
     public String time;
 
-    public Point(float point, String time) {
+    public Point(String point, String time) {
         this.point = point;
         this.time = time;
     }

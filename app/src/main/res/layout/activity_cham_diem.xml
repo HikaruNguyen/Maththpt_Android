@@ -71,6 +71,14 @@
                     android:id="@+id/rvChiTiet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_primary"
+                    android:text="@string/gotoHistory" />
             </LinearLayout>
 
 
