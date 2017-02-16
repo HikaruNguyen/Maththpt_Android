@@ -17,6 +17,7 @@ import com.app.maththpt.databinding.FragmentTestsBinding;
 import com.app.maththpt.model.Tests;
 import com.app.maththpt.modelresult.TestsResult;
 import com.app.maththpt.utils.CLog;
+import com.app.maththpt.viewmodel.TestsViewModel;
 import com.app.maththpt.widget.PullToRefreshHeader;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import rx.schedulers.Schedulers;
 public class TestsFragment extends Fragment {
     private static final String TAG = TestsFragment.class.getSimpleName();
     private FragmentTestsBinding testsBinding;
+    private TestsViewModel testsViewModel;
     private TestsAdapter adapter;
     private MathThptService apiService;
     private Subscription mSubscription;
@@ -49,6 +51,8 @@ public class TestsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         testsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_tests, container, false);
+        testsViewModel = new TestsViewModel();
+        testsBinding.setTestsViewModel(testsViewModel);
         View view = testsBinding.getRoot();
         testsBinding.rvTests.setDivider();
         bindData();
@@ -90,6 +94,7 @@ public class TestsFragment extends Fragment {
                         if (testsBinding.ptrTests.isRefreshing()) {
                             testsBinding.ptrTests.refreshComplete();
                         }
+                        testsViewModel.setErrorVisiable(false);
                         adapter = new TestsAdapter(getActivity(), new ArrayList<Tests>());
                         if (mTestResult != null && mTestResult.data != null && mTestResult.data.size() > 0)
                             adapter.addAll(mTestResult.data);
@@ -101,8 +106,9 @@ public class TestsFragment extends Fragment {
                         if (testsBinding.ptrTests.isRefreshing()) {
                             testsBinding.ptrTests.refreshComplete();
                         }
+                        testsViewModel.setErrorVisiable(true);
                         CLog.d(TAG, "getListTest Error");
-                        Toast.makeText(getActivity(), getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

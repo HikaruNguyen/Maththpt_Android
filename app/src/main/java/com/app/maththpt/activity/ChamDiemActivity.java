@@ -1,6 +1,7 @@
 package com.app.maththpt.activity;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,9 +12,11 @@ import android.widget.TextView;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.ChiTietDiemAdapter;
+import com.app.maththpt.databinding.ActivityChamDiemBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
 import com.app.maththpt.model.Question;
+import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.app.maththpt.widget.DisableScrollRecyclerView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -36,22 +39,24 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
     private static final int[] VORDIPLOM_COLORS = {
             rgb("#2ecc71"), rgb("#f1c40f"), Color.rgb(255, 247, 140), Color.rgb(255, 208, 140),
             Color.rgb(140, 234, 255),};
-    private TextView tvPoint;
     private List<Question> list;
     private PieChart mChart;
     private Typeface mTfLight;
     private Typeface mTfRegular;
-    private float point;
     private List<Category> listCategory;
     private DisableScrollRecyclerView rvChiTiet;
     private ChiTietDiemAdapter adapter;
     private List<ChiTietDiem> chiTietDiems;
     int soCauDung = 0;
+    private ActivityChamDiemBinding chamDiemBinding;
+    private ChamDiemViewModel chamDiemViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cham_diem);
+        chamDiemBinding = DataBindingUtil.setContentView(this, R.layout.activity_cham_diem);
+        chamDiemViewModel = new ChamDiemViewModel(this, getString(R.string.yourPoint));
+        chamDiemBinding.setChamDiemViewModel(chamDiemViewModel);
         getData();
         initUI();
         bindData();
@@ -149,17 +154,15 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
                     soCauDung++;
                 }
             }
+            chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
         }
-        point = soCauDung * 10 / list.size();
-        tvPoint.setText(getString(R.string.yourPoint) + ": " + String.format("%.2f", point));
+
     }
 
     private void initUI() {
         setBackButtonToolbar();
-        setTitleToolbar(getString(R.string.yourPoint));
-        tvPoint = (TextView) findViewById(R.id.tvPoint);
-        mChart = (PieChart) findViewById(R.id.chart1);
-        rvChiTiet = (DisableScrollRecyclerView) findViewById(R.id.rvChiTiet);
+        mChart = chamDiemBinding.chart1;
+        rvChiTiet = chamDiemBinding.rvChiTiet;
         rvChiTiet.setDivider();
         adapter = new ChiTietDiemAdapter(this, new ArrayList<ChiTietDiem>());
         rvChiTiet.setAdapter(adapter);

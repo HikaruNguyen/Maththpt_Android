@@ -11,7 +11,7 @@ import android.databinding.Bindable;
 public class BaseViewModel extends BaseObservable {
     @Bindable
     public String title;
-    private Activity activity;
+    public Activity activity;
 
     public BaseViewModel() {
 
