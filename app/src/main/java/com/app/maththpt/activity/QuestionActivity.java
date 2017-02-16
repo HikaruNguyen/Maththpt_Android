@@ -14,16 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.database.QuestionDBHelper;
 import com.app.maththpt.databinding.ActivityQuestionBinding;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.eventbus.XemDapAnEvent;
 import com.app.maththpt.fragment.QuestionWVFragment;
+import com.app.maththpt.model.Answer;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.Question;
+import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.BaseViewModel;
 
@@ -33,6 +37,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class QuestionActivity extends BaseActivity {
     private static final String TAG = QuestionActivity.class.getSimpleName();
@@ -54,6 +63,10 @@ public class QuestionActivity extends BaseActivity {
     private List<Fragment> fragmentList;
     private ActivityQuestionBinding activityQuestionBinding;
     private BaseViewModel baseViewModel;
+    private String testID;
+    private Subscription mSubscription;
+    private MathThptService apiService;
+    private DetailTestsResult mDetailTestsResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +128,10 @@ public class QuestionActivity extends BaseActivity {
             CLog.d(TAG, "listCategory SIZE:" + listCategory.size());
             soCau = intent.getIntExtra("soCau", 5);
             time = intent.getIntExtra("time", (int) (0.5 * 60 * 1000));
+        } else if (type == Configuaration.TYPE_BODE) {
+            title = intent.getStringExtra("title");
+            testID = intent.getStringExtra("testID");
+//            Toast.makeText(this, testID, Toast.LENGTH_SHORT).show();
         }
         baseViewModel = new BaseViewModel(this, title);
     }
@@ -154,17 +171,80 @@ public class QuestionActivity extends BaseActivity {
 
     private void bindData() {
         list = new ArrayList<>();
-        if (type == Configuaration.TYPE_ONTAP) {
-            list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
-        } else if (type == Configuaration.TYPE_KIEMTRA) {
-            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
-            if (list.size() > 0) {
-                Collections.shuffle(list);
+        if (type == Configuaration.TYPE_BODE) {
+            apiService = MyApplication.with(this).getMaththptSerivce();
+            if (mSubscription != null && !mSubscription.isUnsubscribed())
+                mSubscription.unsubscribe();
+            mSubscription = apiService.getContent(2, testID, 1)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<DetailTestsResult>() {
+                        @Override
+                        public void onCompleted() {
+                            if (mDetailTestsResult.data != null && mDetailTestsResult.data.size() > 0) {
+                                for (int i = 0; i < mDetailTestsResult.data.size(); i++) {
+                                    List<Answer> answerList = new ArrayList<>();
+                                    if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 1) {
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, true));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 2) {
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, true));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 3) {
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 4) {
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
+                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                                    }
+                                    Question question = new Question(Integer.parseInt(mDetailTestsResult.data.get(i).id),
+                                            mDetailTestsResult.data.get(i).question,
+                                            mDetailTestsResult.data.get(i).image,
+                                            answerList,
+                                            Integer.parseInt(mDetailTestsResult.data.get(i).cateID));
+                                    list.add(question);
+                                }
+                                genQuestion();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            CLog.d(TAG, "getListTest Error");
+//                        Toast.makeText(getActivity(), getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNext(DetailTestsResult detailTestsResult) {
+                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                                mDetailTestsResult = detailTestsResult;
+                            }
+                        }
+                    });
+        } else {
+            if (type == Configuaration.TYPE_ONTAP) {
+                list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
+            } else if (type == Configuaration.TYPE_KIEMTRA) {
+                list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
+                if (list.size() > 0) {
+                    Collections.shuffle(list);
+                }
             }
+            genQuestion();
         }
-//        for (int i = 0; i < 45; i++) {
-//            list.add(list.get(0));
-//        }
+
+
+    }
+
+    private void genQuestion() {
         if (list != null && list.size() > 0) {
             fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
@@ -177,7 +257,6 @@ public class QuestionActivity extends BaseActivity {
         } else {
             lnErrorView.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void setUiPageViewController() {

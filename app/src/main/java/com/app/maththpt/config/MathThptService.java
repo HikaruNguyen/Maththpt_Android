@@ -3,6 +3,7 @@ package com.app.maththpt.config;
 import android.content.Context;
 
 import com.app.maththpt.BuildConfig;
+import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.modelresult.TestsResult;
 import com.app.maththpt.network.NullOnEmptyConverterFactory;
 import com.app.maththpt.network.RxErrorHandlingCallAdapterFactory;
@@ -18,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -27,6 +29,9 @@ import rx.Observable;
 public interface MathThptService {
     @GET("get-test.php")
     Observable<TestsResult> getTests();
+
+    @GET("get-content.php")
+    Observable<DetailTestsResult> getContent(@Query("type") int type, @Query("testID") String testID, @Query("page") int page);
 
     class Factory {
 

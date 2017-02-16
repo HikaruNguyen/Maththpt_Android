@@ -1,17 +1,19 @@
 package com.app.maththpt.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.app.maththpt.BR;
 import com.app.maththpt.R;
+import com.app.maththpt.activity.QuestionActivity;
+import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Tests;
 
 import java.util.List;
@@ -51,15 +53,12 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
 
             mViewDataBinding = viewDataBinding;
             mViewDataBinding.executePendingBindings();
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Intent intent = new Intent(mContext, QuestionActivity.class);
-//                    intent.putExtra("title", list.get(getAdapterPosition()).name);
-//                    intent.putExtra("type", Configuaration.TYPE_ONTAP);
-//                    intent.putExtra("cateID", list.get(getAdapterPosition()).id);
-//                    mContext.startActivity(intent);
-                }
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(mContext, QuestionActivity.class);
+                intent.putExtra("title", list.get(getAdapterPosition()).displayname);
+                intent.putExtra("type", Configuaration.TYPE_BODE);
+                intent.putExtra("testID", list.get(getAdapterPosition()).id+"");
+                mContext.startActivity(intent);
             });
         }
 
