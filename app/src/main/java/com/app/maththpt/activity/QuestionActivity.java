@@ -1,5 +1,6 @@
 package com.app.maththpt.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
@@ -139,27 +139,18 @@ public class QuestionActivity extends BaseActivity {
     private void countDown() {
         countDownTimer = new CountDownTimer(time, 1000) { // adjust the milli seconds here
 
+            @SuppressLint("DefaultLocale")
             public void onTick(long millisUntilFinished) {
-
-//                setTitleToolbar("" + String.format(FORMAT,
-//                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
-//                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-//                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
-                baseViewModel.title = "" + String.format(FORMAT,
+                baseViewModel.setTitle("" + String.format(FORMAT,
                         TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
                                 TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-                baseViewModel.notifyChange();
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
             }
 
             public void onFinish() {
-//                setTitleToolbar(getString(R.string.hetGio));
-                baseViewModel.title = getString(R.string.hetGio);
-                baseViewModel.notifyChange();
+                baseViewModel.setTitle(getString(R.string.hetGio));
                 nopBai();
             }
         };
@@ -286,7 +277,6 @@ public class QuestionActivity extends BaseActivity {
         pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
         lnErrorView = (LinearLayout) findViewById(R.id.lnErrorView);
         setBackButtonToolbar();
-//        setTitleToolbar(title);
 
     }
 
@@ -322,7 +312,7 @@ public class QuestionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (type == Configuaration.TYPE_ONTAP) {
+        if (type == Configuaration.TYPE_ONTAP || type == Configuaration.TYPE_BODE) {
             getMenuInflater().inflate(R.menu.menu_quiz, menu);
         } else {
             getMenuInflater().inflate(R.menu.menu_kiemtra, menu);

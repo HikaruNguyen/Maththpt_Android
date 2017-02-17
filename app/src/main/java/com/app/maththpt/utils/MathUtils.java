@@ -5,7 +5,7 @@ package com.app.maththpt.utils;
  */
 
 public class MathUtils {
-    public String doan1 = "<!DOCTYPE html>\n" +
+    private String doan1 = "<!DOCTYPE html>\n" +
             "<html lang=\"en\">\n" +
             "<head>\n" +
             "    <meta charset=\"UTF-8\">\n" +
@@ -20,15 +20,15 @@ public class MathUtils {
 
     public String question = "";
 
-    public String doan2 = "</div>\n" +
+    private String doan2 = "</div>\n" +
             "    <div class=\"cauhoi_anh\">";
 
-    public String doan2_1 = "<img width=\"100%\" src='";
-    public String doan2_2 = "<img src='";
+    private String doan2_1 = "<img width=\"100%\" src='";
+    private String doan2_2 = "<img src='";
 
     public String image = "";
 
-    public String doan3 = "'/>" +
+    private String doan3 = "'/>" +
             "</div>\n" +
             "</div>\n" +
             "<div class=\"dapan\">\n" +
@@ -39,7 +39,7 @@ public class MathUtils {
 
     public String answer1 = "";
 
-    public String doan4 = "</div>\n" +
+    private String doan4 = "</div>\n" +
             "\n" +
             "    <div id=\"answer_2\">\n" +
             "        <input type=\"radio\" name=\"answer\" value=\"2\">" +
@@ -47,21 +47,21 @@ public class MathUtils {
 
     public String answer2 = "";
 
-    public String doan5 = "</div>\n" +
+    private String doan5 = "</div>\n" +
             "    <div id=\"answer_3\">\n" +
             "        <input type=\"radio\" name=\"answer\" value=\"3\">" +
             "<b>C. </b>";
 
     public String answer3 = "";
 
-    public String doan6 = "</div>\n" +
+    private String doan6 = "</div>\n" +
             "    <div id=\"answer_4\">\n" +
             "        <input type=\"radio\" name=\"answer\" value=\"4\">" +
             "<b>D. </b>";
 
     public String answer4 = "";
 
-    public String doan7 = "</div>\n" +
+    private String doan7 = "</div>\n" +
             "\n" +
             "\n" +
             "</div>\n" +
@@ -113,7 +113,7 @@ public class MathUtils {
             "</html>";
 
     public String htmlContain() {
-        if (image == null || image.trim().isEmpty()) {
+        if (image == null || image.trim().isEmpty() || !image.startsWith("data:")) {
             return doan1 + question + doan2 + doan2_2 + image + doan3 + answer1 + doan4 + answer2 + doan5 + answer3 + doan6 + answer4 + doan7;
 
         } else {

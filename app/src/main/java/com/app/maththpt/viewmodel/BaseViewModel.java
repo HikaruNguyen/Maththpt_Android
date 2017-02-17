@@ -23,4 +23,9 @@ public class BaseViewModel extends BaseObservable {
 
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+        notifyChange();
+    }
+
 }

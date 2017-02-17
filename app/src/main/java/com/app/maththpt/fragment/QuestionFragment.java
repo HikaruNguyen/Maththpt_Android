@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
@@ -86,72 +85,60 @@ public class QuestionFragment extends Fragment {
     }
 
     private void event() {
-        rbA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    rbB.setChecked(false);
-                    rbC.setChecked(false);
-                    rbD.setChecked(false);
-                    if (question.answerList.get(0).isCorrect) {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
-                        Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
-                    }
+        rbA.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                rbB.setChecked(false);
+                rbC.setChecked(false);
+                rbD.setChecked(false);
+                if (question.answerList.get(0).isCorrect) {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
+                    Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
+                } else {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
                 }
-
             }
+
         });
-        rbB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    rbA.setChecked(false);
-                    rbC.setChecked(false);
-                    rbD.setChecked(false);
-                    if (question.answerList.get(1).isCorrect) {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
-                        Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
-                    }
+        rbB.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                rbA.setChecked(false);
+                rbC.setChecked(false);
+                rbD.setChecked(false);
+                if (question.answerList.get(1).isCorrect) {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
+                    Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
+                } else {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
                 }
             }
         });
-        rbC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    rbB.setChecked(false);
-                    rbA.setChecked(false);
-                    rbD.setChecked(false);
-                    if (question.answerList.get(2).isCorrect) {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
-                        Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
-                    }
+        rbC.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                rbB.setChecked(false);
+                rbA.setChecked(false);
+                rbD.setChecked(false);
+                if (question.answerList.get(2).isCorrect) {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
+                    Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
+                } else {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
                 }
-
             }
+
         });
-        rbD.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    rbB.setChecked(false);
-                    rbC.setChecked(false);
-                    rbA.setChecked(false);
-                    if (question.answerList.get(3).isCorrect) {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
-                        Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
-                    } else {
-                        ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
-                    }
+        rbD.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                rbB.setChecked(false);
+                rbC.setChecked(false);
+                rbA.setChecked(false);
+                if (question.answerList.get(3).isCorrect) {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = true;
+                    Toast.makeText(getActivity(), "True", Toast.LENGTH_SHORT).show();
+                } else {
+                    ((QuestionActivity) getActivity()).list.get(position - 1).isCorrect = false;
                 }
-
             }
+
         });
     }
 
