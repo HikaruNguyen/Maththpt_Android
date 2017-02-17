@@ -42,7 +42,7 @@ public class CategoryFragment extends Fragment {
     }
 
     private void bindData() {
-        adapter = new CategoryAdapter(getActivity(), new ArrayList<Category>());
+        adapter = new CategoryAdapter(getActivity(), new ArrayList<>());
         list = new ArrayList<>();
         Category category = new Category(1, "Khảo sát đồ thị hàm số", R.mipmap.icon_khaosat);
         list.add(category);

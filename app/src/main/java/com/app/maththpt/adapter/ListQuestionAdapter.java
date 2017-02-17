@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
 import com.app.maththpt.R;
@@ -73,55 +72,40 @@ public class ListQuestionAdapter extends BaseRecyclerAdapter<Question, ListQuest
             rbD = (RadioButton) view.findViewById(R.id.rbD);
 
             image = (ResizableImageViewByWidth) view.findViewById(R.id.image);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(v -> {
 
-                }
             });
 
-            rbA.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        rbB.setChecked(false);
-                        rbC.setChecked(false);
-                        rbD.setChecked(false);
-                    }
+            rbA.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    rbB.setChecked(false);
+                    rbC.setChecked(false);
+                    rbD.setChecked(false);
+                }
 
+            });
+            rbB.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    rbA.setChecked(false);
+                    rbC.setChecked(false);
+                    rbD.setChecked(false);
                 }
             });
-            rbB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        rbA.setChecked(false);
-                        rbC.setChecked(false);
-                        rbD.setChecked(false);
-                    }
+            rbC.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    rbB.setChecked(false);
+                    rbA.setChecked(false);
+                    rbD.setChecked(false);
                 }
-            });
-            rbC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        rbB.setChecked(false);
-                        rbA.setChecked(false);
-                        rbD.setChecked(false);
-                    }
 
-                }
             });
-            rbD.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        rbB.setChecked(false);
-                        rbC.setChecked(false);
-                        rbA.setChecked(false);
-                    }
-
+            rbD.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    rbB.setChecked(false);
+                    rbC.setChecked(false);
+                    rbA.setChecked(false);
                 }
+
             });
         }
 

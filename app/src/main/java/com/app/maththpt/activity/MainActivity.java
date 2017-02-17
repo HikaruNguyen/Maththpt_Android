@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.app.maththpt.BuildConfig;
@@ -80,18 +79,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void event() {
-        navHeaderMainBinding.lnHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!FacebookUtils.getFacebookID().isEmpty()) {
-                    Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, CODE_LOGIN);
-                }
-
+        navHeaderMainBinding.lnHeader.setOnClickListener(view -> {
+            if (!FacebookUtils.getFacebookID().isEmpty()) {
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, CODE_LOGIN);
             }
+
         });
     }
 

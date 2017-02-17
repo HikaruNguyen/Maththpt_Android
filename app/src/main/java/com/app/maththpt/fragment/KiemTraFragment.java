@@ -2,7 +2,6 @@ package com.app.maththpt.fragment;
 
 
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
@@ -64,81 +62,56 @@ public class KiemTraFragment extends Fragment {
     }
 
     private void event() {
-        btnLamBai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnLamBai.setOnClickListener(view -> {
 
-                List<Category> categories = new ArrayList<Category>();
-                for (int i = 0; i < adapter.getItemCount(); i++) {
-                    if (adapter.getItembyPostion(i).isChecked) {
-                        categories.add(adapter.getItembyPostion(i));
-                    }
+            List<Category> categories = new ArrayList<>();
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                if (adapter.getItembyPostion(i).isChecked) {
+                    categories.add(adapter.getItembyPostion(i));
                 }
-                if (categories.size() == 0) {
-                    Toast.makeText(getActivity(), getString(R.string.banChuaChonChuDe), Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(getActivity(), QuestionActivity.class);
-                    intent.putParcelableArrayListExtra("listCate", (ArrayList<? extends Parcelable>) categories);
-                    intent.putExtra("type", Configuaration.TYPE_KIEMTRA);
-                    intent.putExtra("soCau", soCau);
-                    intent.putExtra("time", time);
-                    startActivityForResult(intent, CODE_CHAM_DIEM);
-                }
-
             }
+            if (categories.size() == 0) {
+                Toast.makeText(getActivity(), getString(R.string.banChuaChonChuDe),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(getActivity(), QuestionActivity.class);
+                intent.putParcelableArrayListExtra(
+                        "listCate", (ArrayList<? extends Parcelable>) categories);
+                intent.putExtra("type", Configuaration.TYPE_KIEMTRA);
+                intent.putExtra("soCau", soCau);
+                intent.putExtra("time", time);
+                startActivityForResult(intent, CODE_CHAM_DIEM);
+            }
+
         });
-        lnSoCau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(getString(R.string.soCauKT));
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_socau, null);
-                builder.setView(dialogView);
+        lnSoCau.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.soCauKT));
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_socau, null);
+            builder.setView(dialogView);
 
-                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                NumberPicker np = (NumberPicker) dialog.findViewById(R.id.numberPicker);
-                np.setMinValue(5);
-                np.setMaxValue(100);
-                np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-                        tvSoCau.setText(newVal + " " + getString(R.string.question));
-                    }
-                });
-            }
+            builder.setPositiveButton(
+                    getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss());
+            builder.setNegativeButton(
+                    getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            NumberPicker np = (NumberPicker) dialog.findViewById(R.id.numberPicker);
+            np.setMinValue(5);
+            np.setMaxValue(100);
+            np.setOnValueChangedListener((numberPicker, oldVal, newVal) -> tvSoCau.setText(newVal + " " + getString(R.string.question)));
         });
 
-        lnThoiGian.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        tvThoiGian.setText(selectedHour + " Giờ " + selectedMinute + " Phút");
-                    }
-                }, hour, minute, true);//Yes 24 hour time
+        lnThoiGian.setOnClickListener(view -> {
+            Calendar mcurrentTime = Calendar.getInstance();
+            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = mcurrentTime.get(Calendar.MINUTE);
+            TimePickerDialog mTimePicker;
+            mTimePicker = new TimePickerDialog(getActivity(), (timePicker, selectedHour, selectedMinute) -> tvThoiGian.setText(selectedHour + " Giờ " + selectedMinute + " Phút"), hour, minute, true);//Yes 24 hour time
 
-                mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
-                mTimePicker.show();
-            }
+            mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
+            mTimePicker.show();
         });
     }
 

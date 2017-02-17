@@ -2,7 +2,6 @@ package com.app.maththpt.utils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
@@ -45,9 +44,6 @@ public class FacebookUtils {
             HttpURLConnection.setFollowRedirects(false); //Do _not_ follow redirects!
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             newLocation = connection.getHeaderField("Location");
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
