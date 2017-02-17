@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -29,7 +28,7 @@ import com.app.maththpt.model.Category;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.utils.CLog;
-import com.app.maththpt.viewmodel.BaseViewModel;
+import com.app.maththpt.viewmodel.QuestionViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,23 +45,20 @@ import rx.schedulers.Schedulers;
 public class QuestionActivity extends BaseActivity {
     private static final String TAG = QuestionActivity.class.getSimpleName();
     private static final String FORMAT = "%02d:%02d:%02d";
-    private ViewPager viewPager;
     public List<Question> list;
     private int type;
     private String title;
     private int cateID;
-    private LinearLayout lnErrorView;
     private int positionCurrent = 0;
     private List<Category> listCategory;
     private int soCau;
     private long time;
     private CountDownTimer countDownTimer;
-    private LinearLayout pager_indicator;
     private int dotsCount;
     private ImageView[] dots;
     private List<Fragment> fragmentList;
     private ActivityQuestionBinding activityQuestionBinding;
-    private BaseViewModel baseViewModel;
+    private QuestionViewModel questionViewModel;
     private String testID;
     private Subscription mSubscription;
     private MathThptService apiService;
@@ -73,9 +69,9 @@ public class QuestionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         activityQuestionBinding = DataBindingUtil.setContentView(this, R.layout.activity_question);
         getData();
-        initUI();
         setSupportActionBar(activityQuestionBinding.toolbar);
-        activityQuestionBinding.setMytoolbar(baseViewModel);
+        setBackButtonToolbar();
+        activityQuestionBinding.setQuestionViewModel(questionViewModel);
         bindData();
         event();
         if (type == Configuaration.TYPE_KIEMTRA && list != null && list.size() > 0) {
@@ -84,7 +80,7 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void event() {
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        activityQuestionBinding.viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -133,7 +129,7 @@ public class QuestionActivity extends BaseActivity {
             testID = intent.getStringExtra("testID");
 //            Toast.makeText(this, testID, Toast.LENGTH_SHORT).show();
         }
-        baseViewModel = new BaseViewModel(this, title);
+        questionViewModel = new QuestionViewModel(this, title);
     }
 
     private void countDown() {
@@ -141,7 +137,7 @@ public class QuestionActivity extends BaseActivity {
 
             @SuppressLint("DefaultLocale")
             public void onTick(long millisUntilFinished) {
-                baseViewModel.setTitle("" + String.format(FORMAT,
+                questionViewModel.setTitle("" + String.format(FORMAT,
                         TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
                                 TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
@@ -150,7 +146,7 @@ public class QuestionActivity extends BaseActivity {
             }
 
             public void onFinish() {
-                baseViewModel.setTitle(getString(R.string.hetGio));
+                questionViewModel.setTitle(getString(R.string.hetGio));
                 nopBai();
             }
         };
@@ -159,6 +155,7 @@ public class QuestionActivity extends BaseActivity {
     }
 
     ViewPagerAdapter pagerAdapter;
+    private int page = 1;
 
     private void bindData() {
         list = new ArrayList<>();
@@ -166,51 +163,20 @@ public class QuestionActivity extends BaseActivity {
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
                 mSubscription.unsubscribe();
-            mSubscription = apiService.getContent(2, testID, 1)
+            mSubscription = apiService.getContentbyTestID(2, testID, page)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<DetailTestsResult>() {
                         @Override
                         public void onCompleted() {
-                            if (mDetailTestsResult.data != null && mDetailTestsResult.data.size() > 0) {
-                                for (int i = 0; i < mDetailTestsResult.data.size(); i++) {
-                                    List<Answer> answerList = new ArrayList<>();
-                                    if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 1) {
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, true));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
-                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 2) {
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, true));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
-                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 3) {
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
-                                    } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 4) {
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
-                                        answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
-                                    }
-                                    Question question = new Question(Integer.parseInt(mDetailTestsResult.data.get(i).id),
-                                            mDetailTestsResult.data.get(i).question,
-                                            mDetailTestsResult.data.get(i).image,
-                                            answerList,
-                                            Integer.parseInt(mDetailTestsResult.data.get(i).cateID));
-                                    list.add(question);
-                                }
-                                genQuestion();
-                            }
+                            convertResultToListQuestion(mDetailTestsResult);
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             CLog.d(TAG, "getListTest Error");
-//                        Toast.makeText(getActivity(), getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
+                            questionViewModel.setVisiableNoData(true);
+                            questionViewModel.setMessageError(getString(R.string.error_connect));
                         }
 
                         @Override
@@ -220,14 +186,39 @@ public class QuestionActivity extends BaseActivity {
                             }
                         }
                     });
-        } else {
-            if (type == Configuaration.TYPE_ONTAP) {
-                list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
-            } else if (type == Configuaration.TYPE_KIEMTRA) {
-                list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
-                if (list.size() > 0) {
-                    Collections.shuffle(list);
-                }
+        } else if (type == Configuaration.TYPE_ONTAP) {
+//                list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
+            apiService = MyApplication.with(this).getMaththptSerivce();
+            if (mSubscription != null && !mSubscription.isUnsubscribed())
+                mSubscription.unsubscribe();
+            mSubscription = apiService.getContentbyCategoryID(1, cateID, page)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<DetailTestsResult>() {
+                        @Override
+                        public void onCompleted() {
+                            convertResultToListQuestion(mDetailTestsResult);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            CLog.d(TAG, "getListTest Error");
+                            questionViewModel.setVisiableNoData(true);
+                            questionViewModel.setMessageError(getString(R.string.error_connect));
+                        }
+
+                        @Override
+                        public void onNext(DetailTestsResult detailTestsResult) {
+                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                                mDetailTestsResult = detailTestsResult;
+                            }
+                        }
+                    });
+
+        } else if (type == Configuaration.TYPE_KIEMTRA) {
+            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
+            if (list.size() > 0) {
+                Collections.shuffle(list);
             }
             genQuestion();
         }
@@ -235,18 +226,61 @@ public class QuestionActivity extends BaseActivity {
 
     }
 
+    private void convertResultToListQuestion(DetailTestsResult mDetailTestsResult) {
+        if (mDetailTestsResult.data != null && mDetailTestsResult.data.size() > 0) {
+            questionViewModel.setVisiableNoData(false);
+            for (int i = 0; i < mDetailTestsResult.data.size(); i++) {
+                List<Answer> answerList = new ArrayList<>();
+                if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 1) {
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, true));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 2) {
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, true));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 3) {
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 4) {
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                }
+                Question question = new Question(Integer.parseInt(mDetailTestsResult.data.get(i).id),
+                        mDetailTestsResult.data.get(i).question,
+                        mDetailTestsResult.data.get(i).image,
+                        answerList,
+                        Integer.parseInt(mDetailTestsResult.data.get(i).cateID));
+                list.add(question);
+            }
+            genQuestion();
+        } else {
+            questionViewModel.setVisiableNoData(true);
+            questionViewModel.setMessageError(getString(R.string.no_data));
+        }
+
+    }
+
     private void genQuestion() {
         if (list != null && list.size() > 0) {
+            questionViewModel.setVisiableNoData(false);
             fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
             }
             pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setOffscreenPageLimit(list.size());
+            activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
+            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
             setUiPageViewController();
         } else {
-            lnErrorView.setVisibility(View.VISIBLE);
+            questionViewModel.setVisiableNoData(true);
+            questionViewModel.setMessageError(getString(R.string.no_data));
         }
     }
 
@@ -266,18 +300,10 @@ public class QuestionActivity extends BaseActivity {
 
             params.setMargins(4, 0, 4, 0);
 
-            pager_indicator.addView(dots[i], params);
+            activityQuestionBinding.viewPagerCountDots.addView(dots[i], params);
         }
 
         dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-    }
-
-    private void initUI() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
-        lnErrorView = (LinearLayout) findViewById(R.id.lnErrorView);
-        setBackButtonToolbar();
-
     }
 
 

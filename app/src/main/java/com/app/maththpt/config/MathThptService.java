@@ -31,7 +31,10 @@ public interface MathThptService {
     Observable<TestsResult> getTests();
 
     @GET("get-content.php")
-    Observable<DetailTestsResult> getContent(@Query("type") int type, @Query("testID") String testID, @Query("page") int page);
+    Observable<DetailTestsResult> getContentbyTestID(@Query("type") int type, @Query("testID") String testID, @Query("page") int page);
+
+    @GET("get-content.php")
+    Observable<DetailTestsResult> getContentbyCategoryID(@Query("type") int type, @Query("cateID") int testID, @Query("page") int page);
 
     class Factory {
 

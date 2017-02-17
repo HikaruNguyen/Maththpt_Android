@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="mytoolbar"
-            type="com.app.maththpt.viewmodel.BaseViewModel" />
+            name="questionViewModel"
+            type="com.app.maththpt.viewmodel.QuestionViewModel" />
     </data>
 
 
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title="@{mytoolbar.title}" />
+                android:title="@{questionViewModel.title}" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -42,30 +42,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lnErrorView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="@{questionViewModel.visiableNoData}">
 
                 <ImageView
                     android:id="@+id/ivNodata"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@mipmap/no_data" />
+                    android:src="@mipmap/no_data"
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:maxLines="1"
-                    android:text="@string/no_data"
+                    android:text="@{questionViewModel.messageError}"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/viewPagerIndicator"
