@@ -44,6 +44,7 @@ import rx.schedulers.Schedulers;
 
 public class QuestionActivity extends BaseActivity {
     private static final String TAG = QuestionActivity.class.getSimpleName();
+    private static final int CODE_CHAM_DIEM = 12;
     private static final String FORMAT = "%02d:%02d:%02d";
     public List<Question> list;
     private int type;
@@ -175,7 +176,7 @@ public class QuestionActivity extends BaseActivity {
                         @Override
                         public void onError(Throwable e) {
                             CLog.d(TAG, "getListTest Error");
-                            questionViewModel.setVisiableNoData(true);
+                            questionViewModel.setVisiableError(true);
                             questionViewModel.setMessageError(getString(R.string.error_connect));
                         }
 
@@ -203,7 +204,7 @@ public class QuestionActivity extends BaseActivity {
                         @Override
                         public void onError(Throwable e) {
                             CLog.d(TAG, "getListTest Error");
-                            questionViewModel.setVisiableNoData(true);
+                            questionViewModel.setVisiableError(true);
                             questionViewModel.setMessageError(getString(R.string.error_connect));
                         }
 
@@ -228,7 +229,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void convertResultToListQuestion(DetailTestsResult mDetailTestsResult) {
         if (mDetailTestsResult.data != null && mDetailTestsResult.data.size() > 0) {
-            questionViewModel.setVisiableNoData(false);
+            questionViewModel.setVisiableError(false);
             for (int i = 0; i < mDetailTestsResult.data.size(); i++) {
                 List<Answer> answerList = new ArrayList<>();
                 if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 1) {
@@ -261,7 +262,7 @@ public class QuestionActivity extends BaseActivity {
             }
             genQuestion();
         } else {
-            questionViewModel.setVisiableNoData(true);
+            questionViewModel.setVisiableError(true);
             questionViewModel.setMessageError(getString(R.string.no_data));
         }
 
@@ -269,7 +270,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void genQuestion() {
         if (list != null && list.size() > 0) {
-            questionViewModel.setVisiableNoData(false);
+            questionViewModel.setVisiableError(false);
             fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
@@ -279,7 +280,7 @@ public class QuestionActivity extends BaseActivity {
             activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
             setUiPageViewController();
         } else {
-            questionViewModel.setVisiableNoData(true);
+            questionViewModel.setVisiableError(true);
             questionViewModel.setMessageError(getString(R.string.no_data));
         }
     }
@@ -403,8 +404,7 @@ public class QuestionActivity extends BaseActivity {
         Intent intent = new Intent(this, ChamDiemActivity.class);
         intent.putParcelableArrayListExtra("listAnswer", (ArrayList<? extends Parcelable>) list);
         intent.putParcelableArrayListExtra("listCate", (ArrayList<? extends Parcelable>) listCategory);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, CODE_CHAM_DIEM);
     }
 
     @Override
@@ -412,5 +412,16 @@ public class QuestionActivity extends BaseActivity {
         super.onDestroy();
         if (countDownTimer != null)
             countDownTimer.cancel();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CODE_CHAM_DIEM) {
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        }
     }
 }

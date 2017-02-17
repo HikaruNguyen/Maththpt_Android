@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_button_primary"
-                    android:text="@string/gotoHistory" />
+                    android:text="@string/gotoHistory"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
 

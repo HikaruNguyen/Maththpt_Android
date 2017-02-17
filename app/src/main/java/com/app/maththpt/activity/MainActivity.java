@@ -44,7 +44,8 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int LOGIN_CODE = 11;
+    private static final int CODE_LOGIN = 11;
+
     private SharedPreferences sharedPreferences;
     private MainViewModel mainViewModel;
     ActivityMainBinding activityMainBinding;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(intent, LOGIN_CODE);
+                    startActivityForResult(intent, CODE_LOGIN);
                 }
 
             }
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void changeFragment(Fragment targetFragment) {
+    public void changeFragment(Fragment targetFragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, targetFragment, "fragment")
@@ -226,6 +227,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void setMenuSelect(int id) {
+        activityMainBinding.navView.setCheckedItem(id);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -234,10 +239,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
     }
 
-    private void clearBackStack(FragmentManager manager) {
+    public void clearBackStack(FragmentManager manager) {
         if (manager.getBackStackEntryCount() > 0) {
             FragmentManager.BackStackEntry first = manager
                     .getBackStackEntryAt(0);
@@ -276,9 +282,10 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == LOGIN_CODE) {
+            if (requestCode == CODE_LOGIN) {
                 bindNav();
             }
         }
     }
+
 }

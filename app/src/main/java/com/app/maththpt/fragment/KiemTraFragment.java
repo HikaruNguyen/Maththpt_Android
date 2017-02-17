@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
+import com.app.maththpt.activity.MainActivity;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.adapter.CategoryCheckAdapter;
 import com.app.maththpt.config.Configuaration;
@@ -30,11 +31,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class KiemTraFragment extends Fragment {
-
+    private static final int CODE_CHAM_DIEM = 12;
     private DisableScrollRecyclerView rvCategory;
     private CategoryCheckAdapter adapter;
     private List<Category> list;
@@ -79,7 +82,7 @@ public class KiemTraFragment extends Fragment {
                     intent.putExtra("type", Configuaration.TYPE_KIEMTRA);
                     intent.putExtra("soCau", soCau);
                     intent.putExtra("time", time);
-                    startActivity(intent);
+                    startActivityForResult(intent, CODE_CHAM_DIEM);
                 }
 
             }
@@ -158,4 +161,16 @@ public class KiemTraFragment extends Fragment {
         btnLamBai = (Button) view.findViewById(R.id.btnLamBai);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CODE_CHAM_DIEM) {
+                ((MainActivity) getActivity()).clearBackStack(getActivity().getSupportFragmentManager());
+                ((MainActivity) getActivity()).changeFragment(new HistoryFragment());
+                ((MainActivity) getActivity()).setMenuSelect(R.id.nav_history);
+            }
+        }
+
+    }
 }

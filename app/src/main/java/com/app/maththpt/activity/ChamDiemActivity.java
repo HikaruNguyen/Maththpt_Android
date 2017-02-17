@@ -61,6 +61,16 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         getData();
         initUI();
         bindData();
+        event();
+    }
+
+    private void event() {
+        chamDiemBinding.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("menu_item", R.id.nav_history);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
     }
 
     private void getData() {
@@ -169,7 +179,7 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         mChart = chamDiemBinding.chart1;
         rvChiTiet = chamDiemBinding.rvChiTiet;
         rvChiTiet.setDivider();
-        adapter = new ChiTietDiemAdapter(this, new ArrayList<ChiTietDiem>());
+        adapter = new ChiTietDiemAdapter(this, new ArrayList<>());
         rvChiTiet.setAdapter(adapter);
     }
 
