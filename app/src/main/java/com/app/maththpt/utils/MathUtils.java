@@ -94,6 +94,11 @@ public class MathUtils {
             "\n" +
             "        }\n" +
             "    }\n" +
+            "   function resetColor() {\n" +
+            "        for (var i = 1; i <= 4; i++) {\n" +
+            "            document.getElementById('answer_' + i).style.backgroundColor = 'white';\n" +
+            "        }\n" +
+            "    }" +
             "</script>\n" +
             "<script>\n" +
             "    var rad = document.getElementsByName('answer');\n" +
@@ -113,9 +118,8 @@ public class MathUtils {
             "</html>";
 
     public String htmlContain() {
-        if (image == null || image.trim().isEmpty() || !image.startsWith("data:")) {
+        if (image == null || image.trim().isEmpty() || !image.trim().startsWith("data")) {
             return doan1 + question + doan2 + doan2_2 + image + doan3 + answer1 + doan4 + answer2 + doan5 + answer3 + doan6 + answer4 + doan7;
-
         } else {
             return doan1 + question + doan2 + doan2_1 + image + doan3 + answer1 + doan4 + answer2 + doan5 + answer3 + doan6 + answer4 + doan7;
         }

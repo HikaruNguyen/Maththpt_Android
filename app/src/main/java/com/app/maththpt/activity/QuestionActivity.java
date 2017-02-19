@@ -90,6 +90,7 @@ public class QuestionActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 positionCurrent = position;
+                questionViewModel.setPostion(positionCurrent);
                 for (int i = 0; i < dotsCount; i++) {
                     dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
                 }
@@ -109,6 +110,14 @@ public class QuestionActivity extends BaseActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
+        });
+
+        activityQuestionBinding.imgNext.setOnClickListener(v -> {
+            activityQuestionBinding.viewpager.setCurrentItem(positionCurrent + 1);
+        });
+
+        activityQuestionBinding.imgPre.setOnClickListener(v -> {
+            activityQuestionBinding.viewpager.setCurrentItem(positionCurrent - 1);
         });
     }
 
@@ -271,6 +280,8 @@ public class QuestionActivity extends BaseActivity {
     private void genQuestion() {
         if (list != null && list.size() > 0) {
             questionViewModel.setVisiableError(false);
+            questionViewModel.setSize(list.size());
+            questionViewModel.setPostion(positionCurrent);
             fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
@@ -279,6 +290,7 @@ public class QuestionActivity extends BaseActivity {
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
             activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
             setUiPageViewController();
+
         } else {
             questionViewModel.setVisiableError(true);
             questionViewModel.setMessageError(getString(R.string.no_data));
@@ -375,29 +387,13 @@ public class QuestionActivity extends BaseActivity {
         for (int i = 0; i < list.size(); i++) {
             QuestionWVFragment fragment = (QuestionWVFragment) pagerAdapter.getItem(i);
             if (list.get(i).answerList.get(0).isCorrect) {
-                if (fragment.webView.answer == 1) {
-                    list.get(i).isCorrect = true;
-                } else {
-                    list.get(i).isCorrect = false;
-                }
+                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 1;
             } else if (list.get(i).answerList.get(1).isCorrect) {
-                if (fragment.webView.answer == 2) {
-                    list.get(i).isCorrect = true;
-                } else {
-                    list.get(i).isCorrect = false;
-                }
+                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 2;
             } else if (list.get(i).answerList.get(2).isCorrect) {
-                if (fragment.webView.answer == 3) {
-                    list.get(i).isCorrect = true;
-                } else {
-                    list.get(i).isCorrect = false;
-                }
+                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 3;
             } else if (list.get(i).answerList.get(3).isCorrect) {
-                if (fragment.webView.answer == 4) {
-                    list.get(i).isCorrect = true;
-                } else {
-                    list.get(i).isCorrect = false;
-                }
+                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 4;
             }
 
         }

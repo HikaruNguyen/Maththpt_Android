@@ -75,7 +75,8 @@
                 android:layout_height="55dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="5dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/viewPagerCountDots"
@@ -87,6 +88,24 @@
 
 
             </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imgNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_next"
+                android:visibility="@{questionViewModel.visiableNext}" />
+
+            <ImageView
+                android:id="@+id/imgPre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_pre"
+                android:visibility="@{questionViewModel.visiablePre}" />
         </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>

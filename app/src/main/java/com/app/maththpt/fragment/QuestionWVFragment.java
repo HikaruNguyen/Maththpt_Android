@@ -3,21 +3,21 @@ package com.app.maththpt.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.app.maththpt.R;
+import com.app.maththpt.databinding.FragmentQuestionBinding;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.eventbus.XemDapAnEvent;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.utils.MathUtils;
 import com.app.maththpt.utils.Utils;
-import com.app.maththpt.widget.CustomeWebView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -33,13 +33,13 @@ public class QuestionWVFragment extends Fragment {
     private static final String QUESTION = "QUESTION";
     private static final String POSITION = "POSITION";
     private static final String ISXEMKQ = "ISXEMKQ";
-    public CustomeWebView webView;
-    private Button btnCheck;
     public static ProgressDialog progressDialog;
     private boolean isXemKQ = false;
     private Question question;
     private int position;
     ShareDialog shareDialog;
+    public FragmentQuestionBinding fragmentQuestionBinding;
+    private boolean isCheckedKQ = false;
 
     public QuestionWVFragment() {
         // Required empty public constructor
@@ -68,46 +68,43 @@ public class QuestionWVFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        initUI(view);
+        fragmentQuestionBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question, container, false);
+        View view = fragmentQuestionBinding.getRoot();
         bindData();
         event();
         return view;
     }
 
     private void event() {
-        btnCheck.setOnClickListener(new View.OnClickListener() {
+        fragmentQuestionBinding.btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String loadingUrl = "javascript:checkAnswer1()";
-                webView.loadUrl(loadingUrl);
+                fragmentQuestionBinding.webView.loadUrl(loadingUrl);
             }
         });
     }
 
     private void bindData() {
 //        webView.loadUrl("file:///android_asset/MathView/demo.html");
+        fragmentQuestionBinding.webView.setPosition(position - 1);
         shareDialog = new ShareDialog(getActivity());
         if (question != null) {
 //            Collections.shuffle(question.answerList);
             MathUtils mathUtils = new MathUtils();
-            mathUtils.question = getString(R.string.questionNo) + " " + position + ": " + Utils.replaceMath(question.question.trim());
+            mathUtils.question = "<b>" + getString(R.string.questionNo) + " " + position + "</b>: " + Utils.replaceMath(question.question.trim());
             mathUtils.answer1 = Utils.replaceMath(question.answerList.get(0).answer.trim());
             mathUtils.answer2 = Utils.replaceMath(question.answerList.get(1).answer.trim());
             mathUtils.answer3 = Utils.replaceMath(question.answerList.get(2).answer.trim());
             mathUtils.answer4 = Utils.replaceMath(question.answerList.get(3).answer.trim());
-            if (question.image != null && !question.image.trim().isEmpty()) {
+            if (question.image != null && !question.image.trim().isEmpty() && question.image.startsWith("data")) {
                 mathUtils.image = question.image;
+            } else {
+                mathUtils.image = "";
             }
-            webView.loadDataWithBaseURL("file:///android_asset/", mathUtils.htmlContain(), "text/html", "UTF-8", null);
+            fragmentQuestionBinding.webView.loadDataWithBaseURL("file:///android_asset/", mathUtils.htmlContain(), "text/html", "UTF-8", null);
         }
 
-    }
-
-    private void initUI(View view) {
-        webView = (CustomeWebView) view.findViewById(R.id.webView);
-        webView.setPosition(position - 1);
-        btnCheck = (Button) view.findViewById(R.id.btnCheck);
     }
 
 
@@ -132,7 +129,7 @@ public class QuestionWVFragment extends Fragment {
     @Subscribe
     public void onEvent(ShareQuestionEvent event) {
         if (position == event.position) {
-            bitmap = Utils.getScreenShot(webView);
+            bitmap = Utils.getScreenShot(fragmentQuestionBinding.webView);
             if (ShareDialog.canShow(ShareLinkContent.class)) {
                 SharePhoto photo = new SharePhoto.Builder()
                         .setBitmap(bitmap)
@@ -149,15 +146,20 @@ public class QuestionWVFragment extends Fragment {
     @Subscribe
     public void onEvent(XemDapAnEvent event) {
         if (position == event.position) {
-            if (question.answerList.get(0).isCorrect) {
-                webView.loadUrl("javascript:setColor(checkAnswer(),1);");
-            } else if (question.answerList.get(1).isCorrect) {
-                webView.loadUrl("javascript:setColor(checkAnswer(),2);");
-            } else if (question.answerList.get(2).isCorrect) {
-                webView.loadUrl("javascript:setColor(checkAnswer(),3);");
-            } else if (question.answerList.get(3).isCorrect) {
-                webView.loadUrl("javascript:setColor(checkAnswer(),4);");
+            if (!isCheckedKQ) {
+                if (question.answerList.get(0).isCorrect) {
+                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),1);");
+                } else if (question.answerList.get(1).isCorrect) {
+                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),2);");
+                } else if (question.answerList.get(2).isCorrect) {
+                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),3);");
+                } else if (question.answerList.get(3).isCorrect) {
+                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),4);");
+                }
+            }else {
+                fragmentQuestionBinding.webView.loadUrl("javascript:resetColor();");
             }
+            isCheckedKQ = !isCheckedKQ;
         }
     }
 

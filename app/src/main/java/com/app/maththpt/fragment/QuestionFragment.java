@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
@@ -46,8 +45,8 @@ public class QuestionFragment extends Fragment {
     private Question question;
     private int position;
     ShareDialog shareDialog;
-    private ScrollView svQuestion;
     private LinearLayout lnQuestion;
+    private boolean isCheckedKQ = false;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -181,7 +180,6 @@ public class QuestionFragment extends Fragment {
         lnB = (LinearLayout) view.findViewById(R.id.lnB);
         lnC = (LinearLayout) view.findViewById(R.id.lnC);
         lnD = (LinearLayout) view.findViewById(R.id.lnD);
-        svQuestion = (ScrollView) view.findViewById(R.id.svQuestion);
         lnQuestion = (LinearLayout) view.findViewById(R.id.lnQuestion);
     }
 
@@ -203,26 +201,37 @@ public class QuestionFragment extends Fragment {
 
     @Subscribe
     public void onEvent(XemDapAnEvent event) {
-        if (position == event.position) {
-            if (question.answerList.get(0).isCorrect) {
-                lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-            } else if (question.answerList.get(1).isCorrect) {
-                lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-            } else if (question.answerList.get(2).isCorrect) {
-                lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-            } else if (question.answerList.get(3).isCorrect) {
-                lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+        if (!isCheckedKQ) {
+            if (position == event.position) {
+                if (question.answerList.get(0).isCorrect) {
+                    lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                } else if (question.answerList.get(1).isCorrect) {
+                    lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                } else if (question.answerList.get(2).isCorrect) {
+                    lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                } else if (question.answerList.get(3).isCorrect) {
+                    lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                }
+                if (rbA.isChecked() && !question.answerList.get(0).isCorrect) {
+                    lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                } else if (rbB.isChecked() && !question.answerList.get(1).isCorrect) {
+                    lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                } else if (rbC.isChecked() && !question.answerList.get(2).isCorrect) {
+                    lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                } else if (rbD.isChecked() && !question.answerList.get(3).isCorrect) {
+                    lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                }
             }
-            if (rbA.isChecked() && !question.answerList.get(0).isCorrect) {
-                lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-            } else if (rbB.isChecked() && !question.answerList.get(1).isCorrect) {
-                lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-            } else if (rbC.isChecked() && !question.answerList.get(2).isCorrect) {
-                lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-            } else if (rbD.isChecked() && !question.answerList.get(3).isCorrect) {
-                lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+        } else {
+            if (position == event.position) {
+                lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
             }
+
         }
+        isCheckedKQ = !isCheckedKQ;
     }
 
     Bitmap bitmap;
