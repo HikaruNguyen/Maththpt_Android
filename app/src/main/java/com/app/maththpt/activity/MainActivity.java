@@ -1,5 +1,6 @@
 package com.app.maththpt.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -214,9 +216,8 @@ public class MainActivity extends AppCompatActivity
             clearBackStack(getSupportFragmentManager());
             changeFragment(new HistoryFragment());
         } else if (id == R.id.nav_logout) {
-            LoginManager.getInstance().logOut();
-            sharedPreferences.edit().clear().apply();
-            bindNav();
+            logout();
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -225,6 +226,28 @@ public class MainActivity extends AppCompatActivity
 
     public void setMenuSelect(int id) {
         activityMainBinding.navView.setCheckedItem(id);
+    }
+
+    private void logout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.logout));
+        builder.setMessage(getString(R.string.confirm_logout));
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LoginManager.getInstance().logOut();
+                sharedPreferences.edit().clear().apply();
+                bindNav();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
     }
 
     @Override

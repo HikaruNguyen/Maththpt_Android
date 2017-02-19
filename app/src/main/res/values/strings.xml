@@ -27,7 +27,7 @@
     <string name="chonChuDe">Chọn chủ đề</string>
     <string name="lamBai">Làm bài</string>
     <string name="ok">OK</string>
-    <string name="cancel">Thoát</string>
+    <string name="cancel">Hủy</string>
     <string name="question">Câu hỏi</string>
     <string name="banChuaChonChuDe">Bạn chưa chọn chủ đề</string>
     <string name="nopBai">Nộp bài</string>
@@ -43,4 +43,5 @@
     <string name="lich_su_lam_bai">Lịch sử làm bài</string>
     <string name="datetime">Thời gian</string>
     <string name="gotoHistory">Xem lịch sử</string>
+    <string name="confirm_logout">Bạn có muốn đăng xuất khỏi ứng dụng?</string>
 </resources>
