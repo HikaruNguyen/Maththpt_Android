@@ -10,7 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.app.maththpt.R;
-import com.app.maththpt.fragment.HomeFragment;
+import com.app.maththpt.activity.QuestionActivity;
 
 
 /**
@@ -85,19 +85,19 @@ public class CustomeWebView extends WebView {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 //            prbLoading.setVisibility(View.VISIBLE);
-            if (HomeFragment.progressDialog != null && HomeFragment.progressDialog.isShowing()) {
-                HomeFragment.progressDialog.dismiss();
+            if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
+                QuestionActivity.progressDialog.dismiss();
             }
-            HomeFragment.progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.loading), false, true);
+            QuestionActivity.progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.loading), false, true);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 //            prbLoading.setVisibility(View.GONE);
-            if (HomeFragment.progressDialog != null && HomeFragment.progressDialog.isShowing()) {
+            if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
                 if (getContext() != null)
-                    HomeFragment.progressDialog.dismiss();
+                    QuestionActivity.progressDialog.dismiss();
             }
 
         }

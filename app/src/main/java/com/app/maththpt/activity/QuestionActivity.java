@@ -1,6 +1,7 @@
 package com.app.maththpt.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class QuestionActivity extends BaseActivity {
     private Subscription mSubscription;
     private MathThptService apiService;
     private DetailTestsResult mDetailTestsResult;
+    public static ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -405,9 +407,14 @@ public class QuestionActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (countDownTimer != null)
             countDownTimer.cancel();
+        if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
+            QuestionActivity.progressDialog.dismiss();
+            QuestionActivity.progressDialog = null;
+        }
+
+        super.onDestroy();
     }
 
     @Override

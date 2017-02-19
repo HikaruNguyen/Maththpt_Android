@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         activityMainBinding.navView.addHeaderView(navHeaderMainBinding.getRoot());
         activityMainBinding.navView.setNavigationItemSelectedListener(this);
+        activityMainBinding.navView.setItemIconTintList(null);
     }
 
 
@@ -203,10 +204,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_boDe) {
+        if (id == R.id.nav_tests) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new TestsFragment());
-        } else if (id == R.id.nav_chuyenDe) {
+        } else if (id == R.id.nav_category) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new CategoryFragment());
         } else if (id == R.id.nav_kiemTra) {
@@ -219,8 +220,11 @@ public class MainActivity extends AppCompatActivity
             logout();
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (id != R.id.nav_logout) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
         return true;
     }
 
@@ -238,6 +242,8 @@ public class MainActivity extends AppCompatActivity
                 LoginManager.getInstance().logOut();
                 sharedPreferences.edit().clear().apply();
                 bindNav();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

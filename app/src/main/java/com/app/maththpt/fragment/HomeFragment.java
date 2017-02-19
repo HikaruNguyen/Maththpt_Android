@@ -18,7 +18,7 @@ import com.app.maththpt.widget.CustomeWebView;
 public class HomeFragment extends Fragment {
     private CustomeWebView webView;
     private Button btnCheck;
-    public static ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
