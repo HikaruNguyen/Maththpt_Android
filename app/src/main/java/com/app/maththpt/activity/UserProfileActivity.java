@@ -100,7 +100,7 @@ public class UserProfileActivity extends BaseActivity {
         userProfileBinding.chartPoint.getAxisRight().setEnabled(false);
 
         // add data
-        setData(10);
+        setData();
 
         userProfileBinding.chartPoint.getLegend().setEnabled(false);
 
@@ -124,15 +124,16 @@ public class UserProfileActivity extends BaseActivity {
 
             set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
                     ? LineDataSet.Mode.LINEAR
-                    :  LineDataSet.Mode.CUBIC_BEZIER);
+                    : LineDataSet.Mode.CUBIC_BEZIER);
         }
         userProfileBinding.chartPoint.invalidate();
     }
 
-    private void setData(float range) {
+    private void setData() {
 
         ArrayList<Entry> yVals = new ArrayList<>();
-        for (int i = 0; i < listPoint.size(); i++) {
+        int j = 0;
+        for (int i = listPoint.size() - 1; i >= 0; i--) {
             float val;
             try {
                 val = Float.parseFloat(listPoint.get(i).point);
@@ -140,7 +141,8 @@ public class UserProfileActivity extends BaseActivity {
                 e.printStackTrace();
                 val = 0;
             }
-            yVals.add(new Entry(i, val));
+            yVals.add(new Entry(j, val));
+            j++;
         }
 
         LineDataSet set1;
@@ -158,10 +160,10 @@ public class UserProfileActivity extends BaseActivity {
             set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             set1.setCubicIntensity(0.2f);
             //set1.setDrawFilled(true);
-            set1.setDrawCircles(false);
+            set1.setDrawCircles(true);
             set1.setLineWidth(1.8f);
             set1.setCircleRadius(4f);
-            set1.setCircleColor(Color.WHITE);
+            set1.setCircleColor(Color.RED);
             set1.setHighLightColor(Color.rgb(244, 117, 117));
             set1.setColor(Color.WHITE);
             set1.setFillColor(Color.parseColor("#2196F3"));

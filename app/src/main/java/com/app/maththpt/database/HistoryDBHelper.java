@@ -14,6 +14,8 @@ import com.app.maththpt.model.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.id.list;
+
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 16/02/2017.
  */
@@ -183,11 +185,11 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
             List<Point> Points = new ArrayList<Point>();
 
-            String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY + " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " ASC lIMIT 10";
+            String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY + " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " DESC lIMIT 10";
 //            Cursor cursor = database.query(HistoryDBHelper.TABLE_HISTORY,
 //                    allColumns, null, null, null, null,
 //                    HistoryDBHelper.HISTORY_CREAT_AT + " ASC");
-            Cursor cursor = database.rawQuery(sql,null);
+            Cursor cursor = database.rawQuery(sql, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 Point listLiveChannelForm = cursorToLive(cursor);
@@ -212,5 +214,22 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
             return count;
         }
 
+        public float getAveragePoint() {
+            List<Point> list = getAll();
+            if (list == null || list.size() <= 0) {
+                return 0;
+            } else {
+                float sum = 0;
+                for (int i = 0; i < list.size(); i++) {
+                    try {
+                        sum += Float.parseFloat(list.get(i).point);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        sum += 0;
+                    }
+                }
+                return sum/list.size();
+            }
+        }
     }
 }

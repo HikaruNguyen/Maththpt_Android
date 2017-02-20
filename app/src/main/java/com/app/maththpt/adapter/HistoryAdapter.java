@@ -55,15 +55,12 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
 
             mViewDataBinding = viewDataBinding;
             mViewDataBinding.executePendingBindings();
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            itemView.setOnClickListener(view -> {
 //                    Intent intent = new Intent(mContext, QuestionActivity.class);
 //                    intent.putExtra("title", list.get(getAdapterPosition()).name);
 //                    intent.putExtra("type", Configuaration.TYPE_ONTAP);
 //                    intent.putExtra("cateID", list.get(getAdapterPosition()).id);
 //                    mContext.startActivity(intent);
-                }
             });
         }
 

@@ -45,4 +45,11 @@
     <string name="gotoHistory">Xem lịch sử</string>
     <string name="confirm_logout">Bạn có muốn đăng xuất khỏi ứng dụng?</string>
     <string name="point_chart">Biểu đồ điểm</string>
+    <string name="so_bai_kt">Số bài kiểm tra đã làm:</string>
+    <string name="diem_trung_binh">Điểm trung bình:</string>
+    <string name="xep_loai">Xếp loại:</string>
+    <string name="good">TỐT</string>
+    <string name="rather">KHÁ</string>
+    <string name="medium">TRUNG BÌNH</string>
+    <string name="weak">YẾU</string>
 </resources>
