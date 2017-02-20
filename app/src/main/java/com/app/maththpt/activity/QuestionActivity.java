@@ -394,14 +394,19 @@ public class QuestionActivity extends BaseActivity {
     private void nopBai() {
         for (int i = 0; i < list.size(); i++) {
             QuestionWVFragment fragment = (QuestionWVFragment) pagerAdapter.getItem(i);
-            if (list.get(i).answerList.get(0).isCorrect) {
-                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 1;
-            } else if (list.get(i).answerList.get(1).isCorrect) {
-                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 2;
-            } else if (list.get(i).answerList.get(2).isCorrect) {
-                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 3;
-            } else if (list.get(i).answerList.get(3).isCorrect) {
-                list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 4;
+            if (fragment.fragmentQuestionBinding == null || fragment.fragmentQuestionBinding.webView == null || fragment.fragmentQuestionBinding.webView.answer == 0) {
+                list.get(i).isCorrect = false;
+            } else {
+                if (list.get(i).answerList.get(0).isCorrect) {
+                    list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 1;
+                } else if (list.get(i).answerList.get(1).isCorrect) {
+                    list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 2;
+                } else if (list.get(i).answerList.get(2).isCorrect) {
+                    list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 3;
+                } else if (list.get(i).answerList.get(3).isCorrect) {
+                    list.get(i).isCorrect = fragment.fragmentQuestionBinding.webView.answer == 4;
+                }
+
             }
 
         }
@@ -426,11 +431,14 @@ public class QuestionActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == CODE_CHAM_DIEM) {
+        if (requestCode == CODE_CHAM_DIEM) {
+            if (resultCode == RESULT_OK) {
                 setResult(RESULT_OK, data);
                 finish();
+            } else {
+                finish();
             }
+
         }
     }
 }

@@ -44,4 +44,5 @@
     <string name="datetime">Thời gian</string>
     <string name="gotoHistory">Xem lịch sử</string>
     <string name="confirm_logout">Bạn có muốn đăng xuất khỏi ứng dụng?</string>
+    <string name="point_chart">Biểu đồ điểm</string>
 </resources>

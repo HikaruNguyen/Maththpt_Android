@@ -33,6 +33,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -59,7 +60,6 @@
                             android:id="@+id/imgAvatar"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_centerInParent="true"
                             android:layout_gravity="center_horizontal"
                             android:src="@mipmap/ic_avatar"
                             app:civ_border_color="#EEEEEE"
@@ -69,8 +69,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/imgAvatar"
-                            android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="5dp"
                             android:text="@{userProfileViewModel.userNameProfile}"
@@ -80,13 +78,32 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:singleLine="true"
+                            android:maxLines="1"
                             android:text="@{userProfileViewModel.emailProfile}"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_horizontal_margin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/point_chart"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/chartPoint"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

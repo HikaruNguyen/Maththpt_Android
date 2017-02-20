@@ -179,6 +179,25 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
             return Points;
         }
 
+        public List<Point> getTop10() {
+
+            List<Point> Points = new ArrayList<Point>();
+
+            String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY + " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " ASC lIMIT 10";
+//            Cursor cursor = database.query(HistoryDBHelper.TABLE_HISTORY,
+//                    allColumns, null, null, null, null,
+//                    HistoryDBHelper.HISTORY_CREAT_AT + " ASC");
+            Cursor cursor = database.rawQuery(sql,null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Point listLiveChannelForm = cursorToLive(cursor);
+                Points.add(listLiveChannelForm);
+                cursor.moveToNext();
+            }
+            // Make sure to close the cursor
+            cursor.close();
+            return Points;
+        }
 
         private Point cursorToLive(Cursor cursor) {
             Point Point = new Point(cursor.getString(cursor.getColumnIndex(HISTORY_POINT)), cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));

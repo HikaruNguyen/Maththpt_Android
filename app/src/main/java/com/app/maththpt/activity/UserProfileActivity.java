@@ -2,34 +2,181 @@ package com.app.maththpt.activity;
 
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.database.HistoryDBHelper;
 import com.app.maththpt.databinding.ActivityUserProfileBinding;
+import com.app.maththpt.model.Point;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Float.parseFloat;
 
 public class UserProfileActivity extends BaseActivity {
     private ActivityUserProfileBinding userProfileBinding;
     private UserProfileViewModel userProfileViewModel;
     private SharedPreferences sharedPreferences;
-    private String userName;
-    private String email;
+    private Typeface mTfLight;
+    private List<Point> listPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
         sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
-        userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
-        email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
+        String userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
+        String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
         setSupportActionBar(userProfileBinding.toolbar);
         setBackButtonToolbar();
         userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile), userName, email);
-
         userProfileBinding.setUserProfileViewModel(userProfileViewModel);
 
-//        setBackButtonToolbar();
+        bindData();
+    }
+
+    private void bindData() {
+        mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
+        listPoint = new ArrayList<>();
+        getListPoint();
+        initChart();
+    }
+
+    private void getListPoint() {
+        HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
+        historyDatabase.open();
+        listPoint = historyDatabase.getTop10();
+        historyDatabase.close();
+    }
+
+    private void initChart() {
+        userProfileBinding.chartPoint.setViewPortOffsets(0, 0, 0, 0);
+        userProfileBinding.chartPoint.setBackgroundColor(Color.WHITE);
+
+        // no description text
+        userProfileBinding.chartPoint.getDescription().setEnabled(false);
+
+        // enable touch gestures
+        userProfileBinding.chartPoint.setTouchEnabled(true);
+
+        // enable scaling and dragging
+        userProfileBinding.chartPoint.setDragEnabled(true);
+        userProfileBinding.chartPoint.setScaleEnabled(true);
+
+        // if disabled, scaling can be done on x- and y-axis separately
+        userProfileBinding.chartPoint.setPinchZoom(false);
+
+        userProfileBinding.chartPoint.setDrawGridBackground(false);
+        userProfileBinding.chartPoint.setMaxHighlightDistance(300);
+
+        XAxis x = userProfileBinding.chartPoint.getXAxis();
+        x.setEnabled(false);
+
+        YAxis y = userProfileBinding.chartPoint.getAxisLeft();
+        y.setTypeface(mTfLight);
+        y.setLabelCount(6, false);
+        y.setTextColor(Color.RED);
+        y.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        y.setDrawGridLines(false);
+        y.setAxisLineColor(Color.rgb(104, 241, 175));
+
+        userProfileBinding.chartPoint.getAxisRight().setEnabled(false);
+
+        // add data
+        setData(10);
+
+        userProfileBinding.chartPoint.getLegend().setEnabled(false);
+
+        userProfileBinding.chartPoint.animateXY(2000, 2000);
+
+
+        for (IDataSet set : userProfileBinding.chartPoint.getData().getDataSets())
+            set.setDrawValues(!set.isDrawValuesEnabled());
+
+        List<ILineDataSet> sets = userProfileBinding.chartPoint.getData()
+                .getDataSets();
+
+        for (ILineDataSet iSet : sets) {
+
+            LineDataSet set = (LineDataSet) iSet;
+
+            if (set.isDrawFilledEnabled())
+                set.setDrawFilled(false);
+            else
+                set.setDrawFilled(true);
+
+            set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
+                    ? LineDataSet.Mode.LINEAR
+                    :  LineDataSet.Mode.CUBIC_BEZIER);
+        }
+        userProfileBinding.chartPoint.invalidate();
+    }
+
+    private void setData(float range) {
+
+        ArrayList<Entry> yVals = new ArrayList<>();
+        for (int i = 0; i < listPoint.size(); i++) {
+            float val;
+            try {
+                val = Float.parseFloat(listPoint.get(i).point);
+            } catch (Exception e) {
+                e.printStackTrace();
+                val = 0;
+            }
+            yVals.add(new Entry(i, val));
+        }
+
+        LineDataSet set1;
+
+        if (userProfileBinding.chartPoint.getData() != null &&
+                userProfileBinding.chartPoint.getData().getDataSetCount() > 0) {
+            set1 = (LineDataSet) userProfileBinding.chartPoint.getData().getDataSetByIndex(0);
+            set1.setValues(yVals);
+            userProfileBinding.chartPoint.getData().notifyDataChanged();
+            userProfileBinding.chartPoint.notifyDataSetChanged();
+        } else {
+            // create a dataset and give it a type
+            set1 = new LineDataSet(yVals, "DataSet 1");
+
+            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            set1.setCubicIntensity(0.2f);
+            //set1.setDrawFilled(true);
+            set1.setDrawCircles(false);
+            set1.setLineWidth(1.8f);
+            set1.setCircleRadius(4f);
+            set1.setCircleColor(Color.WHITE);
+            set1.setHighLightColor(Color.rgb(244, 117, 117));
+            set1.setColor(Color.WHITE);
+            set1.setFillColor(Color.parseColor("#2196F3"));
+            set1.setFillAlpha(100);
+            set1.setDrawHorizontalHighlightIndicator(false);
+            set1.setFillFormatter((dataSet, dataProvider) -> -10);
+
+            // create a data object with the datasets
+            LineData data = new LineData(set1);
+            data.setValueTypeface(mTfLight);
+            data.setValueTextSize(9f);
+            data.setDrawValues(false);
+
+            // set data
+            userProfileBinding.chartPoint.setData(data);
+        }
     }
 }
