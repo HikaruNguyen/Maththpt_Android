@@ -94,17 +94,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void bindData() {
-        if (FacebookUtils.isExpires()) {
-            LoginManager.getInstance().logOut();
-            sharedPreferences.edit().clear().commit();
-        }
         changeFragment(new TestsFragment());
         bindNav();
-
     }
 
     private void bindNav() {
-
         String name = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
         if (!FacebookUtils.getFacebookID().isEmpty()) {

@@ -1,17 +1,25 @@
 package com.app.maththpt.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.app.maththpt.R;
+import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.utils.FacebookUtils;
+import com.facebook.login.LoginManager;
 
 public class SplashActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        if (FacebookUtils.isExpires()) {
+            LoginManager.getInstance().logOut();
+            sharedPreferences.edit().clear().commit();
+        }
         new Thread(new Task()).start();
     }
 

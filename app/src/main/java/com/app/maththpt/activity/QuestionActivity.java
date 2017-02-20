@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -290,7 +291,7 @@ public class QuestionActivity extends BaseActivity {
             }
             pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
-            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
+//            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
             setUiPageViewController();
 
         } else {
@@ -347,6 +348,11 @@ public class QuestionActivity extends BaseActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return "";
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+
         }
     }
 
