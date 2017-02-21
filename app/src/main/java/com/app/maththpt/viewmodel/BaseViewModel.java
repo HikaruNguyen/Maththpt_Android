@@ -28,7 +28,10 @@ public class BaseViewModel extends BaseObservable {
         this.title = title;
         visiableError = View.GONE;
     }
-
+    public BaseViewModel(Activity activity) {
+        this.activity = activity;
+        visiableError = View.GONE;
+    }
     public void setTitle(String title) {
         this.title = title;
         notifyChange();

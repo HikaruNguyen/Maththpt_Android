@@ -2,6 +2,7 @@ package com.app.maththpt.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -20,7 +22,6 @@ import android.widget.LinearLayout;
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.config.MathThptService;
-import com.app.maththpt.database.QuestionDBHelper;
 import com.app.maththpt.databinding.ActivityQuestionBinding;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.eventbus.XemDapAnEvent;
@@ -78,9 +79,6 @@ public class QuestionActivity extends BaseActivity {
         activityQuestionBinding.setQuestionViewModel(questionViewModel);
         bindData();
         event();
-        if (type == Configuaration.TYPE_KIEMTRA && list != null && list.size() > 0) {
-            countDown();
-        }
     }
 
     private void event() {
@@ -204,7 +202,7 @@ public class QuestionActivity extends BaseActivity {
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
                 mSubscription.unsubscribe();
-            mSubscription = apiService.getContentbyCategoryID(1, cateID, page)
+            mSubscription = apiService.getContentbyCateID(1, cateID, page)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<DetailTestsResult>() {
@@ -229,11 +227,45 @@ public class QuestionActivity extends BaseActivity {
                     });
 
         } else if (type == Configuaration.TYPE_KIEMTRA) {
-            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
-            if (list.size() > 0) {
-                Collections.shuffle(list);
+//            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
+//            if (list.size() > 0) {
+//                Collections.shuffle(list);
+//            }
+            String cateIDs = "";
+            if (listCategory.size() > 0) {
+                cateIDs = listCategory.get(0).id + "";
             }
-            genQuestion();
+            if (listCategory.size() > 1) {
+                for (int i = 1; i < listCategory.size(); i++) {
+                    cateIDs += "-" + listCategory.get(i).id;
+                }
+            }
+            apiService = MyApplication.with(this).getMaththptSerivce();
+            if (mSubscription != null && !mSubscription.isUnsubscribed())
+                mSubscription.unsubscribe();
+            mSubscription = apiService.getExamByCateID(cateIDs, soCau)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<DetailTestsResult>() {
+                        @Override
+                        public void onCompleted() {
+                            convertResultToListQuestion(mDetailTestsResult);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            CLog.d(TAG, "getListTest Error");
+                            questionViewModel.setVisiableError(true);
+                            questionViewModel.setMessageError(getString(R.string.error_connect));
+                        }
+
+                        @Override
+                        public void onNext(DetailTestsResult detailTestsResult) {
+                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                                mDetailTestsResult = detailTestsResult;
+                            }
+                        }
+                    });
         }
 
 
@@ -282,6 +314,10 @@ public class QuestionActivity extends BaseActivity {
 
     private void genQuestion() {
         if (list != null && list.size() > 0) {
+            if (type == Configuaration.TYPE_KIEMTRA) {
+                Collections.shuffle(list);
+
+            }
             questionViewModel.setVisiableError(false);
             questionViewModel.setSize(list.size());
             questionViewModel.setPostion(positionCurrent);
@@ -293,7 +329,9 @@ public class QuestionActivity extends BaseActivity {
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
 //            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
             setUiPageViewController();
-
+            if (type == Configuaration.TYPE_KIEMTRA) {
+                countDown();
+            }
         } else {
             questionViewModel.setVisiableError(true);
             questionViewModel.setMessageError(getString(R.string.no_data));
@@ -368,7 +406,6 @@ public class QuestionActivity extends BaseActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -439,7 +476,25 @@ public class QuestionActivity extends BaseActivity {
             } else {
                 finish();
             }
-
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.confirmQuitExam));
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.late), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }

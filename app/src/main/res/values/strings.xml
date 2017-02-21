@@ -63,4 +63,7 @@
     <string name="empty_email">Email không được để trống!</string>
     <string name="password_invalid">Mật khẩu không khớp!</string>
     <string name="tiLeLamBaiDung">Tỷ lệ làm bài đúng</string>
+    <string name="confirmQuitExam">Bạn đang làm bài kiểm tra, bạn vẫn muốn thoát?</string>
+    <string name="yes">Đồng ý</string>
+    <string name="late">Để sau</string>
 </resources>

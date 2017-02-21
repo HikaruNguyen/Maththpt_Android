@@ -31,7 +31,7 @@ import com.app.maththpt.databinding.ActivityMainBinding;
 import com.app.maththpt.databinding.NavHeaderMainBinding;
 import com.app.maththpt.fragment.CategoryFragment;
 import com.app.maththpt.fragment.HistoryFragment;
-import com.app.maththpt.fragment.KiemTraFragment;
+import com.app.maththpt.fragment.BeforeExamFragment;
 import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.MainViewModel;
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
             changeFragment(new CategoryFragment());
         } else if (id == R.id.nav_kiemTra) {
             clearBackStack(getSupportFragmentManager());
-            changeFragment(new KiemTraFragment());
+            changeFragment(new BeforeExamFragment());
         } else if (id == R.id.nav_history) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new HistoryFragment());

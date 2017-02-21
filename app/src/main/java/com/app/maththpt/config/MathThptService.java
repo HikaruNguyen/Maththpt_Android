@@ -41,9 +41,13 @@ public interface MathThptService {
                                                      @Query("page") int page);
 
     @GET("content/get-content.php")
-    Observable<DetailTestsResult> getContentbyCategoryID(@Query("type") int type,
-                                                         @Query("cateID") int testID,
-                                                         @Query("page") int page);
+    Observable<DetailTestsResult> getContentbyCateID(@Query("type") int type,
+                                                     @Query("cateID") int testID,
+                                                     @Query("page") int page);
+
+    @GET("content/exam.php")
+    Observable<DetailTestsResult> getExamByCateID(@Query("cateIDs") String cateIDs,
+                                                  @Query("number") int number);
 
     @FormUrlEncoded
     @POST("user/login.php")
