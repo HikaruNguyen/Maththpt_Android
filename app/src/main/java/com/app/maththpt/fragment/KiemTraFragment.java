@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
@@ -100,7 +101,10 @@ public class KiemTraFragment extends Fragment {
             NumberPicker np = (NumberPicker) dialog.findViewById(R.id.numberPicker);
             np.setMinValue(5);
             np.setMaxValue(100);
-            np.setOnValueChangedListener((numberPicker, oldVal, newVal) -> tvSoCau.setText(newVal + " " + getString(R.string.question)));
+            np.setOnValueChangedListener((picker, oldVal, newVal) -> {
+                tvSoCau.setText(newVal + " " + getString(R.string.question));
+                soCau = newVal;
+            });
         });
 
         lnThoiGian.setOnClickListener(view -> {
@@ -108,8 +112,10 @@ public class KiemTraFragment extends Fragment {
             int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
             int minute = mcurrentTime.get(Calendar.MINUTE);
             TimePickerDialog mTimePicker;
-            mTimePicker = new TimePickerDialog(getActivity(), (timePicker, selectedHour, selectedMinute) -> tvThoiGian.setText(selectedHour + " Giờ " + selectedMinute + " Phút"), hour, minute, true);//Yes 24 hour time
-
+            mTimePicker = new TimePickerDialog(getActivity(), (view1, hourOfDay, minute1) -> {
+                tvThoiGian.setText(hourOfDay + " Giờ " + minute1 + " Phút");
+                time = (hourOfDay * 60 * 60 + minute1 * 60) * 1000;
+            }, hour, minute, true);
             mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
             mTimePicker.show();
         });

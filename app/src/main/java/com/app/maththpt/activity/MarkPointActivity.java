@@ -12,10 +12,12 @@ import android.util.Log;
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.ChiTietDiemAdapter;
 import com.app.maththpt.database.HistoryDBHelper;
+import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
 import com.app.maththpt.model.Question;
+import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -125,6 +127,10 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
         List<ChiTietDiem> chiTietDiems = new ArrayList<>();
+        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
+                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
+        statisticalPointDatabase.open();
+
         for (int i = 0; i < listCategory.size(); i++) {
             int demSum = 0;
             int demTrue = 0;
@@ -138,8 +144,18 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
 
             }
             chiTietDiems.add(new ChiTietDiem(listCategory.get(i).name, demSum, demTrue));
+            if (statisticalPointDatabase.isExistCateID(listCategory.get(i).id)) {
+                StatisticalPoint statisticalPoint = statisticalPointDatabase.getStatisticalPointByCateID(listCategory.get(i).id);
+                statisticalPoint.setTotalQuestion(statisticalPoint.getTotalQuestion() + demSum);
+                statisticalPoint.setTotalQuestionTrue(statisticalPoint.getTotalQuestionTrue() + demTrue);
+                statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
+            } else {
+                StatisticalPoint statisticalPoint = new StatisticalPoint(demTrue, demSum, listCategory.get(i).id);
+                statisticalPointDatabase.addStaticticalPoint(statisticalPoint);
+            }
         }
         adapter.addAll(chiTietDiems);
+        statisticalPointDatabase.close();
         initChart();
     }
 
@@ -153,7 +169,8 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 }
             }
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
-            HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
+            HistoryDBHelper.HistoryDatabase historyDatabase =
+                    new HistoryDBHelper.HistoryDatabase(this);
             historyDatabase.open();
             historyDatabase.addPointToHistory(String.valueOf(soCauDung * 10 / list.size()));
             historyDatabase.close();

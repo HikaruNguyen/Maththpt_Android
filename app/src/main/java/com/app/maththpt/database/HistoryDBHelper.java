@@ -29,7 +29,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
     public static final String HISTORY_UPDATE_AT = "history_update_at";
 
     private static final String DATABASE_NAME = "history";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "create table "

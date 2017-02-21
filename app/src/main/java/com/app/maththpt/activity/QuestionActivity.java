@@ -136,7 +136,7 @@ public class QuestionActivity extends BaseActivity {
             listCategory = intent.getParcelableArrayListExtra("listCate");
             CLog.d(TAG, "listCategory SIZE:" + listCategory.size());
             soCau = intent.getIntExtra("soCau", 5);
-            time = intent.getIntExtra("time", (int) (0.5 * 60 * 1000));
+            time = intent.getLongExtra("time", (long) (60 * 1000 * 0.5));
         } else if (type == Configuaration.TYPE_BODE) {
             title = intent.getStringExtra("title");
             testID = intent.getStringExtra("testID");
