@@ -26,9 +26,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResId) {
         super.setContentView(layoutResId);
-//        getToolbar();
-//        getStatusbar();
-
     }
 
     public Toolbar getToolbar() {
@@ -99,14 +96,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void startActivityForBundle(Context context, Class<?> cls) {
         startActivityForBundle(context, cls, null);
-    }
-
-    public void ToastMsg(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    public void ToastErrorConnect() {
-        Toast.makeText(this, getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
     }
 
     @Override

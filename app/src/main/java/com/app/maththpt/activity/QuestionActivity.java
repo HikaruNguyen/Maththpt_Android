@@ -410,7 +410,7 @@ public class QuestionActivity extends BaseActivity {
             }
 
         }
-        Intent intent = new Intent(this, ChamDiemActivity.class);
+        Intent intent = new Intent(this, MarkPointActivity.class);
         intent.putParcelableArrayListExtra("listAnswer", (ArrayList<? extends Parcelable>) list);
         intent.putParcelableArrayListExtra("listCate", (ArrayList<? extends Parcelable>) listCategory);
         startActivityForResult(intent, CODE_CHAM_DIEM);

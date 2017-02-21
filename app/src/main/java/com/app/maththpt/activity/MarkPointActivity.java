@@ -12,12 +12,11 @@ import android.util.Log;
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.ChiTietDiemAdapter;
 import com.app.maththpt.database.HistoryDBHelper;
-import com.app.maththpt.databinding.ActivityChamDiemBinding;
+import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
-import com.app.maththpt.widget.DisableScrollRecyclerView;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -35,7 +34,7 @@ import java.util.List;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
-public class ChamDiemActivity extends BaseActivity implements OnChartValueSelectedListener {
+public class MarkPointActivity extends BaseActivity implements OnChartValueSelectedListener {
     private static final int[] VORDIPLOM_COLORS = {
             rgb("#2ecc71"), rgb("#f1c40f"), Color.rgb(255, 247, 140), Color.rgb(255, 208, 140),
             Color.rgb(140, 234, 255),};
@@ -44,18 +43,15 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
     private Typeface mTfLight;
     private Typeface mTfRegular;
     private List<Category> listCategory;
-    private DisableScrollRecyclerView rvChiTiet;
     private ChiTietDiemAdapter adapter;
-    private List<ChiTietDiem> chiTietDiems;
     int soCauDung = 0;
-    private ActivityChamDiemBinding chamDiemBinding;
+    private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
-    private HistoryDBHelper.HistoryDatabase historyDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chamDiemBinding = DataBindingUtil.setContentView(this, R.layout.activity_cham_diem);
+        chamDiemBinding = DataBindingUtil.setContentView(this, R.layout.activity_mark_point);
         chamDiemViewModel = new ChamDiemViewModel(this, getString(R.string.yourPoint));
         chamDiemBinding.setChamDiemViewModel(chamDiemViewModel);
         getData();
@@ -100,23 +96,14 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         mChart.setDrawCenterText(true);
 
         mChart.setRotationAngle(0);
-        // enable rotation of the chart by touch
         mChart.setRotationEnabled(true);
         mChart.setHighlightPerTapEnabled(true);
 
-        // mChart.setUnit(" €");
-        // mChart.setDrawUnitsInChart(true);
-
-        // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
 
-        setData(soCauDung, list.size());
+        setData();
 
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-        // mChart.spin(2000, 0, 360);
-
-//        mSeekBarX.setOnSeekBarChangeListener(this);
-//        mSeekBarY.setOnSeekBarChangeListener(this);
 
         Legend l = mChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -137,7 +124,7 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         getPoint();
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-        chiTietDiems = new ArrayList<>();
+        List<ChiTietDiem> chiTietDiems = new ArrayList<>();
         for (int i = 0; i < listCategory.size(); i++) {
             int demSum = 0;
             int demTrue = 0;
@@ -166,7 +153,7 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
                 }
             }
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
-            historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
+            HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
             historyDatabase.open();
             historyDatabase.addPointToHistory(String.valueOf(soCauDung * 10 / list.size()));
             historyDatabase.close();
@@ -177,10 +164,9 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
     private void initUI() {
         setBackButtonToolbar();
         mChart = chamDiemBinding.chart1;
-        rvChiTiet = chamDiemBinding.rvChiTiet;
-        rvChiTiet.setDivider();
+        chamDiemBinding.rvChiTiet.setDivider();
         adapter = new ChiTietDiemAdapter(this, new ArrayList<>());
-        rvChiTiet.setAdapter(adapter);
+        chamDiemBinding.rvChiTiet.setAdapter(adapter);
     }
 
     @Override
@@ -198,17 +184,10 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         Log.i("PieChart", "nothing selected");
     }
 
-    private void setData(int count, float range) {
-
-        float mult = range;
+    private void setData() {
 
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
 
-        // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-        // the chart.
-//        for (int i = 0; i < count; i++) {
-//            entries.add(new PieEntry((float) ((Math.random() * mult) + mult / 5), mParties[i % mParties.length]));
-//        }
         entries.add(new PieEntry((float) (soCauDung), "Đúng"));
         entries.add(new PieEntry((float) (list.size() - soCauDung), "Sai"));
         PieDataSet dataSet = new PieDataSet(entries, "Đáp án");
@@ -256,13 +235,7 @@ public class ChamDiemActivity extends BaseActivity implements OnChartValueSelect
         float PhanTram = (float) soCauDung * 100 / list.size();
         String ss = String.format("%.1f", PhanTram) + "%";
         SpannableString s = new SpannableString(ss);
-//        SpannableString s = new SpannableString("" + point);
         s.setSpan(new RelativeSizeSpan(1.7f), 0, s.length(), 0);
-//        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-//        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-//        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
-//        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-//        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
         return s;
     }
 }

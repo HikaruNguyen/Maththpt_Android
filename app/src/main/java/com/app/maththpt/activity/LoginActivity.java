@@ -37,7 +37,6 @@ public class LoginActivity extends BaseActivity {
     private ActivityLoginBinding loginBinding;
     private LoginViewModel loginViewModel;
     private Subscription mSubscription;
-    private MathThptService apiService;
     private com.app.maththpt.modelresult.LoginResult mLoginResult;
 
     @Override
@@ -121,7 +120,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void loginAPI() {
-        apiService = MyApplication.with(this).getMaththptSerivce();
+        MathThptService apiService = MyApplication.with(this).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed())
             mSubscription.unsubscribe();
         mSubscription = apiService.postLogin(loginViewModel.username, loginViewModel.password)

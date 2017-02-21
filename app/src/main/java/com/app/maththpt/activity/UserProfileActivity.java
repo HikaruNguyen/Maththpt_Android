@@ -33,7 +33,6 @@ import static java.lang.Float.parseFloat;
 public class UserProfileActivity extends BaseActivity {
     private ActivityUserProfileBinding userProfileBinding;
     private UserProfileViewModel userProfileViewModel;
-    private SharedPreferences sharedPreferences;
     private Typeface mTfLight;
     private List<Point> listPoint;
 
@@ -41,7 +40,7 @@ public class UserProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
-        sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         String userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
         setSupportActionBar(userProfileBinding.toolbar);
