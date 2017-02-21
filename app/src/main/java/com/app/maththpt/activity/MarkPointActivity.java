@@ -150,7 +150,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 statisticalPoint.setTotalQuestionTrue(statisticalPoint.getTotalQuestionTrue() + demTrue);
                 statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
             } else {
-                StatisticalPoint statisticalPoint = new StatisticalPoint(demTrue, demSum, listCategory.get(i).id);
+                StatisticalPoint statisticalPoint = new StatisticalPoint(demTrue, demSum, listCategory.get(i).id,listCategory.get(i).name);
                 statisticalPointDatabase.addStaticticalPoint(statisticalPoint);
             }
         }

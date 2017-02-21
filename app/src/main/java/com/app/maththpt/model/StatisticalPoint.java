@@ -7,19 +7,16 @@ package com.app.maththpt.model;
 public class StatisticalPoint {
     private int totalQuestionTrue;
     private int totalQuestion;
-    private float ratio;
-
+    private String cateName;
     private int cateID;
 
-    public StatisticalPoint(int totalQuestionTrue, int totalQuestion, int cateID) {
+    public StatisticalPoint(int totalQuestionTrue, int totalQuestion, int cateID, String cateName) {
         this.totalQuestionTrue = totalQuestionTrue;
         this.totalQuestion = totalQuestion;
         this.cateID = cateID;
-        if (totalQuestion <= 0) {
-            ratio = -1;
-        } else {
-            ratio = totalQuestionTrue / totalQuestion;
-        }
+        this.cateName = cateName;
+        getRatio();
+
     }
 
     public int getCateID() {
@@ -31,11 +28,13 @@ public class StatisticalPoint {
     }
 
     public float getRatio() {
+        float ratio;
+        if (getTotalQuestion() <= 0) {
+            ratio = -1;
+        } else {
+            ratio = ((float) getTotalQuestionTrue() * 100) / getTotalQuestion();
+        }
         return ratio;
-    }
-
-    public void setRatio(float ratio) {
-        this.ratio = ratio;
     }
 
     public int getTotalQuestionTrue() {
@@ -52,5 +51,13 @@ public class StatisticalPoint {
 
     public void setTotalQuestion(int totalQuestion) {
         this.totalQuestion = totalQuestion;
+    }
+
+    public String getCateName() {
+        return cateName;
+    }
+
+    public void setCateName(String cateName) {
+        this.cateName = cateName;
     }
 }

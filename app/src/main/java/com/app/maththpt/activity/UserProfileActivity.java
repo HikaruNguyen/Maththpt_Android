@@ -8,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.app.maththpt.R;
+import com.app.maththpt.adapter.StatisticalPointAdapter;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.database.HistoryDBHelper;
+import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityUserProfileBinding;
 import com.app.maththpt.model.Point;
+import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -59,7 +62,23 @@ public class UserProfileActivity extends BaseActivity {
             initChart();
         } else {
             userProfileBinding.chartPoint.setNoDataText(getString(R.string.no_data));
+            userProfileViewModel.setVisiableError(true);
         }
+        getStatisticalPoint();
+    }
+
+    private void getStatisticalPoint() {
+        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
+                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
+        statisticalPointDatabase.open();
+        List<StatisticalPoint> statisticalPoints = statisticalPointDatabase.getAll();
+        if (statisticalPoints != null && statisticalPoints.size() > 0) {
+            userProfileBinding.rvStatisticalPoint.setDivider();
+            StatisticalPointAdapter pointAdapter = new StatisticalPointAdapter(this, new ArrayList<>());
+            userProfileBinding.rvStatisticalPoint.setAdapter(pointAdapter);
+            pointAdapter.addAll(statisticalPoints);
+        }
+        statisticalPointDatabase.close();
 
     }
 

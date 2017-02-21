@@ -62,4 +62,5 @@
     <string name="empty_repassword">Nhập lại mật khẩu không được để trống!</string>
     <string name="empty_email">Email không được để trống!</string>
     <string name="password_invalid">Mật khẩu không khớp!</string>
+    <string name="tiLeLamBaiDung">Tỷ lệ làm bài đúng</string>
 </resources>

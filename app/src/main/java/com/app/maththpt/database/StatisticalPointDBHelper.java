@@ -20,15 +20,16 @@ import java.util.List;
 
 public class StatisticalPointDBHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_STATICTICAL_POINT = "TABLE_STATICTICAL_POINT";
-    public static final String STATICTICAL_POINT_ID = "STATICTICAL_POINT_ID";
-    public static final String STATICTICAL_POINT_TOTAL_QUESTION = "STATICTICAL_POINT_TOTAL_QUESTION";
-    public static final String STATICTICAL_POINT_TOTAL_QUESTION_TRUE = "STATICTICAL_POINT_TOTAL_QUESTION_TRUE";
-    public static final String STATICTICAL_POINT_CATEID = "STATICTICAL_POINT_CATEID";
-    public static final String STATICTICAL_POINT_CREAT_AT = "STATICTICAL_POINT_CREAT_AT";
-    public static final String STATICTICAL_POINT_UPDATE_AT = "STATICTICAL_POINT";
+    private static final String TABLE_STATICTICAL_POINT = "TABLE_STATICTICAL_POINT";
+    private static final String STATICTICAL_POINT_ID = "STATICTICAL_POINT_ID";
+    private static final String STATICTICAL_POINT_TOTAL_QUESTION = "STATICTICAL_POINT_TOTAL_QUESTION";
+    private static final String STATICTICAL_POINT_TOTAL_QUESTION_TRUE = "STATICTICAL_POINT_TOTAL_QUESTION_TRUE";
+    private static final String STATICTICAL_POINT_CATEID = "STATICTICAL_POINT_CATEID";
+    private static final String STATICTICAL_POINT_CATENAME = "STATICTICAL_POINT_CATENAME";
+    private static final String STATICTICAL_POINT_CREAT_AT = "STATICTICAL_POINT_CREAT_AT";
+    private static final String STATICTICAL_POINT_UPDATE_AT = "STATICTICAL_POINT";
 
-    private static final String DATABASE_NAME = "history";
+    private static final String DATABASE_NAME = "STATICTICAL_POINT";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
@@ -38,6 +39,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             + STATICTICAL_POINT_TOTAL_QUESTION + " integer,"
             + STATICTICAL_POINT_TOTAL_QUESTION_TRUE + " integer, "
             + STATICTICAL_POINT_CATEID + " integer, "
+            + STATICTICAL_POINT_CATENAME + " text, "
             + STATICTICAL_POINT_CREAT_AT + " text, "
             + STATICTICAL_POINT_UPDATE_AT + " text );";
 
@@ -67,6 +69,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                 StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION,
                 StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE,
                 StatisticalPointDBHelper.STATICTICAL_POINT_CATEID,
+                StatisticalPointDBHelper.STATICTICAL_POINT_CATENAME,
                 StatisticalPointDBHelper.STATICTICAL_POINT_CREAT_AT,
                 StatisticalPointDBHelper.STATICTICAL_POINT_UPDATE_AT
         };
@@ -110,6 +113,8 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                     .getColumnIndex(StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE);
             int column_cateID = insertHelper
                     .getColumnIndex(StatisticalPointDBHelper.STATICTICAL_POINT_CATEID);
+            int column_cateName = insertHelper
+                    .getColumnIndex(StatisticalPointDBHelper.STATICTICAL_POINT_CATENAME);
             long dtMili = System.currentTimeMillis();
             int column_creat_at = insertHelper
                     .getColumnIndex(StatisticalPointDBHelper.STATICTICAL_POINT_CREAT_AT);
@@ -119,6 +124,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             insertHelper.bind(column_total_question, statisticalPoint.getTotalQuestion());
             insertHelper.bind(column_total_question_true, statisticalPoint.getTotalQuestionTrue());
             insertHelper.bind(column_cateID, statisticalPoint.getCateID());
+            insertHelper.bind(column_cateName, statisticalPoint.getCateName());
             insertHelper.bind(column_creat_at, dtMili + "");
             insertHelper.bind(column_update_at, dtMili + "");
 
@@ -134,6 +140,8 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                     statisticalPoint.getTotalQuestionTrue());
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_CATEID,
                     statisticalPoint.getCateID());
+            values.put(StatisticalPointDBHelper.STATICTICAL_POINT_CATENAME,
+                    statisticalPoint.getCateName());
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_CREAT_AT,
                     dtMili + "");
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_UPDATE_AT,
@@ -159,11 +167,11 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
 
         public List<StatisticalPoint> getAll() {
 
-            List<StatisticalPoint> statisticalPoints = new ArrayList<StatisticalPoint>();
+            List<StatisticalPoint> statisticalPoints = new ArrayList<>();
 
             Cursor cursor = database.query(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
                     allColumns, null, null, null, null,
-                    StatisticalPointDBHelper.STATICTICAL_POINT_UPDATE_AT + " DESC");
+                    null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -230,7 +238,8 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             return new StatisticalPoint(
                     cursor.getInt(cursor.getColumnIndex(STATICTICAL_POINT_TOTAL_QUESTION_TRUE)),
                     cursor.getInt(cursor.getColumnIndex(STATICTICAL_POINT_TOTAL_QUESTION)),
-                    cursor.getInt(cursor.getColumnIndex(STATICTICAL_POINT_CATEID)));
+                    cursor.getInt(cursor.getColumnIndex(STATICTICAL_POINT_CATEID)),
+                    cursor.getString(cursor.getColumnIndex(STATICTICAL_POINT_CATENAME)));
         }
 
 

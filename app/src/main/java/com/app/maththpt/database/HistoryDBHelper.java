@@ -22,11 +22,11 @@ import static android.R.id.list;
 
 public class HistoryDBHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_HISTORY = "tblhistory";
-    public static final String HISTORY_ID = "history_id";
-    public static final String HISTORY_POINT = "history_point";
-    public static final String HISTORY_CREAT_AT = "history_creat_at";
-    public static final String HISTORY_UPDATE_AT = "history_update_at";
+    private static final String TABLE_HISTORY = "tblhistory";
+    private static final String HISTORY_ID = "history_id";
+    private static final String HISTORY_POINT = "history_point";
+    private static final String HISTORY_CREAT_AT = "history_creat_at";
+    private static final String HISTORY_UPDATE_AT = "history_update_at";
 
     private static final String DATABASE_NAME = "history";
     private static final int DATABASE_VERSION = 1;
@@ -39,7 +39,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
             + HISTORY_CREAT_AT + " text, "
             + HISTORY_UPDATE_AT + " text );";
 
-    public HistoryDBHelper(Context context) {
+    private HistoryDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -155,10 +155,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
         public boolean deleteAll() {
             int number = database.delete(HistoryDBHelper.TABLE_HISTORY, null, null);
-            if (number > 0)
-                return true;
-            else
-                return false;
+            return number > 0;
         }
 
 
@@ -202,8 +199,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         }
 
         private Point cursorToLive(Cursor cursor) {
-            Point Point = new Point(cursor.getString(cursor.getColumnIndex(HISTORY_POINT)), cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));
-            return Point;
+            return new Point(cursor.getString(cursor.getColumnIndex(HISTORY_POINT)), cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));
         }
 
         public int getCountHistory() {
