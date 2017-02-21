@@ -31,7 +31,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity {
-    private static String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final int CODE_REGISTER = 11;
     private CallbackManager callbackManager;
     private SharedPreferences.Editor editor;
     private ActivityLoginBinding loginBinding;
@@ -108,14 +109,13 @@ public class LoginActivity extends BaseActivity {
             } else if (loginViewModel.password == null || loginViewModel.password.isEmpty()) {
                 Toast.makeText(LoginActivity.this, getString(R.string.empty_password), Toast.LENGTH_SHORT).show();
             } else {
-                try {
-                    CLog.d(TAG, "pass: " + AeSimpleSHA1.SHA1(loginViewModel.password));
-                } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
                 loginAPI();
             }
 
+        });
+        loginBinding.tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivityForResult(intent, CODE_REGISTER);
         });
     }
 
@@ -164,7 +164,14 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE_REGISTER) {
+            loginViewModel.username = data.getStringExtra("username");
+            loginViewModel.notifyChange();
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+
     }
 
     @Override
@@ -173,4 +180,5 @@ public class LoginActivity extends BaseActivity {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = null;
     }
+
 }

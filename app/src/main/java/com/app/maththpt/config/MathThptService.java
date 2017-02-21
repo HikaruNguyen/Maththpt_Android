@@ -3,6 +3,7 @@ package com.app.maththpt.config;
 import android.content.Context;
 
 import com.app.maththpt.BuildConfig;
+import com.app.maththpt.modelresult.BaseResult;
 import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.modelresult.LoginResult;
 import com.app.maththpt.modelresult.TestsResult;
@@ -35,14 +36,26 @@ public interface MathThptService {
     Observable<TestsResult> getTests();
 
     @GET("content/get-content.php")
-    Observable<DetailTestsResult> getContentbyTestID(@Query("type") int type, @Query("testID") String testID, @Query("page") int page);
+    Observable<DetailTestsResult> getContentbyTestID(@Query("type") int type,
+                                                     @Query("testID") String testID,
+                                                     @Query("page") int page);
 
     @GET("content/get-content.php")
-    Observable<DetailTestsResult> getContentbyCategoryID(@Query("type") int type, @Query("cateID") int testID, @Query("page") int page);
+    Observable<DetailTestsResult> getContentbyCategoryID(@Query("type") int type,
+                                                         @Query("cateID") int testID,
+                                                         @Query("page") int page);
 
     @FormUrlEncoded
     @POST("user/login.php")
-    Observable<LoginResult> postLogin(@Field("username") String username, @Field("password") String password);
+    Observable<LoginResult> postLogin(@Field("username") String username,
+                                      @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("user/register.php")
+    Observable<BaseResult> postRegister(@Field("username") String username,
+                                        @Field("password") String password,
+                                        @Field("fullname") String fullname,
+                                        @Field("email") String email);
 
     class Factory {
 

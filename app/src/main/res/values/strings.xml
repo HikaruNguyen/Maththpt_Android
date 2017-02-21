@@ -54,4 +54,12 @@
     <string name="weak">YẾU</string>
     <string name="empty_username">Tên đăng nhập không được để trống!</string>
     <string name="empty_password">Mật khẩu không được để trống!</string>
+    <string name="register">Đăng ký</string>
+    <string name="fullName">Tên đầy đủ</string>
+    <string name="repass">Nhập lại mật khẩu</string>
+    <string name="no_account">Bạn chưa có tài khoản?</string>
+    <string name="empty_fullname">Tên đầy đủ không được để trống!</string>
+    <string name="empty_repassword">Nhập lại mật khẩu không được để trống!</string>
+    <string name="empty_email">Email không được để trống!</string>
+    <string name="password_invalid">Mật khẩu không khớp!</string>
 </resources>
