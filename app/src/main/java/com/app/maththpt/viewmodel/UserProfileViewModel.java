@@ -3,6 +3,7 @@ package com.app.maththpt.viewmodel;
 import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.view.View;
 
 import com.app.maththpt.R;
 import com.app.maththpt.database.HistoryDBHelper;
@@ -24,6 +25,7 @@ public class UserProfileViewModel extends BaseViewModel {
     @Bindable
     public String classification;
 
+
     public UserProfileViewModel(Activity activity, String title, String userName, String email) {
         super(activity, title);
         this.userNameProfile = userName;
@@ -40,20 +42,27 @@ public class UserProfileViewModel extends BaseViewModel {
     private void setAveragePoint() {
         HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(activity);
         historyDatabase.open();
-        float diem = historyDatabase.getAveragePoint();
-        averagePoint = String.format("%.1f", diem);
-        countPoint = historyDatabase.getCountHistory() + "";
-        historyDatabase.close();
-        if (diem >= 8) {
-            classification = activity.getString(R.string.good);
-        } else if (diem >= 6.5) {
-            classification = activity.getString(R.string.rather);
-        } else if (diem >= 4.5) {
-            classification = activity.getString(R.string.medium);
+        int count = historyDatabase.getCountHistory();
+        if (count > 0) {
+            float diem = historyDatabase.getAveragePoint();
+            averagePoint = String.format("%.1f", diem);
+            countPoint = count + "";
+            if (diem >= 8) {
+                classification = activity.getString(R.string.good);
+            } else if (diem >= 6.5) {
+                classification = activity.getString(R.string.rather);
+            } else if (diem >= 4.5) {
+                classification = activity.getString(R.string.medium);
+            } else {
+                classification = activity.getString(R.string.weak);
+            }
         } else {
-            classification = activity.getString(R.string.weak);
-        }
+            classification = activity.getString(R.string.no_data);
+            countPoint = activity.getString(R.string.no_data);
+            averagePoint = activity.getString(R.string.no_data);
 
+        }
+        historyDatabase.close();
     }
 
 }

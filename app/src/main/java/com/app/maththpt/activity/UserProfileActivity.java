@@ -56,7 +56,12 @@ public class UserProfileActivity extends BaseActivity {
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         listPoint = new ArrayList<>();
         getListPoint();
-        initChart();
+        if (listPoint != null && listPoint.size() > 0) {
+            initChart();
+        } else {
+            userProfileBinding.chartPoint.setNoDataText(getString(R.string.no_data));
+        }
+
     }
 
     private void getListPoint() {

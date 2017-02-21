@@ -98,6 +98,7 @@
                         android:text="@string/point_chart"
                         android:textStyle="bold" />
 
+
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chartPoint"
                         android:layout_width="match_parent"
