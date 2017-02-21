@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.databinding.FragmentQuestionBinding;
@@ -145,22 +146,27 @@ public class QuestionWVFragment extends Fragment {
 
     @Subscribe
     public void onEvent(XemDapAnEvent event) {
-        if (position == event.position) {
-            if (!isCheckedKQ) {
-                if (question.answerList.get(0).isCorrect) {
-                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),1);");
-                } else if (question.answerList.get(1).isCorrect) {
-                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),2);");
-                } else if (question.answerList.get(2).isCorrect) {
-                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),3);");
-                } else if (question.answerList.get(3).isCorrect) {
-                    fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),4);");
+        if (event.type == XemDapAnEvent.TYPE_CHECK) {
+            if (position == event.position) {
+                if (!isCheckedKQ) {
+                    if (question.answerList.get(0).isCorrect) {
+                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),1);");
+                    } else if (question.answerList.get(1).isCorrect) {
+                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),2);");
+                    } else if (question.answerList.get(2).isCorrect) {
+                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),3);");
+                    } else if (question.answerList.get(3).isCorrect) {
+                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),4);");
+                    }
+                } else {
+                    fragmentQuestionBinding.webView.loadUrl("javascript:resetColor();");
                 }
-            }else {
-                fragmentQuestionBinding.webView.loadUrl("javascript:resetColor();");
+                isCheckedKQ = !isCheckedKQ;
             }
-            isCheckedKQ = !isCheckedKQ;
+        } else if (event.type == XemDapAnEvent.TYPE_DETAIL) {
+            Toast.makeText(getActivity(), getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
         }
+
     }
 
 }

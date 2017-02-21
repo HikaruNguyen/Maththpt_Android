@@ -201,37 +201,42 @@ public class QuestionFragment extends Fragment {
 
     @Subscribe
     public void onEvent(XemDapAnEvent event) {
-        if (!isCheckedKQ) {
-            if (position == event.position) {
-                if (question.answerList.get(0).isCorrect) {
-                    lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-                } else if (question.answerList.get(1).isCorrect) {
-                    lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-                } else if (question.answerList.get(2).isCorrect) {
-                    lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
-                } else if (question.answerList.get(3).isCorrect) {
-                    lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+        if (event.type == XemDapAnEvent.TYPE_CHECK) {
+            if (!isCheckedKQ) {
+                if (position == event.position) {
+                    if (question.answerList.get(0).isCorrect) {
+                        lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                    } else if (question.answerList.get(1).isCorrect) {
+                        lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                    } else if (question.answerList.get(2).isCorrect) {
+                        lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                    } else if (question.answerList.get(3).isCorrect) {
+                        lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                    }
+                    if (rbA.isChecked() && !question.answerList.get(0).isCorrect) {
+                        lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                    } else if (rbB.isChecked() && !question.answerList.get(1).isCorrect) {
+                        lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                    } else if (rbC.isChecked() && !question.answerList.get(2).isCorrect) {
+                        lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                    } else if (rbD.isChecked() && !question.answerList.get(3).isCorrect) {
+                        lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                    }
                 }
-                if (rbA.isChecked() && !question.answerList.get(0).isCorrect) {
-                    lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-                } else if (rbB.isChecked() && !question.answerList.get(1).isCorrect) {
-                    lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-                } else if (rbC.isChecked() && !question.answerList.get(2).isCorrect) {
-                    lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
-                } else if (rbD.isChecked() && !question.answerList.get(3).isCorrect) {
-                    lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+            } else {
+                if (position == event.position) {
+                    lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                    lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                    lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+                    lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
                 }
-            }
-        } else {
-            if (position == event.position) {
-                lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-                lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-                lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-                lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
-            }
 
+            }
+            isCheckedKQ = !isCheckedKQ;
+        } else if (event.type == XemDapAnEvent.TYPE_DETAIL) {
+            Toast.makeText(getActivity(), getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
         }
-        isCheckedKQ = !isCheckedKQ;
+
     }
 
     Bitmap bitmap;

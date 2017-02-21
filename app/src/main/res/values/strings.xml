@@ -15,7 +15,7 @@
     <string name="error_connect">Kiểm tra kết nội mạng và thử lại!</string>
     <string name="questionNo">Câu</string>
     <string name="no_data">Chưa có dữ liệu</string>
-    <string name="xemDapAn">Xem đáp án</string>
+    <string name="xemDapAn">Xem đáp án chi tiết</string>
     <string name="login">Đăng nhập</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
@@ -66,4 +66,5 @@
     <string name="confirmQuitExam">Bạn đang làm bài kiểm tra, bạn vẫn muốn thoát?</string>
     <string name="yes">Đồng ý</string>
     <string name="late">Để sau</string>
+    <string name="coming_soon">Chức năng đang phát triển</string>
 </resources>

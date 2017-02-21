@@ -97,14 +97,6 @@ public class QuestionActivity extends BaseActivity {
                 }
 
                 dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-
-//                if (position + 1 == dotsCount) {
-//                    btnNext.setVisibility(View.GONE);
-//                    btnFinish.setVisibility(View.VISIBLE);
-//                } else {
-//                    btnNext.setVisibility(View.VISIBLE);
-//                    btnFinish.setVisibility(View.GONE);
-//                }
             }
 
             @Override
@@ -113,12 +105,16 @@ public class QuestionActivity extends BaseActivity {
             }
         });
 
-        activityQuestionBinding.imgNext.setOnClickListener(v -> {
-            activityQuestionBinding.viewpager.setCurrentItem(positionCurrent + 1);
-        });
+        activityQuestionBinding.imgNext.setOnClickListener(v ->
+                activityQuestionBinding.viewpager.setCurrentItem(positionCurrent + 1));
 
-        activityQuestionBinding.imgPre.setOnClickListener(v -> {
-            activityQuestionBinding.viewpager.setCurrentItem(positionCurrent - 1);
+        activityQuestionBinding.imgPre.setOnClickListener(v ->
+                activityQuestionBinding.viewpager.setCurrentItem(positionCurrent - 1));
+
+        activityQuestionBinding.fab.setOnClickListener(v -> {
+            if (list != null && list.size() > 0)
+                EventBus.getDefault().post(
+                        new XemDapAnEvent(positionCurrent + 1, XemDapAnEvent.TYPE_CHECK));
         });
     }
 
@@ -140,7 +136,7 @@ public class QuestionActivity extends BaseActivity {
             testID = intent.getStringExtra("testID");
 //            Toast.makeText(this, testID, Toast.LENGTH_SHORT).show();
         }
-        questionViewModel = new QuestionViewModel(this, title);
+        questionViewModel = new QuestionViewModel(this, title, type);
     }
 
     private void countDown() {
@@ -413,7 +409,7 @@ public class QuestionActivity extends BaseActivity {
             onBackPressed();
         } else if (id == R.id.action_xemDA) {
             if (list != null && list.size() > 0)
-                EventBus.getDefault().post(new XemDapAnEvent(positionCurrent + 1));
+                EventBus.getDefault().post(new XemDapAnEvent(positionCurrent + 1, XemDapAnEvent.TYPE_DETAIL));
         } else if (id == R.id.action_Share) {
             if (list != null && list.size() > 0) {
                 EventBus.getDefault().post(new ShareQuestionEvent(positionCurrent + 1));
@@ -481,20 +477,24 @@ public class QuestionActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.confirmQuitExam));
-        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.late), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+        if (type == Configuaration.TYPE_KIEMTRA) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.confirmQuitExam));
+            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.setNegativeButton(getString(R.string.late), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        } else {
+            finish();
+        }
     }
 }
