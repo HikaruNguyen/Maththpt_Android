@@ -8,7 +8,11 @@ import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.ActivityLoginBinding;
+import com.app.maththpt.modelresult.DetailTestsResult;
+import com.app.maththpt.utils.AeSimpleSHA1;
+import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.LoginViewModel;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -17,15 +21,24 @@ import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity {
     private static String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager callbackManager;
-    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ActivityLoginBinding loginBinding;
     private LoginViewModel loginViewModel;
+    private Subscription mSubscription;
+    private MathThptService apiService;
+    private com.app.maththpt.modelresult.LoginResult mLoginResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,49 +54,111 @@ public class LoginActivity extends BaseActivity {
 
     private void bindData() {
         callbackManager = CallbackManager.Factory.create();
-        sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(final LoginResult loginResult) {
-                GraphRequest request = GraphRequest.newMeRequest(
-                        loginResult.getAccessToken(),
-                        (object, response) -> {
-                            if (object != null) {
-                                String email = object.optString("email");
-                                String name = object.optString("name");
-                                String fbid = object.optString("id");
-                                editor.putString(Configuaration.KEY_NAME, name);
-                                editor.putString(Configuaration.KEY_EMAIL, email);
-                                editor.commit();
-                                setResult(RESULT_OK);
-                                finish();
-                            } else {
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(final LoginResult loginResult) {
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                (object, response) -> {
+                                    if (object != null) {
+                                        String email = object.optString("email");
+                                        String name = object.optString("name");
+                                        editor.putString(Configuaration.KEY_NAME, name);
+                                        editor.putString(Configuaration.KEY_EMAIL, email);
+                                        editor.commit();
+                                        setResult(RESULT_OK);
+                                        finish();
+                                    } else {
 
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email");
-                request.setParameters(parameters);
-                request.executeAsync();
-            }
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
 
-            @Override
-            public void onCancel() {
-                runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Login Cancel", Toast.LENGTH_LONG).show());
+                    @Override
+                    public void onCancel() {
+                        runOnUiThread(() -> Toast.makeText(
+                                LoginActivity.this, "Login Cancel", Toast.LENGTH_LONG).show());
 
-            }
+                    }
 
-            @Override
-            public void onError(final FacebookException error) {
-                runOnUiThread(() -> Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show());
+                    @Override
+                    public void onError(final FacebookException error) {
+                        runOnUiThread(() -> Toast.makeText(
+                                LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show());
 
-            }
-        });
+                    }
+                });
     }
 
     private void event() {
-        loginBinding.btnLoginFB.setOnClickListener(view -> LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "user_friends", "email")));
+        loginBinding.btnLoginFB.setOnClickListener(
+                view -> LoginManager.getInstance().
+                        logInWithReadPermissions(
+                                LoginActivity.this,
+                                Arrays.asList("public_profile", "user_friends", "email")));
+        loginBinding.btnLogin.setOnClickListener(v -> {
+            if (loginViewModel.username == null || loginViewModel.username.isEmpty()) {
+                Toast.makeText(LoginActivity.this, getString(R.string.empty_username), Toast.LENGTH_SHORT).show();
+            } else if (loginViewModel.password == null || loginViewModel.password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, getString(R.string.empty_password), Toast.LENGTH_SHORT).show();
+            } else {
+                try {
+                    CLog.d(TAG, "pass: " + AeSimpleSHA1.SHA1(loginViewModel.password));
+                } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                loginAPI();
+            }
+
+        });
+    }
+
+    private void loginAPI() {
+        apiService = MyApplication.with(this).getMaththptSerivce();
+        if (mSubscription != null && !mSubscription.isUnsubscribed())
+            mSubscription.unsubscribe();
+        mSubscription = apiService.postLogin(loginViewModel.username, loginViewModel.password)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<com.app.maththpt.modelresult.LoginResult>() {
+                    @Override
+                    public void onCompleted() {
+                        if (mLoginResult.success && mLoginResult.status == 200) {
+                            editor.putString(Configuaration.KEY_NAME, mLoginResult.data.fullname);
+                            editor.putString(Configuaration.KEY_EMAIL, mLoginResult.data.email);
+                            editor.putString(Configuaration.KEY_TOKEN, mLoginResult.data.token);
+                            editor.commit();
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    mLoginResult.message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(
+                                LoginActivity.this,
+                                getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(com.app.maththpt.modelresult.LoginResult loginResult) {
+                        if (loginResult != null) {
+                            mLoginResult = loginResult;
+                        }
+                    }
+                });
     }
 
 
@@ -91,5 +166,12 @@ public class LoginActivity extends BaseActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
+        mSubscription = null;
     }
 }

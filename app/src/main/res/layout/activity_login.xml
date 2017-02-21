@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="LoginViewModel"
+            name="loginViewModel"
             type="com.app.maththpt.viewmodel.LoginViewModel" />
     </data>
 
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:title="@{LoginViewModel.title}" />
+                android:title="@{loginViewModel.title}" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -70,7 +70,9 @@
                         android:id="@+id/edUserName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:addTextChangedListener="@{loginViewModel.watcherUserName}"
+                        android:inputType="text"
+                        android:text="@{loginViewModel.username}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -82,7 +84,9 @@
                         android:id="@+id/edPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:addTextChangedListener="@{loginViewModel.watcherPassword}"
+                        android:inputType="textPassword"
+                        android:text="@{loginViewModel.password}" />
                 </LinearLayout>
 
                 <Button

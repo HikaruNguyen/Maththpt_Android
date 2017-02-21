@@ -52,4 +52,6 @@
     <string name="rather">KHÁ</string>
     <string name="medium">TRUNG BÌNH</string>
     <string name="weak">YẾU</string>
+    <string name="empty_username">Tên đăng nhập không được để trống!</string>
+    <string name="empty_password">Mật khẩu không được để trống!</string>
 </resources>

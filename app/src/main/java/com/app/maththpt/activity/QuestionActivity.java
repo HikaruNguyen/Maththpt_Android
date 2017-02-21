@@ -424,7 +424,8 @@ public class QuestionActivity extends BaseActivity {
             QuestionActivity.progressDialog.dismiss();
             QuestionActivity.progressDialog = null;
         }
-
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
+        mSubscription = null;
         super.onDestroy();
     }
 

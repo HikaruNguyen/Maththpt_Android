@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.app.maththpt.BuildConfig;
 import com.app.maththpt.modelresult.DetailTestsResult;
+import com.app.maththpt.modelresult.LoginResult;
 import com.app.maththpt.modelresult.TestsResult;
 import com.app.maththpt.network.NullOnEmptyConverterFactory;
 import com.app.maththpt.network.RxErrorHandlingCallAdapterFactory;
@@ -18,7 +19,10 @@ import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -27,14 +31,18 @@ import rx.Observable;
  */
 
 public interface MathThptService {
-    @GET("get-test.php")
+    @GET("content/get-test.php")
     Observable<TestsResult> getTests();
 
-    @GET("get-content.php")
+    @GET("content/get-content.php")
     Observable<DetailTestsResult> getContentbyTestID(@Query("type") int type, @Query("testID") String testID, @Query("page") int page);
 
-    @GET("get-content.php")
+    @GET("content/get-content.php")
     Observable<DetailTestsResult> getContentbyCategoryID(@Query("type") int type, @Query("cateID") int testID, @Query("page") int page);
+
+    @FormUrlEncoded
+    @POST("user/login.php")
+    Observable<LoginResult> postLogin(@Field("username") String username, @Field("password") String password);
 
     class Factory {
 

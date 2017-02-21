@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity
 
     private void event() {
         navHeaderMainBinding.lnHeader.setOnClickListener(view -> {
-            if (!FacebookUtils.getFacebookID().isEmpty()) {
+            String token = sharedPreferences.getString(Configuaration.KEY_TOKEN, "");
+            if (!FacebookUtils.getFacebookID().isEmpty() || !token.isEmpty()) {
                 Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 startActivity(intent);
             } else {
@@ -101,8 +102,8 @@ public class MainActivity extends AppCompatActivity
     private void bindNav() {
         String name = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
-        if (!FacebookUtils.getFacebookID().isEmpty()) {
-
+        String token = sharedPreferences.getString(Configuaration.KEY_TOKEN, "");
+        if (!FacebookUtils.getFacebookID().isEmpty() || !token.isEmpty()) {
             if (!name.isEmpty()) {
                 navHeaderMainViewModel.getUserName = name;
             }
