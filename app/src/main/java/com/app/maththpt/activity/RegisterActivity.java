@@ -60,7 +60,7 @@ public class RegisterActivity extends BaseActivity {
             mSubscription.unsubscribe();
         mSubscription = apiService.postRegister(registerViewModel.user.username,
                 registerViewModel.user.password, registerViewModel.user.fullname,
-                registerViewModel.user.email)
+                registerViewModel.user.email, "")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BaseResult>() {

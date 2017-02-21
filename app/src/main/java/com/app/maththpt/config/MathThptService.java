@@ -55,7 +55,8 @@ public interface MathThptService {
     Observable<BaseResult> postRegister(@Field("username") String username,
                                         @Field("password") String password,
                                         @Field("fullname") String fullname,
-                                        @Field("email") String email);
+                                        @Field("email") String email,
+                                        @Field("avatar") String avatar);
 
     class Factory {
 
