@@ -35,18 +35,38 @@ public class RegisterActivity extends BaseActivity {
 
     private void event() {
         registerBinding.btnRegister.setOnClickListener(v -> {
-            if (registerViewModel.user.username == null || registerViewModel.user.username.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.empty_username), Toast.LENGTH_SHORT).show();
-            } else if (registerViewModel.user.fullname == null || registerViewModel.user.fullname.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.empty_fullname), Toast.LENGTH_SHORT).show();
-            } else if (registerViewModel.user.password == null || registerViewModel.user.password.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.empty_password), Toast.LENGTH_SHORT).show();
-            } else if (registerViewModel.repass == null || registerViewModel.repass.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.empty_repassword), Toast.LENGTH_SHORT).show();
-            } else if (registerViewModel.user.email == null || registerViewModel.user.email.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.empty_email), Toast.LENGTH_SHORT).show();
+            if (registerViewModel.user.username == null
+                    || registerViewModel.user.username.isEmpty()) {
+                Toast.makeText(
+                        RegisterActivity.this,
+                        getString(R.string.empty_username),
+                        Toast.LENGTH_SHORT).show();
+            } else if (registerViewModel.user.fullname == null
+                    || registerViewModel.user.fullname.isEmpty()) {
+                Toast.makeText(
+                        RegisterActivity.this,
+                        getString(R.string.empty_fullname),
+                        Toast.LENGTH_SHORT).show();
+            } else if (registerViewModel.user.password == null
+                    || registerViewModel.user.password.isEmpty()) {
+                Toast.makeText(
+                        RegisterActivity.this,
+                        getString(R.string.empty_password),
+                        Toast.LENGTH_SHORT).show();
+            } else if (registerViewModel.repass == null
+                    || registerViewModel.repass.isEmpty()) {
+                Toast.makeText(RegisterActivity.this,
+                        getString(R.string.empty_repassword),
+                        Toast.LENGTH_SHORT).show();
+            } else if (registerViewModel.user.email == null
+                    || registerViewModel.user.email.isEmpty()) {
+                Toast.makeText(RegisterActivity.this,
+                        getString(R.string.empty_email),
+                        Toast.LENGTH_SHORT).show();
             } else if (!registerViewModel.user.password.equals(registerViewModel.repass)) {
-                Toast.makeText(RegisterActivity.this, getString(R.string.password_invalid), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this,
+                        getString(R.string.password_invalid),
+                        Toast.LENGTH_SHORT).show();
             } else {
                 registerAPI();
             }

@@ -36,7 +36,6 @@ import static android.app.Activity.RESULT_OK;
 public class BeforeExamFragment extends Fragment {
     private static final int CODE_CHAM_DIEM = 12;
     private CategoryCheckAdapter adapter;
-    private List<Category> list;
     private int soCau = 50;
     private long time = 15 * 60 * 1000;
     private FragmentBeforeExamBinding beforeExamBinding;
@@ -50,11 +49,12 @@ public class BeforeExamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        beforeExamBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_before_exam, container, false);
+        beforeExamBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_before_exam, container, false);
         beforeExamViewModel = new BeforeExamViewModel(getActivity(), soCau, time);
         beforeExamBinding.setBeforeExamViewModel(beforeExamViewModel);
         View view = beforeExamBinding.getRoot();
-        initUI(view);
+        initUI();
         bindData();
         event();
         return view;
@@ -92,18 +92,18 @@ public class BeforeExamFragment extends Fragment {
 
             builder.setPositiveButton(
                     getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss());
-//            builder.setNegativeButton(
-//                    getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.dismiss());
             AlertDialog dialog = builder.create();
             dialog.show();
             NumberPicker np = (NumberPicker) dialog.findViewById(R.id.numberPicker);
-            np.setMinValue(5);
-            np.setMaxValue(100);
-            np.setOnValueChangedListener((picker, oldVal, newVal) -> {
-//                beforeExamBinding.tvSoCau.setText(newVal + " " + getString(R.string.question));
-                beforeExamViewModel.setNumber(newVal);
-                soCau = newVal;
-            });
+            if (np != null) {
+                np.setMinValue(5);
+                np.setMaxValue(100);
+                np.setValue(soCau);
+                np.setOnValueChangedListener((picker, oldVal, newVal) -> {
+                    beforeExamViewModel.setNumber(newVal);
+                    soCau = newVal;
+                });
+            }
         });
 
         beforeExamBinding.lnThoiGian.setOnClickListener(view -> {
@@ -112,22 +112,22 @@ public class BeforeExamFragment extends Fragment {
             int minute = mcurrentTime.get(Calendar.MINUTE);
             TimePickerDialog mTimePicker;
             mTimePicker = new TimePickerDialog(getActivity(), (view1, hourOfDay, minute1) -> {
-//                beforeExamBinding.tvThoiGian.setText(hourOfDay + " Giờ " + minute1 + " Phút");
                 beforeExamViewModel.setTime((hourOfDay * 60 * 60 + minute1 * 60) * 1000);
                 time = (hourOfDay * 60 * 60 + minute1 * 60) * 1000;
             }, hour, minute, true);
             mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
+            mTimePicker.updateTime(0, 15);
             mTimePicker.show();
         });
     }
 
     private void bindData() {
-        list = CategoryDBHelper.getAllListCategory(getActivity());
+        List<Category> list = CategoryDBHelper.getAllListCategory(getActivity());
         adapter.addAll(list);
     }
 
-    private void initUI(View view) {
-        adapter = new CategoryCheckAdapter(getActivity(), new ArrayList<Category>());
+    private void initUI() {
+        adapter = new CategoryCheckAdapter(getActivity(), new ArrayList<>());
         beforeExamBinding.rvCategory.setAdapter(adapter);
     }
 
@@ -136,7 +136,8 @@ public class BeforeExamFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == CODE_CHAM_DIEM) {
-                ((MainActivity) getActivity()).clearBackStack(getActivity().getSupportFragmentManager());
+                ((MainActivity) getActivity()).clearBackStack(getActivity()
+                        .getSupportFragmentManager());
                 ((MainActivity) getActivity()).changeFragment(new HistoryFragment());
                 ((MainActivity) getActivity()).setMenuSelect(R.id.nav_history);
             }

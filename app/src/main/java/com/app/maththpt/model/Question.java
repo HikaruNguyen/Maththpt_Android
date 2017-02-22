@@ -18,7 +18,8 @@ public class Question implements Serializable, Parcelable {
     public Integer cateID;
     public boolean isCorrect;
 
-    public Question(Integer id, String question, String image, List<Answer> answerList, Integer cateID) {
+    public Question(
+            Integer id, String question, String image, List<Answer> answerList, Integer cateID) {
         this.id = id;
         this.question = question;
         this.image = image;

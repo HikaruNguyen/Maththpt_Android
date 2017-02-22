@@ -83,7 +83,8 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         public void addAllHistory(List<Point> list) throws Exception {
             database.beginTransaction();
             boolean check = false;
-            DatabaseUtils.InsertHelper insertHelper = new DatabaseUtils.InsertHelper(database, HistoryDBHelper.TABLE_HISTORY);
+            DatabaseUtils.InsertHelper insertHelper =
+                    new DatabaseUtils.InsertHelper(database, HistoryDBHelper.TABLE_HISTORY);
 
             for (Point obj : list) {
                 newAddPoint(insertHelper, obj);
@@ -182,7 +183,8 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
             List<Point> Points = new ArrayList<Point>();
 
-            String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY + " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " DESC lIMIT 10";
+            String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY +
+                    " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " DESC lIMIT 10";
 //            Cursor cursor = database.query(HistoryDBHelper.TABLE_HISTORY,
 //                    allColumns, null, null, null, null,
 //                    HistoryDBHelper.HISTORY_CREAT_AT + " ASC");
@@ -199,7 +201,9 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         }
 
         private Point cursorToLive(Cursor cursor) {
-            return new Point(cursor.getString(cursor.getColumnIndex(HISTORY_POINT)), cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));
+            return new Point(
+                    cursor.getString(cursor.getColumnIndex(HISTORY_POINT)),
+                    cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));
         }
 
         public int getCountHistory() {

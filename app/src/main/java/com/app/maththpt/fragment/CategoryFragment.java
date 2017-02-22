@@ -21,8 +21,6 @@ import java.util.List;
  */
 public class CategoryFragment extends Fragment {
 
-    private CategoryAdapter adapter;
-    private List<Category> list;
     private FragmentCategoryBinding categoryBinding;
 
     public CategoryFragment() {
@@ -33,7 +31,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        categoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
+        categoryBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_category, container, false);
         View view = categoryBinding.getRoot();
         initUI();
         bindData();
@@ -41,8 +40,8 @@ public class CategoryFragment extends Fragment {
     }
 
     private void bindData() {
-        adapter = new CategoryAdapter(getActivity(), new ArrayList<>());
-        list = new ArrayList<>();
+        CategoryAdapter adapter = new CategoryAdapter(getActivity(), new ArrayList<>());
+        List<Category> list = new ArrayList<>();
         Category category = new Category(1, "Khảo sát đồ thị hàm số", R.mipmap.icon_khaosat);
         list.add(category);
         category = new Category(2, "Lũy thừa, logarit", R.mipmap.ic_luythua);

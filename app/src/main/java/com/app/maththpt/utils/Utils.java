@@ -18,7 +18,8 @@ import java.net.URL;
  */
 
 public class Utils {
-    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
+    public static String encodeToBase64(
+            Bitmap image, Bitmap.CompressFormat compressFormat, int quality) {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(compressFormat, quality, byteArrayOS);
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
@@ -50,7 +51,10 @@ public class Utils {
 
     public static String replaceMath(String string) {
         if (string != null) {
-            string = string.replace("<p>", "").replace("</p>", "").replace("xmlns=\"http://www.w3.org/1998/Math/MathML\"", "").replace("xmlns='http://www.w3.org/1998/Math/MathML'", "");
+            string = string.replace("<p>", "")
+                    .replace("</p>", "")
+                    .replace("xmlns=\"http://www.w3.org/1998/Math/MathML\"", "")
+                    .replace("xmlns='http://www.w3.org/1998/Math/MathML'", "");
         } else {
             return "";
         }

@@ -35,7 +35,6 @@ public class QuestionWVFragment extends Fragment {
     private static final String POSITION = "POSITION";
     private static final String ISXEMKQ = "ISXEMKQ";
     public static ProgressDialog progressDialog;
-    private boolean isXemKQ = false;
     private Question question;
     private int position;
     ShareDialog shareDialog;
@@ -46,12 +45,11 @@ public class QuestionWVFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static QuestionWVFragment newInstance(Question question, int position, boolean isXemKQ) {
+    public static QuestionWVFragment newInstance(Question question, int position) {
         QuestionWVFragment fragment = new QuestionWVFragment();
         Bundle args = new Bundle();
         args.putSerializable(QUESTION, question);
         args.putInt(POSITION, position);
-        args.putBoolean(ISXEMKQ, isXemKQ);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,29 +60,19 @@ public class QuestionWVFragment extends Fragment {
         if (getArguments() != null) {
             question = (Question) getArguments().getSerializable(QUESTION);
             position = getArguments().getInt(POSITION);
-            isXemKQ = getArguments().getBoolean(ISXEMKQ);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentQuestionBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question, container, false);
+        fragmentQuestionBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_question, container, false);
         View view = fragmentQuestionBinding.getRoot();
         bindData();
-        event();
         return view;
     }
 
-    private void event() {
-        fragmentQuestionBinding.btnCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String loadingUrl = "javascript:checkAnswer1()";
-                fragmentQuestionBinding.webView.loadUrl(loadingUrl);
-            }
-        });
-    }
 
     private void bindData() {
 //        webView.loadUrl("file:///android_asset/MathView/demo.html");
@@ -93,17 +81,23 @@ public class QuestionWVFragment extends Fragment {
         if (question != null) {
 //            Collections.shuffle(question.answerList);
             MathUtils mathUtils = new MathUtils();
-            mathUtils.question = "<b>" + getString(R.string.questionNo) + " " + position + "</b>: " + Utils.replaceMath(question.question.trim());
+            mathUtils.question = "<b>" + getString(R.string.questionNo) + " " + position + "</b>: "
+                    + Utils.replaceMath(question.question.trim());
             mathUtils.answer1 = Utils.replaceMath(question.answerList.get(0).answer.trim());
             mathUtils.answer2 = Utils.replaceMath(question.answerList.get(1).answer.trim());
             mathUtils.answer3 = Utils.replaceMath(question.answerList.get(2).answer.trim());
             mathUtils.answer4 = Utils.replaceMath(question.answerList.get(3).answer.trim());
-            if (question.image != null && !question.image.trim().isEmpty() && question.image.startsWith("data")) {
+            if (question.image != null
+                    && !question.image.trim().isEmpty()
+                    && question.image.startsWith("data")) {
                 mathUtils.image = question.image;
             } else {
                 mathUtils.image = "";
             }
-            fragmentQuestionBinding.webView.loadDataWithBaseURL("file:///android_asset/", mathUtils.htmlContain(), "text/html", "UTF-8", null);
+            fragmentQuestionBinding.webView.loadDataWithBaseURL(
+                    "file:///android_asset/",
+                    mathUtils.htmlContain(),
+                    "text/html", "UTF-8", null);
         }
 
     }
@@ -150,13 +144,17 @@ public class QuestionWVFragment extends Fragment {
             if (position == event.position) {
                 if (!isCheckedKQ) {
                     if (question.answerList.get(0).isCorrect) {
-                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),1);");
+                        fragmentQuestionBinding.webView.loadUrl(
+                                "javascript:setColor(checkAnswer(),1);");
                     } else if (question.answerList.get(1).isCorrect) {
-                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),2);");
+                        fragmentQuestionBinding.webView.loadUrl(
+                                "javascript:setColor(checkAnswer(),2);");
                     } else if (question.answerList.get(2).isCorrect) {
-                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),3);");
+                        fragmentQuestionBinding.webView.loadUrl(
+                                "javascript:setColor(checkAnswer(),3);");
                     } else if (question.answerList.get(3).isCorrect) {
-                        fragmentQuestionBinding.webView.loadUrl("javascript:setColor(checkAnswer(),4);");
+                        fragmentQuestionBinding.webView.loadUrl(
+                                "javascript:setColor(checkAnswer(),4);");
                     }
                 } else {
                     fragmentQuestionBinding.webView.loadUrl("javascript:resetColor();");
@@ -164,7 +162,10 @@ public class QuestionWVFragment extends Fragment {
                 isCheckedKQ = !isCheckedKQ;
             }
         } else if (event.type == XemDapAnEvent.TYPE_DETAIL) {
-            Toast.makeText(getActivity(), getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    getActivity(),
+                    getString(R.string.coming_soon),
+                    Toast.LENGTH_SHORT).show();
         }
 
     }

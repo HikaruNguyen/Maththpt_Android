@@ -161,8 +161,9 @@ public class MainActivity extends AppCompatActivity
         navHeaderMainViewModel.getUserName = getString(R.string.login).toUpperCase();
         navHeaderMainViewModel.getEmail = getString(R.string.app_name).toUpperCase();
         navHeaderMainViewModel.notifyChange();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, activityMainBinding.drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle
+                = new ActionBarDrawerToggle(this, activityMainBinding.drawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         activityMainBinding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         activityMainBinding.navView.addHeaderView(navHeaderMainBinding.getRoot());
@@ -280,21 +281,6 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage(getString(R.string.confirmQuitApp));
-//            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    finish();
-//                }
-//            });
-//            builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                }
-//            });
-//            builder.show();
         }
     }
 

@@ -43,7 +43,8 @@ public class UserProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userProfileBinding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
-        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        SharedPreferences sharedPreferences
+                = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         String userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
         setSupportActionBar(userProfileBinding.toolbar);
@@ -74,7 +75,8 @@ public class UserProfileActivity extends BaseActivity {
         List<StatisticalPoint> statisticalPoints = statisticalPointDatabase.getAll();
         if (statisticalPoints != null && statisticalPoints.size() > 0) {
             userProfileBinding.rvStatisticalPoint.setDivider();
-            StatisticalPointAdapter pointAdapter = new StatisticalPointAdapter(this, new ArrayList<>());
+            StatisticalPointAdapter pointAdapter
+                    = new StatisticalPointAdapter(this, new ArrayList<>());
             userProfileBinding.rvStatisticalPoint.setAdapter(pointAdapter);
             pointAdapter.addAll(statisticalPoints);
         }

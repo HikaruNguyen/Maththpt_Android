@@ -41,7 +41,10 @@ public class AssetDatabaseOpenHelper {
         } catch (IOException e) {
             CLog.d("IOException", e.getMessage());
         }
-        return SQLiteDatabase.openDatabase(context.getDatabasePath(DB_NAME).getPath(), null, SQLiteDatabase.OPEN_READONLY);
+        return SQLiteDatabase.openDatabase(
+                context.getDatabasePath(DB_NAME).getPath(),
+                null,
+                SQLiteDatabase.OPEN_READONLY);
     }
 
     /*

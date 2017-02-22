@@ -36,6 +36,7 @@ public class CRecyclerView extends RecyclerView {
     }
 
     public void setDivider() {
-        this.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+        this.addItemDecoration(
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
     }
 }

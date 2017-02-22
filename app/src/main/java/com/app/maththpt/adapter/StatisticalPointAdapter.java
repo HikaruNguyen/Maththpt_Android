@@ -17,7 +17,8 @@ import java.util.List;
  * Created by manhi on 2/7/2016.
  */
 
-public class StatisticalPointAdapter extends BaseRecyclerAdapter<StatisticalPoint, StatisticalPointAdapter.ViewHolder> {
+public class StatisticalPointAdapter extends
+        BaseRecyclerAdapter<StatisticalPoint, StatisticalPointAdapter.ViewHolder> {
     public StatisticalPointAdapter(Context context, List<StatisticalPoint> list) {
         super(context, list);
     }

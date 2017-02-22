@@ -58,14 +58,10 @@ public class QuestionActivity extends BaseActivity {
     private int soCau;
     private long time;
     private CountDownTimer countDownTimer;
-    private int dotsCount;
-    private ImageView[] dots;
-    private List<Fragment> fragmentList;
     private ActivityQuestionBinding activityQuestionBinding;
     private QuestionViewModel questionViewModel;
     private String testID;
     private Subscription mSubscription;
-    private MathThptService apiService;
     private DetailTestsResult mDetailTestsResult;
     public static ProgressDialog progressDialog;
 
@@ -82,28 +78,25 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void event() {
-        activityQuestionBinding.viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        activityQuestionBinding.viewpager.addOnPageChangeListener(
+                new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(
+                            int position, float positionOffset, int positionOffsetPixels) {
 
-            }
+                    }
 
-            @Override
-            public void onPageSelected(int position) {
-                positionCurrent = position;
-                questionViewModel.setPostion(positionCurrent);
-                for (int i = 0; i < dotsCount; i++) {
-                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
-                }
+                    @Override
+                    public void onPageSelected(int position) {
+                        positionCurrent = position;
+                        questionViewModel.setPostion(positionCurrent);
+                    }
 
-                dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-            }
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+                    }
+                });
 
         activityQuestionBinding.imgNext.setOnClickListener(v ->
                 activityQuestionBinding.viewpager.setCurrentItem(positionCurrent + 1));
@@ -144,12 +137,16 @@ public class QuestionActivity extends BaseActivity {
 
             @SuppressLint("DefaultLocale")
             public void onTick(long millisUntilFinished) {
-                questionViewModel.setTitle("" + String.format(FORMAT,
-                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
-                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                questionViewModel.setTitle(
+                        "" + String.format(
+                                FORMAT,
+                                TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                                        - TimeUnit.HOURS.toMinutes(
+                                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                                TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+                                        - TimeUnit.MINUTES.toSeconds(
+                                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
             }
 
             public void onFinish() {
@@ -166,6 +163,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void bindData() {
         list = new ArrayList<>();
+        MathThptService apiService;
         if (type == Configuaration.TYPE_BODE) {
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
@@ -188,7 +186,9 @@ public class QuestionActivity extends BaseActivity {
 
                         @Override
                         public void onNext(DetailTestsResult detailTestsResult) {
-                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                            if (detailTestsResult != null
+                                    && detailTestsResult.success
+                                    && detailTestsResult.status == 200) {
                                 mDetailTestsResult = detailTestsResult;
                             }
                         }
@@ -216,7 +216,9 @@ public class QuestionActivity extends BaseActivity {
 
                         @Override
                         public void onNext(DetailTestsResult detailTestsResult) {
-                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                            if (detailTestsResult != null
+                                    && detailTestsResult.success
+                                    && detailTestsResult.status == 200) {
                                 mDetailTestsResult = detailTestsResult;
                             }
                         }
@@ -257,7 +259,9 @@ public class QuestionActivity extends BaseActivity {
 
                         @Override
                         public void onNext(DetailTestsResult detailTestsResult) {
-                            if (detailTestsResult != null && detailTestsResult.success && detailTestsResult.status == 200) {
+                            if (detailTestsResult != null
+                                    && detailTestsResult.success
+                                    && detailTestsResult.status == 200) {
                                 mDetailTestsResult = detailTestsResult;
                             }
                         }
@@ -293,7 +297,8 @@ public class QuestionActivity extends BaseActivity {
                     answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
                     answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
                 }
-                Question question = new Question(Integer.parseInt(mDetailTestsResult.data.get(i).id),
+                Question question = new Question(
+                        Integer.parseInt(mDetailTestsResult.data.get(i).id),
                         mDetailTestsResult.data.get(i).question,
                         mDetailTestsResult.data.get(i).image,
                         answerList,
@@ -317,14 +322,13 @@ public class QuestionActivity extends BaseActivity {
             questionViewModel.setVisiableError(false);
             questionViewModel.setSize(list.size());
             questionViewModel.setPostion(positionCurrent);
-            fragmentList = new ArrayList<>();
+            List<Fragment> fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
+                fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1));
             }
             pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
 //            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
-            setUiPageViewController();
             if (type == Configuaration.TYPE_KIEMTRA) {
                 countDown();
             }
@@ -333,29 +337,6 @@ public class QuestionActivity extends BaseActivity {
             questionViewModel.setMessageError(getString(R.string.no_data));
         }
     }
-
-    private void setUiPageViewController() {
-
-        dotsCount = pagerAdapter.getCount();
-        dots = new ImageView[dotsCount];
-
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new ImageView(this);
-            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            params.setMargins(4, 0, 4, 0);
-
-            activityQuestionBinding.viewPagerCountDots.addView(dots[i], params);
-        }
-
-        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-    }
-
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> fragmentList = new ArrayList<>();
@@ -427,7 +408,9 @@ public class QuestionActivity extends BaseActivity {
     private void nopBai() {
         for (int i = 0; i < list.size(); i++) {
             QuestionWVFragment fragment = (QuestionWVFragment) pagerAdapter.getItem(i);
-            if (fragment.fragmentQuestionBinding == null || fragment.fragmentQuestionBinding.webView == null || fragment.fragmentQuestionBinding.webView.answer == 0) {
+            if (fragment.fragmentQuestionBinding == null
+                    || fragment.fragmentQuestionBinding.webView == null
+                    || fragment.fragmentQuestionBinding.webView.answer == 0) {
                 list.get(i).isCorrect = false;
             } else {
                 if (list.get(i).answerList.get(0).isCorrect) {
@@ -444,8 +427,10 @@ public class QuestionActivity extends BaseActivity {
 
         }
         Intent intent = new Intent(this, MarkPointActivity.class);
-        intent.putParcelableArrayListExtra("listAnswer", (ArrayList<? extends Parcelable>) list);
-        intent.putParcelableArrayListExtra("listCate", (ArrayList<? extends Parcelable>) listCategory);
+        intent.putParcelableArrayListExtra(
+                "listAnswer", (ArrayList<? extends Parcelable>) list);
+        intent.putParcelableArrayListExtra(
+                "listCate", (ArrayList<? extends Parcelable>) listCategory);
         startActivityForResult(intent, CODE_CHAM_DIEM);
     }
 
@@ -453,7 +438,8 @@ public class QuestionActivity extends BaseActivity {
     protected void onDestroy() {
         if (countDownTimer != null)
             countDownTimer.cancel();
-        if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
+        if (QuestionActivity.progressDialog != null
+                && QuestionActivity.progressDialog.isShowing()) {
             QuestionActivity.progressDialog.dismiss();
             QuestionActivity.progressDialog = null;
         }

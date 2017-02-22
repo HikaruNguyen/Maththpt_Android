@@ -75,7 +75,8 @@ public class QuestionDBHelper {
         return list;
     }
 
-    public static List<Question> getListQuestionByListCateID(Context context, List<Category> listCate, int soCau) {
+    public static List<Question> getListQuestionByListCateID(
+            Context context, List<Category> listCate, int soCau) {
         List<Question> list = new ArrayList<>();
         AssetDatabaseOpenHelper adb = new AssetDatabaseOpenHelper(context);
         SQLiteDatabase database = adb.StoreDatabase(DB_NAME);

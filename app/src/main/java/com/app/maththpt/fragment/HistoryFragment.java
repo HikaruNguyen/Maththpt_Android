@@ -16,9 +16,6 @@ import com.app.maththpt.viewmodel.HistoryViewModel;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HistoryFragment extends Fragment {
 
     private FragmentHistoryBinding historyBinding;
@@ -33,7 +30,8 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        historyBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_history, container, false);
+        historyBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_history, container, false);
         historyViewModel = new HistoryViewModel();
         historyBinding.setHistoryViewModel(historyViewModel);
         View view = historyBinding.getRoot();
@@ -43,7 +41,8 @@ public class HistoryFragment extends Fragment {
     }
 
     private void bindData() {
-        HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(getActivity());
+        HistoryDBHelper.HistoryDatabase historyDatabase =
+                new HistoryDBHelper.HistoryDatabase(getActivity());
         historyDatabase.open();
         historyAdapter.addAll(historyDatabase.getAll());
         historyBinding.rvHistory.setAdapter(historyAdapter);

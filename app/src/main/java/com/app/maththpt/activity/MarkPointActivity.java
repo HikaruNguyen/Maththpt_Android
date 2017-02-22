@@ -145,12 +145,20 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             }
             chiTietDiems.add(new ChiTietDiem(listCategory.get(i).name, demSum, demTrue));
             if (statisticalPointDatabase.isExistCateID(listCategory.get(i).id)) {
-                StatisticalPoint statisticalPoint = statisticalPointDatabase.getStatisticalPointByCateID(listCategory.get(i).id);
+                StatisticalPoint statisticalPoint =
+                        statisticalPointDatabase.getStatisticalPointByCateID(
+                                listCategory.get(i).id);
                 statisticalPoint.setTotalQuestion(statisticalPoint.getTotalQuestion() + demSum);
-                statisticalPoint.setTotalQuestionTrue(statisticalPoint.getTotalQuestionTrue() + demTrue);
+                statisticalPoint.setTotalQuestionTrue(
+                        statisticalPoint.getTotalQuestionTrue() + demTrue);
                 statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
             } else {
-                StatisticalPoint statisticalPoint = new StatisticalPoint(demTrue, demSum, listCategory.get(i).id,listCategory.get(i).name);
+                StatisticalPoint statisticalPoint =
+                        new StatisticalPoint(
+                                demTrue,
+                                demSum,
+                                listCategory.get(i).id,
+                                listCategory.get(i).name);
                 statisticalPointDatabase.addStaticticalPoint(statisticalPoint);
             }
         }

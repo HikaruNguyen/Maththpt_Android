@@ -58,8 +58,8 @@
 
                         <com.mikhaellopez.circularimageview.CircularImageView
                             android:id="@+id/imgAvatar"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="@dimen/image_size_100dp"
+                            android:layout_height="@dimen/image_size_100dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@mipmap/ic_avatar"
                             app:civ_border_color="#EEEEEE"
@@ -70,8 +70,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="@dimen/margin_5dp"
                             android:text="@{userProfileViewModel.userNameProfile}"
+                            android:textSize="@dimen/text_size_15sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -80,7 +81,7 @@
                             android:layout_gravity="center_horizontal"
                             android:maxLines="1"
                             android:text="@{userProfileViewModel.emailProfile}"
-                            android:textSize="12sp" />
+                            android:textSize="@dimen/text_size_12sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -89,21 +90,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="@dimen/activity_horizontal_margin">
+                    android:padding="@dimen/margin_16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/point_chart"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chartPoint"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp" />
+                        android:layout_height="@dimen/image_size_200dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_marginTop="@dimen/margin_10dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -115,13 +117,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/so_bai_kt"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.countPoint}" />
+                            android:text="@{userProfileViewModel.countPoint}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -134,13 +138,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/diem_trung_binh"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.averagePoint}" />
+                            android:text="@{userProfileViewModel.averagePoint}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -153,39 +159,43 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/xep_loai"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.classification}" />
+                            android:text="@{userProfileViewModel.classification}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="@dimen/margin_5dp"
+                        android:layout_marginTop="@dimen/margin_5dp"
                         android:background="@color/colorGray" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tiLeLamBaiDung"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/no_data"
+                        android:textSize="@dimen/text_size_14sp"
                         android:visibility="@{userProfileViewModel.visiableError}" />
 
                     <com.app.maththpt.widget.DisableScrollRecyclerView
                         android:id="@+id/rvStatisticalPoint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="@dimen/margin_5dp" />
                 </LinearLayout>
 
 

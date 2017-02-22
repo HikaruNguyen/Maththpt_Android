@@ -8,11 +8,11 @@
         android:id="@+id/tvName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="aa" />
+        android:textSize="@dimen/text_size_14sp" />
 
     <TextView
         android:id="@+id/tvPoint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="aa" />
+        android:textSize="@dimen/text_size_12sp" />
 </LinearLayout>

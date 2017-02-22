@@ -36,7 +36,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/activity_horizontal_margin"
+            android:padding="@dimen/margin_16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -47,28 +47,30 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="@dimen/margin_30dp"
                     android:gravity="center_horizontal"
                     android:text="@string/login"
                     android:textAllCaps="true"
-                    android:textSize="30sp"
+                    android:textSize="@dimen/text_size_30sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="@dimen/margin_30dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/username"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edUserName"
                         android:layout_width="match_parent"
+                        android:textSize="@dimen/text_size_14sp"
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{loginViewModel.watcherUserName}"
                         android:inputType="text"
@@ -78,12 +80,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/password"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{loginViewModel.watcherPassword}"
                         android:inputType="textPassword"
                         android:text="@{loginViewModel.password}" />
@@ -93,18 +97,20 @@
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/margin_20dp"
                     android:background="@drawable/bg_button_primary"
                     android:text="@string/login"
+                    android:textSize="@dimen/text_size_14sp"
                     android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnLoginFB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
                     android:background="@drawable/bg_button_fb"
                     android:text="@string/loginFB"
+                    android:textSize="@dimen/text_size_14sp"
                     android:textColor="@color/white" />
 
                 <TextView
@@ -112,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
                     android:text="@string/no_account" />
             </LinearLayout>
         </ScrollView>

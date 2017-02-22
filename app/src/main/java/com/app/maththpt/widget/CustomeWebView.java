@@ -1,7 +1,9 @@
 package com.app.maththpt.widget;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
@@ -60,6 +62,7 @@ public class CustomeWebView extends WebView {
         init();
     }
 
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void init() {
         this.setWebViewClient(new MyBrowser());
         WebSettings webSettings = this.getSettings();
@@ -68,7 +71,14 @@ public class CustomeWebView extends WebView {
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUserAgentString("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>6");
+        Resources res = getResources();
+        float fontSize = res.getDimension(R.dimen.text_size_14sp);
+        webSettings.setDefaultFontSize((int) fontSize);
+
+        webSettings.setUserAgentString(
+                "Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) " +
+                        "AppleWebKit/<WebKit Rev> (KHTML, like Gecko) " +
+                        "Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>6");
         addJavascriptInterface(new WebAppInterface(context), "Android");
 
     }
@@ -85,17 +95,20 @@ public class CustomeWebView extends WebView {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 //            prbLoading.setVisibility(View.VISIBLE);
-            if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
+            if (QuestionActivity.progressDialog != null
+                    && QuestionActivity.progressDialog.isShowing()) {
                 QuestionActivity.progressDialog.dismiss();
             }
-            QuestionActivity.progressDialog = ProgressDialog.show(getContext(), "", getContext().getString(R.string.loading), false, true);
+            QuestionActivity.progressDialog = ProgressDialog.show(
+                    getContext(), "", getContext().getString(R.string.loading), false, true);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 //            prbLoading.setVisibility(View.GONE);
-            if (QuestionActivity.progressDialog != null && QuestionActivity.progressDialog.isShowing()) {
+            if (QuestionActivity.progressDialog != null
+                    && QuestionActivity.progressDialog.isShowing()) {
                 if (getContext() != null)
                     QuestionActivity.progressDialog.dismiss();
             }
