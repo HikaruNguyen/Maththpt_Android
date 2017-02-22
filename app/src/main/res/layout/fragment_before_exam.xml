@@ -30,6 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_14sp"
                     android:text="@string/soCauKT"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
@@ -37,6 +38,7 @@
                 <TextView
                     android:id="@+id/tvSoCau"
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/text_size_14sp"
                     android:layout_height="wrap_content"
                     android:text="@{beforeExamViewModel.number}" />
             </LinearLayout>
@@ -58,12 +60,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/thoiGianLamBai"
+                    android:textSize="@dimen/text_size_14sp"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvThoiGian"
                     android:layout_width="wrap_content"
+                    android:textSize="@dimen/text_size_14sp"
                     android:layout_height="wrap_content"
                     android:text="@{beforeExamViewModel.time}" />
             </LinearLayout>
@@ -78,6 +82,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_14sp"
                 android:text="@string/chonChuDe"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
@@ -93,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20dp"
                 android:background="@drawable/bg_button_primary"
+                android:textSize="@dimen/text_size_14sp"
                 android:text="@string/lamBai"
                 android:textColor="@color/white" />
         </LinearLayout>

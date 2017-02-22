@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/margin_10dp"
             android:textAllCaps="true"
+            android:textSize="@dimen/text_size_15sp"
             android:text="@{navHeaderMainViewModel.getUserName}"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/black"
@@ -48,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textSize="@dimen/text_size_12sp"
             android:text="@{navHeaderMainViewModel.getEmail}"
             android:textColor="@color/black" />
 

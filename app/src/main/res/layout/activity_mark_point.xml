@@ -65,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/chiTiet"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_14sp"
                     android:textStyle="bold" />
 
                 <com.app.maththpt.widget.DisableScrollRecyclerView
@@ -79,7 +80,8 @@
                     android:layout_marginTop="@dimen/margin_10dp"
                     android:background="@drawable/bg_button_primary"
                     android:text="@string/gotoHistory"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
             </LinearLayout>
 
 

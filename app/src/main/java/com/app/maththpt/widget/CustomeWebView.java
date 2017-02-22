@@ -3,6 +3,7 @@ package com.app.maththpt.widget;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.webkit.JavascriptInterface;
@@ -70,6 +71,10 @@ public class CustomeWebView extends WebView {
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setLoadWithOverviewMode(true);
+        Resources res = getResources();
+        float fontSize = res.getDimension(R.dimen.text_size_14sp);
+        webSettings.setDefaultFontSize((int) fontSize);
+
         webSettings.setUserAgentString(
                 "Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) " +
                         "AppleWebKit/<WebKit Rev> (KHTML, like Gecko) " +

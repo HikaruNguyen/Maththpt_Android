@@ -72,6 +72,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_5dp"
                             android:text="@{userProfileViewModel.userNameProfile}"
+                            android:textSize="@dimen/text_size_15sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -95,6 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/point_chart"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
 
@@ -115,13 +117,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/so_bai_kt"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.countPoint}" />
+                            android:text="@{userProfileViewModel.countPoint}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -134,13 +138,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/diem_trung_binh"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.averagePoint}" />
+                            android:text="@{userProfileViewModel.averagePoint}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -153,13 +159,15 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/xep_loai"
+                            android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@{userProfileViewModel.classification}" />
+                            android:text="@{userProfileViewModel.classification}"
+                            android:textSize="@dimen/text_size_14sp" />
                     </LinearLayout>
 
                     <View
@@ -173,12 +181,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tiLeLamBaiDung"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/no_data"
+                        android:textSize="@dimen/text_size_14sp"
                         android:visibility="@{userProfileViewModel.visiableError}" />
 
                     <com.app.maththpt.widget.DisableScrollRecyclerView

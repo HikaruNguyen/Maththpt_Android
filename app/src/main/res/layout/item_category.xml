@@ -19,8 +19,8 @@
             android:id="@+id/img_icon"
             android:layout_width="@dimen/image_size_50dp"
             android:layout_height="@dimen/image_size_50dp"
-            app:imageResource="@{category.icon}"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            app:imageResource="@{category.icon}" />
 
         <TextView
             android:id="@+id/tvName"
@@ -29,6 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_5dp"
             android:layout_toRightOf="@+id/img_icon"
-            android:text="@{category.name}" />
+            android:text="@{category.name}"
+            android:textSize="@dimen/text_size_14sp" />
     </RelativeLayout>
 </layout>
