@@ -16,7 +16,8 @@ import java.util.List;
  * Created by manhi on 2/7/2016.
  */
 
-public class ChiTietDiemAdapter extends BaseRecyclerAdapter<ChiTietDiem, ChiTietDiemAdapter.ViewHolder> {
+public class ChiTietDiemAdapter extends
+        BaseRecyclerAdapter<ChiTietDiem, ChiTietDiemAdapter.ViewHolder> {
     public ChiTietDiemAdapter(Context context, List<ChiTietDiem> list) {
         super(context, list);
     }

@@ -27,7 +27,6 @@ public class ListQuestionFragment extends Fragment {
     private List<Question> list;
 
     public ListQuestionFragment() {
-        // Required empty public constructor
     }
 
 

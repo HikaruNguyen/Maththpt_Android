@@ -20,7 +20,8 @@ import java.util.List;
  * Created by manhi on 2/7/2016.
  */
 
-public class ListQuestionAdapter extends BaseRecyclerAdapter<Question, ListQuestionAdapter.ViewHolder> {
+public class ListQuestionAdapter extends
+        BaseRecyclerAdapter<Question, ListQuestionAdapter.ViewHolder> {
     public ListQuestionAdapter(Context context, List<Question> list) {
         super(context, list);
     }

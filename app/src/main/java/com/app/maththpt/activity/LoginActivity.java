@@ -54,7 +54,8 @@ public class LoginActivity extends BaseActivity {
 
     private void bindData() {
         callbackManager = CallbackManager.Factory.create();
-        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                Configuaration.Pref, MODE_PRIVATE);
         editor = sharedPreferences.edit();
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -105,9 +106,15 @@ public class LoginActivity extends BaseActivity {
                                 Arrays.asList("public_profile", "user_friends", "email")));
         loginBinding.btnLogin.setOnClickListener(v -> {
             if (loginViewModel.username == null || loginViewModel.username.isEmpty()) {
-                Toast.makeText(LoginActivity.this, getString(R.string.empty_username), Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        LoginActivity.this,
+                        getString(R.string.empty_username),
+                        Toast.LENGTH_SHORT).show();
             } else if (loginViewModel.password == null || loginViewModel.password.isEmpty()) {
-                Toast.makeText(LoginActivity.this, getString(R.string.empty_password), Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        LoginActivity.this,
+                        getString(R.string.empty_password),
+                        Toast.LENGTH_SHORT).show();
             } else {
                 loginAPI();
             }

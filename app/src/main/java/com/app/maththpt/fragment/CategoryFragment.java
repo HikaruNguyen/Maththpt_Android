@@ -33,7 +33,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        categoryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
+        categoryBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_category, container, false);
         View view = categoryBinding.getRoot();
         initUI();
         bindData();

@@ -10,16 +10,21 @@ import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.utils.FacebookUtils;
 import com.facebook.login.LoginManager;
 
+import bolts.Task;
+
 public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
-//        if (FacebookUtils.isExpires()) {
-//            LoginManager.getInstance().logOut();
-//            sharedPreferences.edit().clear().commit();
-//        }
+        if (FacebookUtils.isExpires()) {
+            LoginManager.getInstance().logOut();
+            if (sharedPreferences.getString(Configuaration.KEY_TOKEN, "").isEmpty()) {
+                sharedPreferences.edit().clear().commit();
+            }
+
+        }
         new Thread(new Task()).start();
     }
 

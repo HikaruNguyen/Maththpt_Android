@@ -12,16 +12,12 @@ import android.widget.Button;
 import com.app.maththpt.R;
 import com.app.maththpt.widget.CustomeWebView;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
     private CustomeWebView webView;
     private Button btnCheck;
     private ProgressDialog progressDialog;
 
     public HomeFragment() {
-        // Required empty public constructor
     }
 
 
@@ -36,12 +32,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void event() {
-        btnCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String loadingUrl = "javascript:checkAnswer1()";
-                webView.loadUrl(loadingUrl);
-            }
+        btnCheck.setOnClickListener(view -> {
+            String loadingUrl = "javascript:checkAnswer1()";
+            webView.loadUrl(loadingUrl);
         });
     }
 

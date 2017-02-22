@@ -22,8 +22,10 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_STATICTICAL_POINT = "TABLE_STATICTICAL_POINT";
     private static final String STATICTICAL_POINT_ID = "STATICTICAL_POINT_ID";
-    private static final String STATICTICAL_POINT_TOTAL_QUESTION = "STATICTICAL_POINT_TOTAL_QUESTION";
-    private static final String STATICTICAL_POINT_TOTAL_QUESTION_TRUE = "STATICTICAL_POINT_TOTAL_QUESTION_TRUE";
+    private static final String STATICTICAL_POINT_TOTAL_QUESTION
+            = "STATICTICAL_POINT_TOTAL_QUESTION";
+    private static final String STATICTICAL_POINT_TOTAL_QUESTION_TRUE
+            = "STATICTICAL_POINT_TOTAL_QUESTION_TRUE";
     private static final String STATICTICAL_POINT_CATEID = "STATICTICAL_POINT_CATEID";
     private static final String STATICTICAL_POINT_CATENAME = "STATICTICAL_POINT_CATENAME";
     private static final String STATICTICAL_POINT_CREAT_AT = "STATICTICAL_POINT_CREAT_AT";
@@ -90,7 +92,10 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
         public void addAllHistory(List<StatisticalPoint> list) throws Exception {
             database.beginTransaction();
             boolean check = false;
-            DatabaseUtils.InsertHelper insertHelper = new DatabaseUtils.InsertHelper(database, StatisticalPointDBHelper.TABLE_STATICTICAL_POINT);
+            DatabaseUtils.InsertHelper insertHelper =
+                    new DatabaseUtils.InsertHelper(
+                            database,
+                            StatisticalPointDBHelper.TABLE_STATICTICAL_POINT);
 
             for (StatisticalPoint obj : list) {
                 newAddStaticticalPoint(insertHelper, obj);
@@ -100,7 +105,9 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
         }
 
         @SuppressWarnings("deprecation")
-        public void newAddStaticticalPoint(DatabaseUtils.InsertHelper insertHelper, StatisticalPoint statisticalPoint) {
+        public void newAddStaticticalPoint(
+                DatabaseUtils.InsertHelper insertHelper,
+                StatisticalPoint statisticalPoint) {
             if (statisticalPoint == null) {
                 return;
             }
@@ -157,7 +164,9 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
 
 
         public boolean deleteAll() {
-            int number = database.delete(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT, null, null);
+            int number = database.delete(
+                    StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
+                    null, null);
             if (number > 0)
                 return true;
             else
@@ -170,8 +179,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             List<StatisticalPoint> statisticalPoints = new ArrayList<>();
 
             Cursor cursor = database.query(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
-                    allColumns, null, null, null, null,
-                    null);
+                    allColumns, null, null, null, null, null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -186,7 +194,8 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
 
         public StatisticalPoint getStatisticalPointByCateID(int cateID) {
             String sql = "SELECT * FROM " + StatisticalPointDBHelper.TABLE_STATICTICAL_POINT
-                    + " WHERE " + StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID;
+                    + " WHERE "
+                    + StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID;
             Cursor cursor = database.rawQuery(sql, null);
 
             cursor.moveToFirst();
@@ -196,22 +205,31 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
         }
 
         public boolean isExistCateID(int cateID) {
-            Cursor cursor = database.query(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
-                    allColumns, StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID, null, null, null, null);
+            Cursor cursor = database.query(
+                    StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
+                    allColumns,
+                    StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID,
+                    null, null, null, null);
             if (cursor.moveToFirst()) {
                 return true;
             } else
                 return false;
         }
 
-        public boolean updateStatisticalPointByCateID(int cateID, int total_question, int total_question_true) {
+        public boolean updateStatisticalPointByCateID(
+                int cateID, int total_question, int total_question_true) {
             ContentValues values = new ContentValues();
             long dtMili = System.currentTimeMillis();
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_UPDATE_AT, dtMili + "");
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION, total_question);
-            values.put(StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE, total_question_true);
-            long insertId = database.update(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT, values,
-                    StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID, null);
+            values.put(
+                    StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE,
+                    total_question_true);
+            long insertId = database.update(
+                    StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
+                    values,
+                    StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID,
+                    null);
 
             if (insertId > 0)
                 return true;
@@ -223,10 +241,18 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             long dtMili = System.currentTimeMillis();
             values.put(StatisticalPointDBHelper.STATICTICAL_POINT_UPDATE_AT, dtMili + "");
-            values.put(StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION, statisticalPoint.getTotalQuestion());
-            values.put(StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE, statisticalPoint.getTotalQuestionTrue());
-            long insertId = database.update(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT, values,
-                    StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + statisticalPoint.getCateID(), null);
+            values.put(
+                    StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION,
+                    statisticalPoint.getTotalQuestion());
+            values.put(
+                    StatisticalPointDBHelper.STATICTICAL_POINT_TOTAL_QUESTION_TRUE,
+                    statisticalPoint.getTotalQuestionTrue());
+            long insertId = database.update(
+                    StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
+                    values,
+                    StatisticalPointDBHelper.STATICTICAL_POINT_CATEID
+                            + " = " + statisticalPoint.getCateID(),
+                    null);
 
             if (insertId > 0)
                 return true;

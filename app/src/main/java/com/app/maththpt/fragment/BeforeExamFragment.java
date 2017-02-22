@@ -50,7 +50,8 @@ public class BeforeExamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        beforeExamBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_before_exam, container, false);
+        beforeExamBinding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_before_exam, container, false);
         beforeExamViewModel = new BeforeExamViewModel(getActivity(), soCau, time);
         beforeExamBinding.setBeforeExamViewModel(beforeExamViewModel);
         View view = beforeExamBinding.getRoot();
@@ -127,7 +128,7 @@ public class BeforeExamFragment extends Fragment {
     }
 
     private void initUI(View view) {
-        adapter = new CategoryCheckAdapter(getActivity(), new ArrayList<Category>());
+        adapter = new CategoryCheckAdapter(getActivity(), new ArrayList<>());
         beforeExamBinding.rvCategory.setAdapter(adapter);
     }
 
@@ -136,7 +137,8 @@ public class BeforeExamFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == CODE_CHAM_DIEM) {
-                ((MainActivity) getActivity()).clearBackStack(getActivity().getSupportFragmentManager());
+                ((MainActivity) getActivity()).clearBackStack(getActivity()
+                        .getSupportFragmentManager());
                 ((MainActivity) getActivity()).changeFragment(new HistoryFragment());
                 ((MainActivity) getActivity()).setMenuSelect(R.id.nav_history);
             }

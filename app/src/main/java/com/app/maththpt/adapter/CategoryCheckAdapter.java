@@ -17,7 +17,8 @@ import java.util.List;
  * Created by manhi on 2/7/2016.
  */
 
-public class CategoryCheckAdapter extends BaseRecyclerAdapter<Category, CategoryCheckAdapter.ViewHolder> {
+public class CategoryCheckAdapter extends
+        BaseRecyclerAdapter<Category, CategoryCheckAdapter.ViewHolder> {
     public CategoryCheckAdapter(Context context, List<Category> list) {
         super(context, list);
     }
@@ -25,14 +26,11 @@ public class CategoryCheckAdapter extends BaseRecyclerAdapter<Category, Category
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.bindData(list.get(position));
-        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    list.get(position).isChecked = true;
-                } else {
-                    list.get(position).isChecked = false;
-                }
+        holder.checkbox.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                list.get(position).isChecked = true;
+            } else {
+                list.get(position).isChecked = false;
             }
         });
     }

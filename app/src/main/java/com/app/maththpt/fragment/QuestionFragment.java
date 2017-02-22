@@ -146,7 +146,10 @@ public class QuestionFragment extends Fragment {
         shareDialog = new ShareDialog(getActivity());
         if (question != null) {
 //            Collections.shuffle(question.answerList);
-            tv_question.setText(getString(R.string.questionNo) + " " + position + ": " + Utils.replaceMath(question.question));
+            tv_question.setText(
+                    getString(R.string.questionNo) + " "
+                            + position + ": "
+                            + Utils.replaceMath(question.question));
             tv_answerA.setText(Utils.replaceMath(question.answerList.get(0).answer));
             tv_answerB.setText(Utils.replaceMath(question.answerList.get(1).answer));
             tv_answerC.setText(Utils.replaceMath(question.answerList.get(2).answer));
@@ -205,22 +208,30 @@ public class QuestionFragment extends Fragment {
             if (!isCheckedKQ) {
                 if (position == event.position) {
                     if (question.answerList.get(0).isCorrect) {
-                        lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                        lnA.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_true));
                     } else if (question.answerList.get(1).isCorrect) {
-                        lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                        lnB.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_true));
                     } else if (question.answerList.get(2).isCorrect) {
-                        lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                        lnC.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_true));
                     } else if (question.answerList.get(3).isCorrect) {
-                        lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_true));
+                        lnD.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_true));
                     }
                     if (rbA.isChecked() && !question.answerList.get(0).isCorrect) {
-                        lnA.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                        lnA.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_false));
                     } else if (rbB.isChecked() && !question.answerList.get(1).isCorrect) {
-                        lnB.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                        lnB.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_false));
                     } else if (rbC.isChecked() && !question.answerList.get(2).isCorrect) {
-                        lnC.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                        lnC.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_false));
                     } else if (rbD.isChecked() && !question.answerList.get(3).isCorrect) {
-                        lnD.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.background_false));
+                        lnD.setBackgroundColor(
+                                ContextCompat.getColor(getActivity(), R.color.background_false));
                     }
                 }
             } else {
@@ -234,7 +245,10 @@ public class QuestionFragment extends Fragment {
             }
             isCheckedKQ = !isCheckedKQ;
         } else if (event.type == XemDapAnEvent.TYPE_DETAIL) {
-            Toast.makeText(getActivity(), getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    getActivity(),
+                    getString(R.string.coming_soon),
+                    Toast.LENGTH_SHORT).show();
         }
 
     }

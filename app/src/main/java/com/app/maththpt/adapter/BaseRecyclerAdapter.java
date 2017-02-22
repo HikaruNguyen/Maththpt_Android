@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * Created by manhi on 20/1/2016.
  */
-public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH> {
 
     public Context mContext;
     public List<T> list = new ArrayList<>();
