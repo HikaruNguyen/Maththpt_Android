@@ -38,7 +38,6 @@ public class TestsFragment extends Fragment {
     private FragmentTestsBinding testsBinding;
     private TestsViewModel testsViewModel;
     private TestsAdapter adapter;
-    private MathThptService apiService;
     private Subscription mSubscription;
     private TestsResult mTestResult;
 
@@ -83,7 +82,7 @@ public class TestsFragment extends Fragment {
     }
 
     private void bindData() {
-        apiService = MyApplication.with(getActivity()).getMaththptSerivce();
+        MathThptService apiService = MyApplication.with(getActivity()).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = apiService.getTests()
                 .subscribeOn(Schedulers.newThread())

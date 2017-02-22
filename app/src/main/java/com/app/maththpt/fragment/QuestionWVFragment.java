@@ -35,7 +35,6 @@ public class QuestionWVFragment extends Fragment {
     private static final String POSITION = "POSITION";
     private static final String ISXEMKQ = "ISXEMKQ";
     public static ProgressDialog progressDialog;
-    private boolean isXemKQ = false;
     private Question question;
     private int position;
     ShareDialog shareDialog;
@@ -46,12 +45,11 @@ public class QuestionWVFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static QuestionWVFragment newInstance(Question question, int position, boolean isXemKQ) {
+    public static QuestionWVFragment newInstance(Question question, int position) {
         QuestionWVFragment fragment = new QuestionWVFragment();
         Bundle args = new Bundle();
         args.putSerializable(QUESTION, question);
         args.putInt(POSITION, position);
-        args.putBoolean(ISXEMKQ, isXemKQ);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +60,6 @@ public class QuestionWVFragment extends Fragment {
         if (getArguments() != null) {
             question = (Question) getArguments().getSerializable(QUESTION);
             position = getArguments().getInt(POSITION);
-            isXemKQ = getArguments().getBoolean(ISXEMKQ);
         }
     }
 
@@ -73,19 +70,9 @@ public class QuestionWVFragment extends Fragment {
                 inflater, R.layout.fragment_question, container, false);
         View view = fragmentQuestionBinding.getRoot();
         bindData();
-        event();
         return view;
     }
 
-    private void event() {
-        fragmentQuestionBinding.btnCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String loadingUrl = "javascript:checkAnswer1()";
-                fragmentQuestionBinding.webView.loadUrl(loadingUrl);
-            }
-        });
-    }
 
     private void bindData() {
 //        webView.loadUrl("file:///android_asset/MathView/demo.html");

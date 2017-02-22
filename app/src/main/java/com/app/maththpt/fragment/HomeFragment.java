@@ -15,7 +15,6 @@ import com.app.maththpt.widget.CustomeWebView;
 public class HomeFragment extends Fragment {
     private CustomeWebView webView;
     private Button btnCheck;
-    private ProgressDialog progressDialog;
 
     public HomeFragment() {
     }
@@ -25,9 +24,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_question, container, false);
-        initUI(view);
-        bindData();
-        event();
+//        initUI(view);
+//        bindData();
+//        event();
         return view;
     }
 

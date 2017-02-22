@@ -58,13 +58,10 @@ public class QuestionActivity extends BaseActivity {
     private int soCau;
     private long time;
     private CountDownTimer countDownTimer;
-    private ImageView[] dots;
-    private List<Fragment> fragmentList;
     private ActivityQuestionBinding activityQuestionBinding;
     private QuestionViewModel questionViewModel;
     private String testID;
     private Subscription mSubscription;
-    private MathThptService apiService;
     private DetailTestsResult mDetailTestsResult;
     public static ProgressDialog progressDialog;
 
@@ -81,7 +78,7 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void event() {
-        activityQuestionBinding.viewpager.setOnPageChangeListener(
+        activityQuestionBinding.viewpager.addOnPageChangeListener(
                 new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(
@@ -149,7 +146,7 @@ public class QuestionActivity extends BaseActivity {
                                         TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                                 TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
                                         - TimeUnit.MINUTES.toSeconds(
-                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
             }
 
             public void onFinish() {
@@ -166,6 +163,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void bindData() {
         list = new ArrayList<>();
+        MathThptService apiService;
         if (type == Configuaration.TYPE_BODE) {
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
@@ -324,9 +322,9 @@ public class QuestionActivity extends BaseActivity {
             questionViewModel.setVisiableError(false);
             questionViewModel.setSize(list.size());
             questionViewModel.setPostion(positionCurrent);
-            fragmentList = new ArrayList<>();
+            List<Fragment> fragmentList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1, false));
+                fragmentList.add(QuestionWVFragment.newInstance(list.get(i), i + 1));
             }
             pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
