@@ -51,21 +51,12 @@
                 android:orientation="vertical"
                 android:visibility="@{questionViewModel.visiableError}">
 
-                <ImageView
-                    android:id="@+id/ivNodata"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@mipmap/no_data"
-                    android:visibility="gone" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:maxLines="1"
-                    android:text="@{questionViewModel.messageError}"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:text="@{questionViewModel.messageError}" />
 
             </RelativeLayout>
 

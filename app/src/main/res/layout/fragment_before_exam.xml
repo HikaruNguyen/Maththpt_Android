@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/margin_16dp"
         tools:context="com.app.maththpt.fragment.BeforeExamFragment">
 
         <LinearLayout
@@ -71,8 +71,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="@dimen/margin_5dp"
+                android:layout_marginTop="@dimen/margin_5dp"
                 android:background="@color/colorGray" />
 
             <TextView
@@ -91,7 +91,7 @@
                 android:id="@+id/btnLamBai"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/margin_20dp"
                 android:background="@drawable/bg_button_primary"
                 android:text="@string/lamBai"
                 android:textColor="@color/white" />

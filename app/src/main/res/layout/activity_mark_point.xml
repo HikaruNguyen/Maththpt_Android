@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/activity_horizontal_margin"
+            android:padding="@dimen/margin_16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -50,15 +50,15 @@
                     android:text="@{chamDiemViewModel.yourPoint}"
                     android:textAllCaps="true"
                     android:textColor="@color/red"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_size_20sp"
                     android:textStyle="bold" />
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/chart1"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/image_size_200dp"
                     android:layout_above="@+id/seekBar1"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="@dimen/margin_10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                     android:id="@+id/btnHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
                     android:background="@drawable/bg_button_primary"
                     android:text="@string/gotoHistory"
                     android:textColor="@color/white" />

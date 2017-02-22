@@ -6,13 +6,13 @@
 
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/progress_wheel"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginBottom="22dp"
+        android:layout_width="@dimen/image_size_44dp"
+        android:layout_height="@dimen/image_size_44dp"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/margin_20dp"
+        android:layout_marginTop="@dimen/margin_20dp"
         wheel:matProg_barColor="@color/colorPrimary"
-        wheel:matProg_circleRadius="44dp"
+        wheel:matProg_circleRadius="@dimen/image_size_44dp"
         wheel:matProg_progressIndeterminate="true" />
 
 </RelativeLayout>

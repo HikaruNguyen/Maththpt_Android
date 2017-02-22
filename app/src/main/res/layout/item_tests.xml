@@ -13,20 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/margin_16dp">
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{test.displayname}"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_size_15sp" />
 
         <TextView
             android:id="@+id/tvAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{test.author}"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_size_12sp" />
     </LinearLayout>
 </layout>

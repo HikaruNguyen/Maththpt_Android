@@ -13,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:padding="@dimen/margin_16dp">
 
         <ImageView
             android:id="@+id/img_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/image_size_50dp"
+            android:layout_height="@dimen/image_size_50dp"
             app:imageResource="@{category.icon}"
             android:layout_centerVertical="true" />
 
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/margin_5dp"
             android:layout_toRightOf="@+id/img_icon"
             android:text="@{category.name}" />
     </RelativeLayout>
