@@ -29,6 +29,9 @@
   <dimen name="margin_30dp">
     26.67dp
   </dimen>
+  <dimen name="text_size_10sp">
+    8.89sp
+  </dimen>
   <dimen name="text_size_12sp">
     10.67sp
   </dimen>

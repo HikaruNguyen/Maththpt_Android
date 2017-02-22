@@ -73,8 +73,8 @@ public class CustomeWebView extends WebView {
         webSettings.setLoadWithOverviewMode(true);
         Resources res = getResources();
         float fontSize = res.getDimension(R.dimen.text_size_14sp);
-        webSettings.setDefaultFontSize((int) fontSize);
-
+//        webSettings.setDefaultFontSize((int) fontSize);
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
         webSettings.setUserAgentString(
                 "Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) " +
                         "AppleWebKit/<WebKit Rev> (KHTML, like Gecko) " +
