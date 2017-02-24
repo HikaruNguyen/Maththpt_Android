@@ -16,9 +16,9 @@ import java.util.List;
  * Created by manhi on 2/7/2016.
  */
 
-public class ChiTietDiemAdapter extends
-        BaseRecyclerAdapter<ChiTietDiem, ChiTietDiemAdapter.ViewHolder> {
-    public ChiTietDiemAdapter(Context context, List<ChiTietDiem> list) {
+public class DetailPointAdapter extends
+        BaseRecyclerAdapter<ChiTietDiem, DetailPointAdapter.ViewHolder> {
+    public DetailPointAdapter(Context context, List<ChiTietDiem> list) {
         super(context, list);
     }
 
@@ -35,11 +35,11 @@ public class ChiTietDiemAdapter extends
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName;
         private TextView tvPoint;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             tvPoint = (TextView) view.findViewById(R.id.tvPoint);
             tvName = (TextView) view.findViewById(R.id.tvName);
@@ -55,7 +55,6 @@ public class ChiTietDiemAdapter extends
         public void bindData(ChiTietDiem chiTietDiem) {
             tvName.setText(chiTietDiem.name);
             tvPoint.setText(chiTietDiem.trueQuestion + "/" + chiTietDiem.sumQuestion);
-//                    + "("+chiTietDiem.trueQuestion/chiTietDiem.sumQuestion+")" );
         }
 
     }

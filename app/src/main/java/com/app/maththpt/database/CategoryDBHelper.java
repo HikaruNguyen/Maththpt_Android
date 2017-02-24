@@ -16,10 +16,10 @@ import java.util.List;
 public class CategoryDBHelper {
 
     public static final String TAG = CategoryDBHelper.class.getSimpleName();
-    public static final String CategoryID = "id";
+    private static final String CategoryID = "id";
     private static final String Name = "name";
-    public static final String DB_NAME = "de_c01_001.sqlite";
-    public static final String TABLE_Question = "tbl_Category";
+    private static final String DB_NAME = "de_c01_001.sqlite";
+    private static final String TABLE_Question = "tbl_Category";
 
     public static List<Category> getAllListCategory(Context context) {
         List<Category> list = new ArrayList<>();

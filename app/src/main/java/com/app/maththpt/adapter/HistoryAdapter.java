@@ -8,7 +8,6 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -32,7 +31,6 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-//        holder.bindData(list.get(position));
         ViewDataBinding viewDataBinding = holder.getViewDataBinding();
         viewDataBinding.setVariable(BR.point, list.get(position));
     }
@@ -50,21 +48,14 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
 
         private ViewDataBinding mViewDataBinding;
 
-        public ViewHolder(ViewDataBinding viewDataBinding) {
+        ViewHolder(ViewDataBinding viewDataBinding) {
             super(viewDataBinding.getRoot());
 
             mViewDataBinding = viewDataBinding;
             mViewDataBinding.executePendingBindings();
-            itemView.setOnClickListener(view -> {
-//                    Intent intent = new Intent(mContext, QuestionActivity.class);
-//                    intent.putExtra("title", list.get(getAdapterPosition()).name);
-//                    intent.putExtra("type", Configuaration.TYPE_ONTAP);
-//                    intent.putExtra("cateID", list.get(getAdapterPosition()).id);
-//                    mContext.startActivity(intent);
-            });
         }
 
-        public ViewDataBinding getViewDataBinding() {
+        ViewDataBinding getViewDataBinding() {
             return mViewDataBinding;
         }
     }
@@ -78,7 +69,7 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
     @BindingAdapter("displayDate")
     public static void displayDate(TextView textView, String time) {
         CLog.d("", "DATE :" + time);
-        long lTime = 0;
+        long lTime;
         String sDateTime = "";
         try {
             lTime = Long.parseLong(time);
@@ -86,8 +77,6 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        textView.setText(textView.getContext().getString(R.string.datetime) + " : " + DateFormat.format("MM/dd/yyyy", new Date(Long.parseLong(time) * 1000)).toString());
         textView.setText(textView.getContext().getString(R.string.datetime) + " : " + sDateTime);
     }
 }

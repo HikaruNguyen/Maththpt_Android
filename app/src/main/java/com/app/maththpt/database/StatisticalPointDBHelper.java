@@ -45,7 +45,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             + STATICTICAL_POINT_CREAT_AT + " text, "
             + STATICTICAL_POINT_UPDATE_AT + " text );";
 
-    public StatisticalPointDBHelper(Context context) {
+    private StatisticalPointDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -105,7 +105,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
         }
 
         @SuppressWarnings("deprecation")
-        public void newAddStaticticalPoint(
+        void newAddStaticticalPoint(
                 DatabaseUtils.InsertHelper insertHelper,
                 StatisticalPoint statisticalPoint) {
             if (statisticalPoint == null) {
@@ -156,10 +156,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             long insertId = database.insert(StatisticalPointDBHelper.TABLE_STATICTICAL_POINT, null,
                     values);
 
-            if (insertId != -1)
-                return true;
-            else
-                return false;
+            return insertId != -1;
         }
 
 
@@ -167,10 +164,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
             int number = database.delete(
                     StatisticalPointDBHelper.TABLE_STATICTICAL_POINT,
                     null, null);
-            if (number > 0)
-                return true;
-            else
-                return false;
+            return number > 0;
         }
 
 
@@ -210,10 +204,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                     allColumns,
                     StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID,
                     null, null, null, null);
-            if (cursor.moveToFirst()) {
-                return true;
-            } else
-                return false;
+            return cursor.moveToFirst();
         }
 
         public boolean updateStatisticalPointByCateID(
@@ -231,10 +222,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                     StatisticalPointDBHelper.STATICTICAL_POINT_CATEID + " = " + cateID,
                     null);
 
-            if (insertId > 0)
-                return true;
-            else
-                return false;
+            return insertId > 0;
         }
 
         public boolean updateStatisticalPointByCateID(StatisticalPoint statisticalPoint) {
@@ -254,10 +242,7 @@ public class StatisticalPointDBHelper extends SQLiteOpenHelper {
                             + " = " + statisticalPoint.getCateID(),
                     null);
 
-            if (insertId > 0)
-                return true;
-            else
-                return false;
+            return insertId > 0;
         }
 
         private StatisticalPoint cursorToLive(Cursor cursor) {

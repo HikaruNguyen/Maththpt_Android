@@ -8,7 +8,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by manhi on 4/1/2017.
@@ -32,12 +31,6 @@ public class MyApplication extends Application {
         return mathThptService;
     }
 
-    public Scheduler defaultSubscribeScheduler() {
-        if (defaultSubscribeScheduler == null) {
-            defaultSubscribeScheduler = Schedulers.io();
-        }
-        return defaultSubscribeScheduler;
-    }
     public static MyApplication with(Context context) {
         return (MyApplication) context.getApplicationContext();
     }

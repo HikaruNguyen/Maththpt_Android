@@ -17,11 +17,12 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                Configuaration.Pref, MODE_PRIVATE);
         if (FacebookUtils.isExpires()) {
             LoginManager.getInstance().logOut();
             if (sharedPreferences.getString(Configuaration.KEY_TOKEN, "").isEmpty()) {
-                sharedPreferences.edit().clear().commit();
+                sharedPreferences.edit().clear().apply();
             }
 
         }

@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.app.maththpt.R;
 import com.app.maththpt.model.StatisticalPoint;
-import com.app.maththpt.model.StatisticalPoint;
 
 import java.util.List;
 
@@ -36,21 +35,14 @@ public class StatisticalPointAdapter extends
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName;
         private TextView tvPoint;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             tvPoint = (TextView) view.findViewById(R.id.tvPoint);
             tvName = (TextView) view.findViewById(R.id.tvName);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
 
         public void bindData(StatisticalPoint StatisticalPoint) {

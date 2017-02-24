@@ -2,7 +2,6 @@ package com.app.maththpt.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
@@ -466,18 +463,8 @@ public class QuestionActivity extends BaseActivity {
         if (type == Configuaration.TYPE_KIEMTRA) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.confirmQuitExam));
-            builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-            builder.setNegativeButton(getString(R.string.late), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish());
+            builder.setNegativeButton(getString(R.string.late), (dialog, which) -> dialog.dismiss());
             builder.show();
         } else {
             finish();

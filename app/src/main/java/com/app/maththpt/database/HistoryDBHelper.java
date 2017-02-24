@@ -14,8 +14,6 @@ import com.app.maththpt.model.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.id.list;
-
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 16/02/2017.
  */
@@ -82,7 +80,6 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         @SuppressWarnings("deprecation")
         public void addAllHistory(List<Point> list) throws Exception {
             database.beginTransaction();
-            boolean check = false;
             DatabaseUtils.InsertHelper insertHelper =
                     new DatabaseUtils.InsertHelper(database, HistoryDBHelper.TABLE_HISTORY);
 
@@ -94,13 +91,11 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         }
 
         @SuppressWarnings("deprecation")
-        public void newAddPoint(DatabaseUtils.InsertHelper insertHelper, Point Point) {
+        void newAddPoint(DatabaseUtils.InsertHelper insertHelper, Point Point) {
             if (Point == null) {
                 return;
             }
             insertHelper.prepareForInsert();
-            int column_id = insertHelper
-                    .getColumnIndex(HistoryDBHelper.HISTORY_ID);
             int column_name = insertHelper
                     .getColumnIndex(HistoryDBHelper.HISTORY_POINT);
             long dtMili = System.currentTimeMillis();
@@ -108,7 +103,6 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
                     .getColumnIndex(HistoryDBHelper.HISTORY_CREAT_AT);
             int column_update_at = insertHelper
                     .getColumnIndex(HistoryDBHelper.HISTORY_UPDATE_AT);
-//        insertHelper.bind(column_id, managerDict.getDictName());
             insertHelper.bind(column_name, Point.point);
             insertHelper.bind(column_creat_at, dtMili + "");
             insertHelper.bind(column_update_at, dtMili + "");
@@ -130,10 +124,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
             long insertId = database.insert(HistoryDBHelper.TABLE_HISTORY, null,
                     values);
 
-            if (insertId != -1)
-                return true;
-            else
-                return false;
+            return insertId != -1;
         }
 
         public boolean addPointToHistory(String point) {
@@ -147,10 +138,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
                     dtMili + "");
             long insertId = database.insert(HistoryDBHelper.TABLE_HISTORY, null,
                     values);
-            if (insertId != -1)
-                return true;
-            else
-                return false;
+            return insertId != -1;
         }
 
 
@@ -185,9 +173,6 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
             String sql = "SELECT * FROM " + HistoryDBHelper.TABLE_HISTORY +
                     " ORDER BY " + HistoryDBHelper.HISTORY_CREAT_AT + " DESC lIMIT 10";
-//            Cursor cursor = database.query(HistoryDBHelper.TABLE_HISTORY,
-//                    allColumns, null, null, null, null,
-//                    HistoryDBHelper.HISTORY_CREAT_AT + " ASC");
             Cursor cursor = database.rawQuery(sql, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -195,7 +180,6 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
                 Points.add(listLiveChannelForm);
                 cursor.moveToNext();
             }
-            // Make sure to close the cursor
             cursor.close();
             return Points;
         }

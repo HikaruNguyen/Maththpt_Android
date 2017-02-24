@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.activity.MyApplication;
@@ -108,9 +107,7 @@ public class TestsFragment extends Fragment {
                             testsBinding.ptrTests.refreshComplete();
                         }
                         testsViewModel.setErrorVisiable(true);
-                        CLog.d(TAG, "getListTest Error");
-//                        Toast.makeText(getActivity(), getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
-                    }
+                        CLog.d(TAG, "getListTest Error");                    }
 
                     @Override
                     public void onNext(TestsResult testsResult) {

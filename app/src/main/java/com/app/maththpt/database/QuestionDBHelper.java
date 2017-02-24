@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class QuestionDBHelper {
 
-    public static final String TAG = QuestionDBHelper.class.getSimpleName();
-    public static final String QuestionID = "id";
+    private static final String TAG = QuestionDBHelper.class.getSimpleName();
+    private static final String QuestionID = "id";
     private static final String Question = "question";
     private static final String Image = "image";
     private static final String Answer1 = "answerA";
@@ -27,14 +27,9 @@ public class QuestionDBHelper {
     private static final String Answer4 = "answerD";
     private static final String AnswerTrue = "answerTrue";
     private static final String CategoryID = "CateID";
-//    private static final String TypeA = "typeA";
-//    private static final String TypeB = "typeB";
-//    private static final String TypeC = "typeC";
-//    private static final String TypeD = "typeD";
-//    private static final String TypeQuestion = "typeQuestion";
 
-    public static final String DB_NAME = "de_c01_001.sqlite";
-    public static final String TABLE_Question = "tbl_question";
+    private static final String DB_NAME = "de_c01_001.sqlite";
+    private static final String TABLE_Question = "tbl_question";
 
     public static List<Question> getAllListQuestion(Context context) {
         List<Question> list = new ArrayList<>();
@@ -109,20 +104,10 @@ public class QuestionDBHelper {
 
     private static Question getQuestionByCursor(Cursor cursor) {
         Integer id = cursor.getInt(cursor.getColumnIndex(QuestionID));
-        if (null == id) {
-            id = 0;
-        }
         String answer1 = cursor.getString(cursor.getColumnIndex(Answer1));
         String answer2 = cursor.getString(cursor.getColumnIndex(Answer2));
         String answer3 = cursor.getString(cursor.getColumnIndex(Answer3));
         String answer4 = cursor.getString(cursor.getColumnIndex(Answer4));
-
-//        int typeA = cursor.getInt(cursor.getColumnIndex(TypeA));
-//        int typeB = cursor.getInt(cursor.getColumnIndex(TypeB));
-//        int typeC = cursor.getInt(cursor.getColumnIndex(TypeC));
-//        int typeD = cursor.getInt(cursor.getColumnIndex(TypeD));
-//        int typeQuestion = cursor.getInt(cursor.getColumnIndex(TypeQuestion));
-
         int answerRight = cursor.getInt(cursor.getColumnIndex(AnswerTrue));
         List<Answer> answerList = new ArrayList<>();
         if (answerRight == 1) {

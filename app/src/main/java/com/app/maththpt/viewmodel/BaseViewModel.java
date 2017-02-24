@@ -19,16 +19,16 @@ public class BaseViewModel extends BaseObservable {
     @Bindable
     public String messageError;
 
-    public BaseViewModel() {
+    BaseViewModel() {
         visiableError = View.GONE;
     }
 
-    public BaseViewModel(Activity activity, String title) {
+    BaseViewModel(Activity activity, String title) {
         this.activity = activity;
         this.title = title;
         visiableError = View.GONE;
     }
-    public BaseViewModel(Activity activity) {
+    BaseViewModel(Activity activity) {
         this.activity = activity;
         visiableError = View.GONE;
     }

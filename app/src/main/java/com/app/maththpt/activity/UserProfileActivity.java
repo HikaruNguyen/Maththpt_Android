@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.app.maththpt.R;
@@ -16,22 +15,16 @@ import com.app.maththpt.databinding.ActivityUserProfileBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Float.parseFloat;
 
 public class UserProfileActivity extends BaseActivity {
     private ActivityUserProfileBinding userProfileBinding;

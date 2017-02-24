@@ -24,7 +24,7 @@ public class Answer implements Serializable, Parcelable {
         this.isCorrect = false;
     }
 
-    protected Answer(Parcel in) {
+    private Answer(Parcel in) {
         answer = in.readString();
         isCorrect = in.readByte() != 0;
 //        type = in.readInt();

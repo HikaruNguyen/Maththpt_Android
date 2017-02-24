@@ -31,56 +31,23 @@ public class CategoryAdapter extends BaseRecyclerAdapter<Category, CategoryAdapt
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-//        holder.bindData(list.get(position));
         ViewDataBinding viewDataBinding = holder.getViewDataBinding();
-
         viewDataBinding.setVariable(BR.category, list.get(position));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view;
-//        view = layoutInflater.inflate(R.layout.item_category, parent, false);
-//        return new ViewHolder(view);
         ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                 R.layout.item_category, parent, false);
 
         return new ViewHolder(binding);
     }
 
-
-    //    public class ViewHolder extends RecyclerView.ViewHolder {
-//        private ImageView img_icon;
-//        private TextView tvName;
-//
-//        public ViewHolder(View view) {
-//            super(view);
-//            img_icon = (ImageView) view.findViewById(R.id.img_icon);
-//            tvName = (TextView) view.findViewById(R.id.tvName);
-//
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-//        }
-//
-//        public void bindData(Category category) {
-//            tvName.setText(category.name);
-//            try {
-//                img_icon.setImageResource(category.icon);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private ViewDataBinding mViewDataBinding;
 
-        public ViewHolder(ViewDataBinding viewDataBinding) {
+        ViewHolder(ViewDataBinding viewDataBinding) {
             super(viewDataBinding.getRoot());
 
             mViewDataBinding = viewDataBinding;
@@ -97,7 +64,7 @@ public class CategoryAdapter extends BaseRecyclerAdapter<Category, CategoryAdapt
             });
         }
 
-        public ViewDataBinding getViewDataBinding() {
+        ViewDataBinding getViewDataBinding() {
             return mViewDataBinding;
         }
     }

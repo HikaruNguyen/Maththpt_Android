@@ -74,17 +74,6 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         return list.get(position);
     }
 
-    //    @Override
-//    public void onBindViewHolder(VH holder, final int position) {
-//        if (onItemClickListener != null && holder.itemView != null) {
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    onItemClickListener.onItemClick(position);
-//                }
-//            });
-//        }
-//    }
     public abstract void onBindViewHolder(VH holder, final int position);
 
     @Override

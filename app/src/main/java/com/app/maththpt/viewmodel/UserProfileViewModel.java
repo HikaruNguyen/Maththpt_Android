@@ -1,9 +1,7 @@
 package com.app.maththpt.viewmodel;
 
 import android.app.Activity;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.view.View;
 
 import com.app.maththpt.R;
 import com.app.maththpt.database.HistoryDBHelper;
@@ -40,7 +38,8 @@ public class UserProfileViewModel extends BaseViewModel {
     }
 
     private void setAveragePoint() {
-        HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(activity);
+        HistoryDBHelper.HistoryDatabase historyDatabase =
+                new HistoryDBHelper.HistoryDatabase(activity);
         historyDatabase.open();
         int count = historyDatabase.getCountHistory();
         if (count > 0) {

@@ -10,9 +10,6 @@ import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.ActivityLoginBinding;
-import com.app.maththpt.modelresult.DetailTestsResult;
-import com.app.maththpt.utils.AeSimpleSHA1;
-import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.LoginViewModel;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -21,8 +18,6 @@ import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import rx.Subscriber;

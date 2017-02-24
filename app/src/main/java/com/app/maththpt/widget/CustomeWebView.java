@@ -22,8 +22,6 @@ public class CustomeWebView extends WebView {
     private static final String TAG = CustomeWebView.class.getSimpleName();
     private int type;
     private Context context;
-    private boolean isPLAYING = false;
-    //    public ProgressDialog progressDialog;
     public int answer;
 
     public int getPosition() {

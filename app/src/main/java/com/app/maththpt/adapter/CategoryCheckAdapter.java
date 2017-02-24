@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.app.maththpt.R;
 import com.app.maththpt.model.Category;
@@ -26,13 +25,8 @@ public class CategoryCheckAdapter extends
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.bindData(list.get(position));
-        holder.checkbox.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                list.get(position).isChecked = true;
-            } else {
-                list.get(position).isChecked = false;
-            }
-        });
+        holder.checkbox.setOnCheckedChangeListener(
+                (compoundButton, b) -> list.get(position).isChecked = b);
     }
 
     @Override
@@ -42,16 +36,17 @@ public class CategoryCheckAdapter extends
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private CheckBox checkbox;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             checkbox = (CheckBox) view.findViewById(R.id.checkbox);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
+            itemView.setOnClickListener(v -> {
+                if (checkbox.isChecked()) {
+                    checkbox.setChecked(false);
+                } else {
+                    checkbox.setChecked(true);
                 }
             });
         }

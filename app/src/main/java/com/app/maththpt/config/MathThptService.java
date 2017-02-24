@@ -91,9 +91,9 @@ public interface MathThptService {
                         .addHeader("X-Math-Api-Key", APIConfig.X_Math_Api_Key).build();
                 return chain.proceed(request).newBuilder().build();
             });
-            httpClient.connectTimeout(60L, TimeUnit.SECONDS);
-            httpClient.readTimeout(60L, TimeUnit.SECONDS);
-            httpClient.writeTimeout(60L, TimeUnit.SECONDS);
+            httpClient.connectTimeout(5, TimeUnit.SECONDS);
+            httpClient.readTimeout(5, TimeUnit.SECONDS);
+            httpClient.writeTimeout(5, TimeUnit.SECONDS);
 
             if (BuildConfig.DEBUG) {
                 httpClient.addInterceptor(logging);

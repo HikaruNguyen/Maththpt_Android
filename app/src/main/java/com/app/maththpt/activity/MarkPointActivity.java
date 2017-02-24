@@ -10,7 +10,7 @@ import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 
 import com.app.maththpt.R;
-import com.app.maththpt.adapter.ChiTietDiemAdapter;
+import com.app.maththpt.adapter.DetailPointAdapter;
 import com.app.maththpt.database.HistoryDBHelper;
 import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
@@ -45,7 +45,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     private Typeface mTfLight;
     private Typeface mTfRegular;
     private List<Category> listCategory;
-    private ChiTietDiemAdapter adapter;
+    private DetailPointAdapter adapter;
     int soCauDung = 0;
     private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
@@ -190,7 +190,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         setBackButtonToolbar();
         mChart = chamDiemBinding.chart1;
         chamDiemBinding.rvChiTiet.setDivider();
-        adapter = new ChiTietDiemAdapter(this, new ArrayList<>());
+        adapter = new DetailPointAdapter(this, new ArrayList<>());
         chamDiemBinding.rvChiTiet.setAdapter(adapter);
     }
 

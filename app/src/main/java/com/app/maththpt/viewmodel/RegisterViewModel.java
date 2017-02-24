@@ -2,11 +2,8 @@ package com.app.maththpt.viewmodel;
 
 import android.app.Activity;
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.databinding.InverseBindingAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.TextView;
 
 import com.app.maththpt.model.User;
 

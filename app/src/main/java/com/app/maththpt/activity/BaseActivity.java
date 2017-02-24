@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.app.maththpt.R;
 
@@ -34,45 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         }
         return mActionBarToolbar;
-    }
-
-    public void SetMarginToolbar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mActionBarToolbar);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.topMargin = getStatusBarHeight();
-        mActionBarToolbar.setLayoutParams(params);
-
-    }
-
-    public void setTitleToolbar(String title) {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(title);
-        setSupportActionBar(mActionBarToolbar);
-    }
-
-
-    public void hideToolBar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mActionBarToolbar);
-        mActionBarToolbar.setVisibility(View.GONE);
-    }
-
-    public void showToolBar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mActionBarToolbar);
-        mActionBarToolbar.setVisibility(View.VISIBLE);
-    }
-
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     public void setBackButtonToolbar() {

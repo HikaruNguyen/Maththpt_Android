@@ -1,7 +1,5 @@
 package com.app.maththpt.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 16/02/2017.
  */

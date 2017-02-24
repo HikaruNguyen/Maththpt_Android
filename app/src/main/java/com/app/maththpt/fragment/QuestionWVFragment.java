@@ -34,7 +34,6 @@ public class QuestionWVFragment extends Fragment {
     private static final String QUESTION = "QUESTION";
     private static final String POSITION = "POSITION";
     private static final String ISXEMKQ = "ISXEMKQ";
-    public static ProgressDialog progressDialog;
     private Question question;
     private int position;
     ShareDialog shareDialog;

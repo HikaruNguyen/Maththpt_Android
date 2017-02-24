@@ -15,16 +15,16 @@ import java.io.InputStream;
  * Created by manhi on 20/7/2016.
  */
 
-public class AssetDatabaseOpenHelper {
+class AssetDatabaseOpenHelper {
     // tên file datebase trong thư mục assets
 
     private Context context;
 
-    public AssetDatabaseOpenHelper(Context context) {
+    AssetDatabaseOpenHelper(Context context) {
         this.context = context;
     }
 
-    public SQLiteDatabase StoreDatabase(String DB_NAME) {
+    SQLiteDatabase StoreDatabase(String DB_NAME) {
         ///data/data/{package của bạn}/databases
         String path = "/data/data/" + BuildConfig.APPLICATION_ID + "/databases";
         File pathDb = new File(path);

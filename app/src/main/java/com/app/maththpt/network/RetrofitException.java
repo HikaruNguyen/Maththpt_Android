@@ -12,13 +12,13 @@ import retrofit2.Retrofit;
  * Created by pham.quy.hai on 9/9/16.
  */
 
-public class RetrofitException extends RuntimeException {
-    public static RetrofitException httpError(String url, Response response, Retrofit retrofit) {
+class RetrofitException extends RuntimeException {
+    static RetrofitException httpError(String url, Response response, Retrofit retrofit) {
         String message = response.code() + " " + response.message();
         return new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
     }
 
-    public static RetrofitException networkError(IOException exception) {
+    static RetrofitException networkError(IOException exception) {
         return new RetrofitException(exception.getMessage(),
                 null,
                 null,
@@ -27,7 +27,7 @@ public class RetrofitException extends RuntimeException {
                 null);
     }
 
-    public static RetrofitException unexpectedError(Throwable exception) {
+    static RetrofitException unexpectedError(Throwable exception) {
         return new RetrofitException(exception.getMessage(),
                 null,
                 null,
@@ -37,7 +37,7 @@ public class RetrofitException extends RuntimeException {
     }
 
     /** Identifies the event kind which triggered a {@link RetrofitException}. */
-    public enum Kind {
+    private enum Kind {
         /** An {@link IOException} occurred while communicating to the server. */
         NETWORK,
         /** A non-200 HTTP status code was received from the server. */
@@ -55,12 +55,12 @@ public class RetrofitException extends RuntimeException {
     private final Retrofit retrofit;
     private Error error;
 
-    RetrofitException(String message,
-                      String url,
-                      Response response,
-                      Kind kind,
-                      Throwable exception,
-                      Retrofit retrofit) {
+    private RetrofitException(String message,
+                              String url,
+                              Response response,
+                              Kind kind,
+                              Throwable exception,
+                              Retrofit retrofit) {
         super(message, exception);
         this.url = url;
         this.response = response;
@@ -103,7 +103,7 @@ public class RetrofitException extends RuntimeException {
      *
      * @throws IOException if unable to convert the body to the specified {@code type}.
      */
-    public <T> T getErrorBodyAs(Class<T> type) throws IOException {
+    private <T> T getErrorBodyAs(Class<T> type) throws IOException {
         if (response == null || response.errorBody() == null) {
             return null;
         }

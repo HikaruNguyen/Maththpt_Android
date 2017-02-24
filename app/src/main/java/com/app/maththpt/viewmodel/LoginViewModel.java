@@ -5,8 +5,6 @@ import android.databinding.Bindable;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import java.util.Objects;
-
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 15/02/2017.
  */

@@ -1,6 +1,5 @@
 package com.app.maththpt.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -29,9 +28,9 @@ import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.ActivityMainBinding;
 import com.app.maththpt.databinding.NavHeaderMainBinding;
+import com.app.maththpt.fragment.BeforeExamFragment;
 import com.app.maththpt.fragment.CategoryFragment;
 import com.app.maththpt.fragment.HistoryFragment;
-import com.app.maththpt.fragment.BeforeExamFragment;
 import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.MainViewModel;
@@ -172,28 +171,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -232,22 +209,14 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.logout));
         builder.setMessage(getString(R.string.confirm_logout));
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LoginManager.getInstance().logOut();
-                sharedPreferences.edit().clear().apply();
-                bindNav();
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-            }
+        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+            LoginManager.getInstance().logOut();
+            sharedPreferences.edit().clear().apply();
+            bindNav();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
         });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
         builder.show();
 
     }

@@ -29,7 +29,7 @@ public class Question implements Serializable, Parcelable {
     }
 
 
-    protected Question(Parcel in) {
+    private Question(Parcel in) {
         question = in.readString();
         image = in.readString();
         answerList = in.createTypedArrayList(Answer.CREATOR);
