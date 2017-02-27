@@ -15,6 +15,8 @@ import com.app.maththpt.databinding.ActivityUserProfileBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
+import com.app.maththpt.widget.MyMarkerView;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -85,8 +87,8 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     private void initChart() {
-        userProfileBinding.chartPoint.setViewPortOffsets(0, 0, 0, 0);
-        userProfileBinding.chartPoint.setBackgroundColor(Color.WHITE);
+//        userProfileBinding.chartPoint.setOnChartValueSelectedListener(this);
+        userProfileBinding.chartPoint.setDrawGridBackground(false);
 
         // no description text
         userProfileBinding.chartPoint.getDescription().setEnabled(false);
@@ -99,51 +101,44 @@ public class UserProfileActivity extends BaseActivity {
         userProfileBinding.chartPoint.setScaleEnabled(true);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        userProfileBinding.chartPoint.setPinchZoom(false);
+        userProfileBinding.chartPoint.setPinchZoom(true);
 
-        userProfileBinding.chartPoint.setDrawGridBackground(false);
-        userProfileBinding.chartPoint.setMaxHighlightDistance(300);
+        // set an alternative background color
+        // userProfileBinding.chartPoint.setBackgroundColor(Color.GRAY);
 
-        XAxis x = userProfileBinding.chartPoint.getXAxis();
-        x.setEnabled(false);
+        // create a custom MarkerView (extend MarkerView) and specify the layout
+        // to use for it
+        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
+        mv.setChartView(userProfileBinding.chartPoint); // For bounds control
+        userProfileBinding.chartPoint.setMarker(mv); // Set the marker to the chart
 
-        YAxis y = userProfileBinding.chartPoint.getAxisLeft();
-        y.setTypeface(mTfLight);
-        y.setLabelCount(6, false);
-        y.setTextColor(Color.RED);
-        y.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        y.setDrawGridLines(false);
-        y.setAxisLineColor(Color.rgb(104, 241, 175));
+        XAxis xl = userProfileBinding.chartPoint.getXAxis();
+        xl.setAvoidFirstLastClipping(true);
+        xl.setAxisMinimum(0f);
 
-        userProfileBinding.chartPoint.getAxisRight().setEnabled(false);
+        YAxis leftAxis = userProfileBinding.chartPoint.getAxisLeft();
+        leftAxis.setInverted(false);
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
+        YAxis rightAxis = userProfileBinding.chartPoint.getAxisRight();
+        rightAxis.setEnabled(false);
         // add data
         setData();
 
-        userProfileBinding.chartPoint.getLegend().setEnabled(false);
+        // // restrain the maximum scale-out factor
+        // userProfileBinding.chartPoint.setScaleMinima(3f, 3f);
+        //
+        // // center the view to a specific position inside the chart
+        // userProfileBinding.chartPoint.centerViewPort(10, 50);
 
-        userProfileBinding.chartPoint.animateXY(2000, 2000);
+        // get the legend (only possible after setting data)
+        Legend l = userProfileBinding.chartPoint.getLegend();
 
+        // modify the legend ...
+        l.setForm(Legend.LegendForm.LINE);
 
-        for (IDataSet set : userProfileBinding.chartPoint.getData().getDataSets())
-            set.setDrawValues(!set.isDrawValuesEnabled());
-
-        List<ILineDataSet> sets = userProfileBinding.chartPoint.getData()
-                .getDataSets();
-
-        for (ILineDataSet iSet : sets) {
-
-            LineDataSet set = (LineDataSet) iSet;
-
-            if (set.isDrawFilledEnabled())
-                set.setDrawFilled(false);
-            else
-                set.setDrawFilled(true);
-
-            set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
-                    ? LineDataSet.Mode.LINEAR
-                    : LineDataSet.Mode.CUBIC_BEZIER);
-        }
+        // dont forget to refresh the drawing
+        userProfileBinding.chartPoint.setNoDataText(getString(R.string.no_data));
         userProfileBinding.chartPoint.invalidate();
     }
 
@@ -163,40 +158,17 @@ public class UserProfileActivity extends BaseActivity {
             j++;
         }
 
-        LineDataSet set1;
+        LineDataSet set1 = new LineDataSet(yVals, getString(R.string.yourPoint));
 
-        if (userProfileBinding.chartPoint.getData() != null &&
-                userProfileBinding.chartPoint.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) userProfileBinding.chartPoint.getData().getDataSetByIndex(0);
-            set1.setValues(yVals);
-            userProfileBinding.chartPoint.getData().notifyDataChanged();
-            userProfileBinding.chartPoint.notifyDataSetChanged();
-        } else {
-            // create a dataset and give it a type
-            set1 = new LineDataSet(yVals, "DataSet 1");
+        set1.setLineWidth(1.5f);
+        set1.setCircleColor(Color.RED);
+        set1.setColor(Color.GREEN);
+        set1.setCircleRadius(4f);
 
-            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-            set1.setCubicIntensity(0.2f);
-            //set1.setDrawFilled(true);
-            set1.setDrawCircles(true);
-            set1.setLineWidth(1.8f);
-            set1.setCircleRadius(4f);
-            set1.setCircleColor(Color.RED);
-            set1.setHighLightColor(Color.rgb(244, 117, 117));
-            set1.setColor(Color.WHITE);
-            set1.setFillColor(Color.parseColor("#2196F3"));
-            set1.setFillAlpha(100);
-            set1.setDrawHorizontalHighlightIndicator(false);
-            set1.setFillFormatter((dataSet, dataProvider) -> -10);
+        // create a data object with the datasets
+        LineData data = new LineData(set1);
 
-            // create a data object with the datasets
-            LineData data = new LineData(set1);
-            data.setValueTypeface(mTfLight);
-            data.setValueTextSize(9f);
-            data.setDrawValues(false);
-
-            // set data
-            userProfileBinding.chartPoint.setData(data);
-        }
+        // set data
+        userProfileBinding.chartPoint.setData(data);
     }
 }
