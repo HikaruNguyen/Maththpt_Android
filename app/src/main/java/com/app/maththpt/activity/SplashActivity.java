@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         private void goToMain() {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, DemoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

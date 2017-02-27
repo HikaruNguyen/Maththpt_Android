@@ -64,7 +64,8 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.DemoActivity"></activity>
     </application>
 
 </manifest>
