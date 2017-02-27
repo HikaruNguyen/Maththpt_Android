@@ -28,10 +28,11 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
 public class UserProfileActivity extends BaseActivity {
     private ActivityUserProfileBinding userProfileBinding;
@@ -111,12 +112,12 @@ public class UserProfileActivity extends BaseActivity {
         xl.setDrawAxisLine(true);
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
-        xl.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-//                return mMonths[(int) value % mMonths.length];
-                return statisticalPoints.get((int) (value % statisticalPoints.size())).getCateName();
+        xl.setValueFormatter((value, axis) -> {
+            String name = statisticalPoints.get((int) (value % statisticalPoints.size())).getCateName();
+            if (name.length() > 10) {
+                name = name.substring(0, 10) + "...";
             }
+            return name;
         });
         YAxis yl = userProfileBinding.chartStatistical.getAxisLeft();
         yl.setTypeface(mTfLight);
@@ -130,7 +131,7 @@ public class UserProfileActivity extends BaseActivity {
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-//        yr.setInverted(true);
+        yr.setInverted(true);
 
         setDataStatistical();
         userProfileBinding.chartStatistical.setFitBars(true);
@@ -143,8 +144,12 @@ public class UserProfileActivity extends BaseActivity {
         l.setDrawInside(false);
         l.setFormSize(8f);
         l.setXEntrySpace(4f);
-
+        userProfileBinding.chartStatistical.setNoDataText(getString(R.string.no_data));
     }
+
+    private static final int[] MY_COLORS = {
+            rgb("#ff5252"), rgb("#aa00ff"), rgb("#304ffe"), rgb("#0091ea"),
+            rgb("#00c853"), rgb("#ffd600"), rgb("#ff6e40"), rgb("#455a64")};
 
     private void setDataStatistical() {
 
@@ -154,8 +159,13 @@ public class UserProfileActivity extends BaseActivity {
 
         for (int i = statisticalPoints.size() - 1; i >= 0; i--) {
             float val = statisticalPoints.get(i).getRatio();
-            float vals[] = new float[1];
-            vals[0] = val;
+//            if (i == statisticalPoints.size() - 1) {
+//                yVals1.add(new BarEntry(i * spaceForBar, 100,
+//                        statisticalPoints.get(i).getCateName()));
+//            } else {
+//                yVals1.add(new BarEntry(i * spaceForBar, val,
+//                        statisticalPoints.get(i).getCateName()));
+//            }
             yVals1.add(new BarEntry(i * spaceForBar, val,
                     statisticalPoints.get(i).getCateName()));
         }
@@ -170,7 +180,7 @@ public class UserProfileActivity extends BaseActivity {
             userProfileBinding.chartStatistical.notifyDataSetChanged();
         } else {
             set1 = new BarDataSet(yVals1, getString(R.string.tiLeLamBaiDung));
-            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+            set1.setColors(MY_COLORS);
 //            set1.setDrawIcons(false);
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
