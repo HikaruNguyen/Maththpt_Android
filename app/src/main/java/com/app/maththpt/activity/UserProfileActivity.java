@@ -16,14 +16,19 @@ import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
 import com.app.maththpt.widget.MyMarkerView;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +68,13 @@ public class UserProfileActivity extends BaseActivity {
         getStatisticalPoint();
     }
 
+    List<StatisticalPoint> statisticalPoints;
+
     private void getStatisticalPoint() {
         StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
                 = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
         statisticalPointDatabase.open();
-        List<StatisticalPoint> statisticalPoints = statisticalPointDatabase.getAll();
+        statisticalPoints = statisticalPointDatabase.getAll();
         if (statisticalPoints != null && statisticalPoints.size() > 0) {
             userProfileBinding.rvStatisticalPoint.setDivider();
             StatisticalPointAdapter pointAdapter
@@ -76,7 +83,105 @@ public class UserProfileActivity extends BaseActivity {
             pointAdapter.addAll(statisticalPoints);
         }
         statisticalPointDatabase.close();
+        initChartStatistical();
+    }
 
+    private void initChartStatistical() {
+        userProfileBinding.chartStatistical.setDrawBarShadow(false);
+
+        userProfileBinding.chartStatistical.setDrawValueAboveBar(true);
+
+        userProfileBinding.chartStatistical.getDescription().setEnabled(false);
+
+        // if more than 60 entries are displayed in the chart, no values will be
+        // drawn
+        userProfileBinding.chartStatistical.setMaxVisibleValueCount(100);
+
+        // scaling can now only be done on x- and y-axis separately
+        userProfileBinding.chartStatistical.setPinchZoom(false);
+        userProfileBinding.chartStatistical.setDoubleTapToZoomEnabled(false);
+        // draw shadows for each bar that show the maximum value
+        // userProfileBinding.chartStatistical.setDrawBarShadow(true);
+
+        userProfileBinding.chartStatistical.setDrawGridBackground(false);
+
+        XAxis xl = userProfileBinding.chartStatistical.getXAxis();
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setTypeface(mTfLight);
+        xl.setDrawAxisLine(true);
+        xl.setDrawGridLines(false);
+        xl.setGranularity(10f);
+        xl.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+//                return mMonths[(int) value % mMonths.length];
+                return statisticalPoints.get((int) (value % statisticalPoints.size())).getCateName();
+            }
+        });
+        YAxis yl = userProfileBinding.chartStatistical.getAxisLeft();
+        yl.setTypeface(mTfLight);
+        yl.setDrawAxisLine(true);
+        yl.setDrawGridLines(true);
+        yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        yl.setInverted(true);
+
+        YAxis yr = userProfileBinding.chartStatistical.getAxisRight();
+        yr.setTypeface(mTfLight);
+        yr.setDrawAxisLine(true);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+//        yr.setInverted(true);
+
+        setDataStatistical();
+        userProfileBinding.chartStatistical.setFitBars(true);
+        userProfileBinding.chartStatistical.animateY(2500);
+
+        Legend l = userProfileBinding.chartStatistical.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+        l.setFormSize(8f);
+        l.setXEntrySpace(4f);
+
+    }
+
+    private void setDataStatistical() {
+
+        float barWidth = 9f;
+        float spaceForBar = 10f;
+        ArrayList<BarEntry> yVals1 = new ArrayList<>();
+
+        for (int i = statisticalPoints.size() - 1; i >= 0; i--) {
+            float val = statisticalPoints.get(i).getRatio();
+            float vals[] = new float[1];
+            vals[0] = val;
+            yVals1.add(new BarEntry(i * spaceForBar, val,
+                    statisticalPoints.get(i).getCateName()));
+        }
+
+        BarDataSet set1;
+
+        if (userProfileBinding.chartStatistical.getData() != null &&
+                userProfileBinding.chartStatistical.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) userProfileBinding.chartStatistical.getData().getDataSetByIndex(0);
+            set1.setValues(yVals1);
+            userProfileBinding.chartStatistical.getData().notifyDataChanged();
+            userProfileBinding.chartStatistical.notifyDataSetChanged();
+        } else {
+            set1 = new BarDataSet(yVals1, getString(R.string.tiLeLamBaiDung));
+            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+//            set1.setDrawIcons(false);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setValueTypeface(mTfLight);
+            data.setBarWidth(barWidth);
+            userProfileBinding.chartStatistical.setData(data);
+        }
     }
 
     private void getListPoint() {

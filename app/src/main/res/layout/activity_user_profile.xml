@@ -196,6 +196,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_5dp" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/chartStatistical"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/image_size_200dp"
+                        android:background="@android:color/white" />
                 </LinearLayout>
 
 
