@@ -75,6 +75,7 @@ public class QuestionWVFragment extends Fragment {
 
     private void bindData() {
 //        webView.loadUrl("file:///android_asset/MathView/demo.html");
+        fragmentQuestionBinding.webView.setProgress_wheel(fragmentQuestionBinding.progressWheel);
         fragmentQuestionBinding.webView.setPosition(position - 1);
         shareDialog = new ShareDialog(getActivity());
         if (question != null) {

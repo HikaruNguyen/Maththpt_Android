@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 
 import com.app.maththpt.R;
 import com.app.maththpt.activity.QuestionActivity;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 
 /**
@@ -23,6 +24,16 @@ public class CustomeWebView extends WebView {
     private int type;
     private Context context;
     public int answer;
+
+    public ProgressWheel getProgress_wheel() {
+        return progress_wheel;
+    }
+
+    public void setProgress_wheel(ProgressWheel progress_wheel) {
+        this.progress_wheel = progress_wheel;
+    }
+
+    private ProgressWheel progress_wheel;
 
     public int getPosition() {
         return position;
@@ -93,22 +104,16 @@ public class CustomeWebView extends WebView {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
 //            prbLoading.setVisibility(View.VISIBLE);
-            if (QuestionActivity.progressDialog != null
-                    && QuestionActivity.progressDialog.isShowing()) {
-                QuestionActivity.progressDialog.dismiss();
+            if (progress_wheel != null) {
+                progress_wheel.setVisibility(VISIBLE);
             }
-            QuestionActivity.progressDialog = ProgressDialog.show(
-                    getContext(), "", getContext().getString(R.string.loading), false, true);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-//            prbLoading.setVisibility(View.GONE);
-            if (QuestionActivity.progressDialog != null
-                    && QuestionActivity.progressDialog.isShowing()) {
-                if (getContext() != null)
-                    QuestionActivity.progressDialog.dismiss();
+            if (progress_wheel != null) {
+                progress_wheel.setVisibility(GONE);
             }
 
         }
