@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "690993164012",
+    "firebase_url": "https://filmhd.firebaseio.com",
+    "project_id": "firebase-filmhd",
+    "storage_bucket": "firebase-filmhd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690993164012:android:c49e744a24bb8289",
+        "android_client_info": {
+          "package_name": "com.app.maththpt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690993164012-krrbsuvka9m7s7rd44lmfc96r6ipulb5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.maththpt",
+            "certificate_hash": "b70c331fdb88ed689bfd0e347bb552608982e30b"
+          }
+        },
+        {
+          "client_id": "690993164012-kg2e3a6egbmk16m9su2k0lmhfp1uutpa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr_8ITK-hylZtfgGX-2WmbZCgZ-vwqFls"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690993164012-kg2e3a6egbmk16m9su2k0lmhfp1uutpa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
