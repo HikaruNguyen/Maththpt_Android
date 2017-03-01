@@ -1,14 +1,21 @@
 package com.app.maththpt.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 21/02/2017.
  */
 
-public class StatisticalPoint {
+public class StatisticalPoint extends RealmObject {
     private int totalQuestionTrue;
     private int totalQuestion;
     private String cateName;
+    @PrimaryKey
     private int cateID;
+
+    public StatisticalPoint() {
+    }
 
     public StatisticalPoint(int totalQuestionTrue, int totalQuestion, int cateID, String cateName) {
         this.totalQuestionTrue = totalQuestionTrue;

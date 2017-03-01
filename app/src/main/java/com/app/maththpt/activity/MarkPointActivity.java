@@ -11,8 +11,6 @@ import android.util.Log;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.DetailPointAdapter;
-import com.app.maththpt.database.HistoryDBHelper;
-import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
@@ -20,6 +18,7 @@ import com.app.maththpt.model.Point;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.realm.HistoryModule;
+import com.app.maththpt.realm.StatisticalModule;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -54,8 +53,6 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     int soCauDung = 0;
     private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
-
-    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,14 +127,25 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     }
 
     private void bindData() {
-        initRealm();
+        Realm.init(this);
         getPoint();
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        getStatistical();
+        initChart();
+    }
+
+    private void getStatistical() {
         List<ChiTietDiem> chiTietDiems = new ArrayList<>();
-        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
-                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
-        statisticalPointDatabase.open();
+//        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
+//                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
+//        statisticalPointDatabase.open();
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("statisticalPoint.realm")
+                .modules(Realm.getDefaultModule(), new StatisticalModule())
+                .build();
+
+        Realm realStatistical = Realm.getInstance(settingConfig);
 
         for (int i = 0; i < listCategory.size(); i++) {
             int demSum = 0;
@@ -151,15 +159,24 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 }
 
             }
-            chiTietDiems.add(new ChiTietDiem(listCategory.get(i).name, demSum, demTrue));
-            if (statisticalPointDatabase.isExistCateID(listCategory.get(i).id)) {
+            ChiTietDiem chiTietDiem = new ChiTietDiem(listCategory.get(i).name, demSum, demTrue);
+            chiTietDiems.add(chiTietDiem);
+            boolean isExistCateId = realStatistical
+                    .where(StatisticalPoint.class)
+                    .equalTo("cateID", listCategory.get(i).id)
+                    .count() > 0;
+            if (isExistCateId) {
+                realStatistical.beginTransaction();
                 StatisticalPoint statisticalPoint =
-                        statisticalPointDatabase.getStatisticalPointByCateID(
-                                listCategory.get(i).id);
+                        realStatistical.where(StatisticalPoint.class)
+                                .equalTo("cateID", listCategory.get(i).id)
+                                .findFirst();
                 statisticalPoint.setTotalQuestion(statisticalPoint.getTotalQuestion() + demSum);
                 statisticalPoint.setTotalQuestionTrue(
                         statisticalPoint.getTotalQuestionTrue() + demTrue);
-                statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
+//                statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
+                realStatistical.insertOrUpdate(statisticalPoint);
+                realStatistical.commitTransaction();
             } else {
                 StatisticalPoint statisticalPoint =
                         new StatisticalPoint(
@@ -167,27 +184,23 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                                 demSum,
                                 listCategory.get(i).id,
                                 listCategory.get(i).name);
-                statisticalPointDatabase.addStaticticalPoint(statisticalPoint);
+                realStatistical.beginTransaction();
+                realStatistical.insertOrUpdate(statisticalPoint);
+                realStatistical.commitTransaction();
+
             }
         }
         adapter.addAll(chiTietDiems);
-        statisticalPointDatabase.close();
-        initChart();
+//        statisticalPointDatabase.close();
     }
 
-    private void initRealm() {
-        Realm.init(this);
+    private void getPoint() {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
                 .build();
 
-        realm = Realm.getInstance(settingConfig);
-    }
-
-
-    private void getPoint() {
-
+        Realm realmHistory = Realm.getInstance(settingConfig);
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).isCorrect) {
@@ -197,9 +210,9 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
             long dtMili = System.currentTimeMillis();
             Point point = new Point(soCauDung * 10 / list.size(), dtMili + "");
-            realm.beginTransaction();
-            Point copyOfPoint = realm.copyToRealm(point);
-            realm.commitTransaction();
+            realmHistory.beginTransaction();
+            realmHistory.insert(point);
+            realmHistory.commitTransaction();
         }
 
     }

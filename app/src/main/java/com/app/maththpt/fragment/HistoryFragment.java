@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.HistoryAdapter;
-import com.app.maththpt.database.HistoryDBHelper;
 import com.app.maththpt.databinding.FragmentHistoryBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.realm.HistoryModule;

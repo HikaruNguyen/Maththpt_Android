@@ -9,15 +9,13 @@ import android.os.Bundle;
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.StatisticalPointAdapter;
 import com.app.maththpt.config.Configuaration;
-import com.app.maththpt.database.HistoryDBHelper;
-import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityUserProfileBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.realm.HistoryModule;
+import com.app.maththpt.realm.StatisticalModule;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
 import com.app.maththpt.widget.MyMarkerView;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -27,7 +25,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;
@@ -35,7 +32,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
@@ -63,6 +59,7 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     private void bindData() {
+        Realm.init(this);
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         listPoint = new ArrayList<>();
         getListPoint();
@@ -78,10 +75,25 @@ public class UserProfileActivity extends BaseActivity {
     List<StatisticalPoint> statisticalPoints;
 
     private void getStatisticalPoint() {
-        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
-                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
-        statisticalPointDatabase.open();
-        statisticalPoints = statisticalPointDatabase.getAll();
+//        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
+//                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
+//        statisticalPointDatabase.open();
+//        statisticalPoints = statisticalPointDatabase.getAll();
+//        if (statisticalPoints != null && statisticalPoints.size() > 0) {
+//            userProfileBinding.rvStatisticalPoint.setDivider();
+//            StatisticalPointAdapter pointAdapter
+//                    = new StatisticalPointAdapter(this, new ArrayList<>());
+//            userProfileBinding.rvStatisticalPoint.setAdapter(pointAdapter);
+//            pointAdapter.addAll(statisticalPoints);
+//        }
+//        statisticalPointDatabase.close();
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("statisticalPoint.realm")
+                .modules(Realm.getDefaultModule(), new StatisticalModule())
+                .build();
+
+        Realm realStatistical = Realm.getInstance(settingConfig);
+        statisticalPoints = realStatistical.where(StatisticalPoint.class).findAll();
         if (statisticalPoints != null && statisticalPoints.size() > 0) {
             userProfileBinding.rvStatisticalPoint.setDivider();
             StatisticalPointAdapter pointAdapter
@@ -89,7 +101,6 @@ public class UserProfileActivity extends BaseActivity {
             userProfileBinding.rvStatisticalPoint.setAdapter(pointAdapter);
             pointAdapter.addAll(statisticalPoints);
         }
-        statisticalPointDatabase.close();
         initChartStatistical();
     }
 
@@ -203,7 +214,7 @@ public class UserProfileActivity extends BaseActivity {
 
     private void getListPoint() {
         // TODO: 01/03/2017 getTop10
-        Realm.init(this);
+
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
