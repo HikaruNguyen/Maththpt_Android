@@ -186,7 +186,7 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
 
         private Point cursorToLive(Cursor cursor) {
             return new Point(
-                    cursor.getString(cursor.getColumnIndex(HISTORY_POINT)),
+                    cursor.getFloat(cursor.getColumnIndex(HISTORY_POINT)),
                     cursor.getString(cursor.getColumnIndex(HISTORY_CREAT_AT)));
         }
 
@@ -201,18 +201,18 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         public float getAveragePoint() {
             List<Point> list = getAll();
             if (list == null || list.size() <= 0) {
-                return 0;
+                return -1;
             } else {
                 float sum = 0;
                 for (int i = 0; i < list.size(); i++) {
                     try {
-                        sum += Float.parseFloat(list.get(i).point);
+                        sum += list.get(i).point;
                     } catch (Exception e) {
                         e.printStackTrace();
                         sum += 0;
                     }
                 }
-                return sum/list.size();
+                return sum / list.size();
             }
         }
     }

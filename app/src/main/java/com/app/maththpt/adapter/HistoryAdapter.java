@@ -61,7 +61,7 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
     }
 
     @BindingAdapter("displayPoint")
-    public static void displayPoint(TextView textView, String point) {
+    public static void displayPoint(TextView textView, float point) {
         textView.setText(textView.getContext().getString(R.string.yourPoint) + " : " + point);
     }
 

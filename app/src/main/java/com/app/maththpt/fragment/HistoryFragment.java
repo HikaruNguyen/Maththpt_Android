@@ -12,9 +12,16 @@ import com.app.maththpt.R;
 import com.app.maththpt.adapter.HistoryAdapter;
 import com.app.maththpt.database.HistoryDBHelper;
 import com.app.maththpt.databinding.FragmentHistoryBinding;
+import com.app.maththpt.model.Point;
+import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.viewmodel.HistoryViewModel;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class HistoryFragment extends Fragment {
 
@@ -41,15 +48,21 @@ public class HistoryFragment extends Fragment {
     }
 
     private void bindData() {
-        HistoryDBHelper.HistoryDatabase historyDatabase =
-                new HistoryDBHelper.HistoryDatabase(getActivity());
-        historyDatabase.open();
-        historyAdapter.addAll(historyDatabase.getAll());
+        Realm.init(getActivity());
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("history.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .build();
+
+        Realm realm = Realm.getInstance(settingConfig);
+        RealmResults<Point> listPoints =
+                realm.where(Point.class).findAllSorted("time", Sort.DESCENDING);
+        historyAdapter.addAll(listPoints);
         historyBinding.rvHistory.setAdapter(historyAdapter);
-        historyDatabase.close();
+//        historyDatabase.close();
         if (historyAdapter.getItemCount() > 0) {
             historyViewModel.setVisiableError(false);
-        }else {
+        } else {
             historyViewModel.setVisiableError(true);
         }
 

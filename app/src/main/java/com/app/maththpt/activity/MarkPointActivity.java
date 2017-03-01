@@ -16,8 +16,10 @@ import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
+import com.app.maththpt.model.Point;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.model.StatisticalPoint;
+import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -34,6 +36,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
 public class MarkPointActivity extends BaseActivity implements OnChartValueSelectedListener {
@@ -49,6 +54,8 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     int soCauDung = 0;
     private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
+
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +130,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     }
 
     private void bindData() {
+        initRealm();
         getPoint();
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
@@ -167,6 +175,16 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         initChart();
     }
 
+    private void initRealm() {
+        Realm.init(this);
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("history.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .build();
+
+        realm = Realm.getInstance(settingConfig);
+    }
+
 
     private void getPoint() {
 
@@ -177,11 +195,11 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 }
             }
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
-            HistoryDBHelper.HistoryDatabase historyDatabase =
-                    new HistoryDBHelper.HistoryDatabase(this);
-            historyDatabase.open();
-            historyDatabase.addPointToHistory(String.valueOf(soCauDung * 10 / list.size()));
-            historyDatabase.close();
+            long dtMili = System.currentTimeMillis();
+            Point point = new Point(soCauDung * 10 / list.size(), dtMili + "");
+            realm.beginTransaction();
+            Point copyOfPoint = realm.copyToRealm(point);
+            realm.commitTransaction();
         }
 
     }

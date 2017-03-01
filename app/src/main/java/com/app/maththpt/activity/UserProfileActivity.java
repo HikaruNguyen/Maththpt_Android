@@ -14,6 +14,7 @@ import com.app.maththpt.database.StatisticalPointDBHelper;
 import com.app.maththpt.databinding.ActivityUserProfileBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
+import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
 import com.app.maththpt.widget.MyMarkerView;
 import com.github.mikephil.charting.components.AxisBase;
@@ -31,6 +32,11 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
@@ -113,7 +119,8 @@ public class UserProfileActivity extends BaseActivity {
         xl.setDrawGridLines(false);
         xl.setGranularity(10f);
         xl.setValueFormatter((value, axis) -> {
-            String name = statisticalPoints.get((int) (value % statisticalPoints.size())).getCateName();
+            String name = statisticalPoints.get(
+                    (int) (value / 10)).getCateName();
             if (name.length() > 10) {
                 name = name.substring(0, 10) + "...";
             }
@@ -195,10 +202,15 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     private void getListPoint() {
-        HistoryDBHelper.HistoryDatabase historyDatabase = new HistoryDBHelper.HistoryDatabase(this);
-        historyDatabase.open();
-        listPoint = historyDatabase.getTop10();
-        historyDatabase.close();
+        // TODO: 01/03/2017 getTop10
+        Realm.init(this);
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("history.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .build();
+
+        Realm realm = Realm.getInstance(settingConfig);
+        listPoint = realm.where(Point.class).findAllSorted("time", Sort.DESCENDING);
     }
 
     private void initChart() {
@@ -264,7 +276,7 @@ public class UserProfileActivity extends BaseActivity {
         for (int i = listPoint.size() - 1; i >= 0; i--) {
             float val;
             try {
-                val = Float.parseFloat(listPoint.get(i).point);
+                val = listPoint.get(i).point;
             } catch (Exception e) {
                 e.printStackTrace();
                 val = 0;

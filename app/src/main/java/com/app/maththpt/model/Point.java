@@ -1,14 +1,19 @@
 package com.app.maththpt.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by FRAMGIA\nguyen.duc.manh on 16/02/2017.
  */
 
-public class Point {
-    public String point;
+public class Point extends RealmObject {
+    public float point;
     public String time;
 
-    public Point(String point, String time) {
+    public Point() {
+    }
+
+    public Point(float point, String time) {
         this.point = point;
         this.time = time;
     }
