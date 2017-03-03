@@ -13,15 +13,17 @@ public class StatisticalPoint extends RealmObject {
     private String cateName;
     @PrimaryKey
     private int cateID;
+    private String userID;
 
     public StatisticalPoint() {
     }
 
-    public StatisticalPoint(int totalQuestionTrue, int totalQuestion, int cateID, String cateName) {
+    public StatisticalPoint(int totalQuestionTrue, int totalQuestion, int cateID, String cateName, String userID) {
         this.totalQuestionTrue = totalQuestionTrue;
         this.totalQuestion = totalQuestion;
         this.cateID = cateID;
         this.cateName = cateName;
+        this.userID = userID;
         getRatio();
 
     }
@@ -66,5 +68,13 @@ public class StatisticalPoint extends RealmObject {
 
     public void setCateName(String cateName) {
         this.cateName = cateName;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 }

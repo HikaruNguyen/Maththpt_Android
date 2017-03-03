@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.app.maththpt.R;
 
@@ -18,7 +17,6 @@ import com.app.maththpt.R;
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Toolbar mActionBarToolbar;
-    private ImageView statusBar;
 
     @Override
     public void setContentView(int layoutResId) {

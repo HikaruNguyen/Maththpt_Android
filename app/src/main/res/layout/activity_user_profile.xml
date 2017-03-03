@@ -61,7 +61,7 @@
                             android:layout_width="@dimen/image_size_100dp"
                             android:layout_height="@dimen/image_size_100dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/ic_avatar"
+                            android:srcUrl="@{userProfileViewModel.avatarProfile}"
                             app:civ_border_color="#EEEEEE"
                             app:civ_border_width="2dp" />
 

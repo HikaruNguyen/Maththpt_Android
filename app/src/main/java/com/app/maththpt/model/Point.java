@@ -9,12 +9,14 @@ import io.realm.RealmObject;
 public class Point extends RealmObject {
     public float point;
     public String time;
+    public String userID;
 
     public Point() {
     }
 
-    public Point(float point, String time) {
+    public Point(float point, String time, String userID) {
         this.point = point;
         this.time = time;
+        this.userID = userID;
     }
 }

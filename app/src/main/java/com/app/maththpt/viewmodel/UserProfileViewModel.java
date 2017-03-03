@@ -21,6 +21,8 @@ public class UserProfileViewModel extends BaseViewModel {
     public String emailProfile;
 
     @Bindable
+    public String avatarProfile;
+    @Bindable
     public String averagePoint;
     @Bindable
     public String countPoint;
@@ -28,10 +30,12 @@ public class UserProfileViewModel extends BaseViewModel {
     public String classification;
 
 
-    public UserProfileViewModel(Activity activity, String title, String userName, String email) {
+    public UserProfileViewModel(Activity activity, String title, String userName, String email,
+                                String avatarProfile) {
         super(activity, title);
         this.userNameProfile = userName;
         this.emailProfile = email;
+        this.avatarProfile = avatarProfile;
         setAveragePoint();
     }
 

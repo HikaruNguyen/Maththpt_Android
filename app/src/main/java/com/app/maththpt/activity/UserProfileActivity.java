@@ -1,10 +1,12 @@
 package com.app.maththpt.activity;
 
 import android.content.SharedPreferences;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.StatisticalPointAdapter;
@@ -14,6 +16,7 @@ import com.app.maththpt.model.Point;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.realm.StatisticalModule;
+import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.UserProfileViewModel;
 import com.app.maththpt.widget.MyMarkerView;
 import com.github.mikephil.charting.components.Legend;
@@ -26,6 +29,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,7 @@ public class UserProfileActivity extends BaseActivity {
     private UserProfileViewModel userProfileViewModel;
     private Typeface mTfLight;
     private List<Point> listPoint;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +55,28 @@ public class UserProfileActivity extends BaseActivity {
                 = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         String userName = sharedPreferences.getString(Configuaration.KEY_NAME, "");
         String email = sharedPreferences.getString(Configuaration.KEY_EMAIL, "");
+        String avatar = "";
+        if (!FacebookUtils.getAvatarFBFromId().isEmpty()) {
+            avatar = FacebookUtils.getAvatarFBFromId();
+        }
+        userID = sharedPreferences.getString(Configuaration.KEY_ID, "");
         setSupportActionBar(userProfileBinding.toolbar);
         setBackButtonToolbar();
-        userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile), userName, email);
+        userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile), userName, email,
+                avatar);
         userProfileBinding.setUserProfileViewModel(userProfileViewModel);
 
         bindData();
+    }
+
+    @BindingAdapter("android:srcUrl")
+    public static void setImageUrl(ImageView view, String url) {
+        if (url != null && !url.trim().isEmpty()) {
+            Picasso.with(view.getContext()).load(url).placeholder(R.mipmap.ic_avatar).into(view);
+        } else {
+            Picasso.with(view.getContext()).load(R.mipmap.ic_avatar).into(view);
+        }
+
     }
 
     private void bindData() {
@@ -75,25 +96,16 @@ public class UserProfileActivity extends BaseActivity {
     List<StatisticalPoint> statisticalPoints;
 
     private void getStatisticalPoint() {
-//        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
-//                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
-//        statisticalPointDatabase.open();
-//        statisticalPoints = statisticalPointDatabase.getAll();
-//        if (statisticalPoints != null && statisticalPoints.size() > 0) {
-//            userProfileBinding.rvStatisticalPoint.setDivider();
-//            StatisticalPointAdapter pointAdapter
-//                    = new StatisticalPointAdapter(this, new ArrayList<>());
-//            userProfileBinding.rvStatisticalPoint.setAdapter(pointAdapter);
-//            pointAdapter.addAll(statisticalPoints);
-//        }
-//        statisticalPointDatabase.close();
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("statisticalPoint.realm")
                 .modules(Realm.getDefaultModule(), new StatisticalModule())
                 .build();
 
         Realm realStatistical = Realm.getInstance(settingConfig);
-        statisticalPoints = realStatistical.where(StatisticalPoint.class).findAll();
+        statisticalPoints = realStatistical
+                .where(StatisticalPoint.class)
+                .equalTo("userID", userID)
+                .findAll();
         if (statisticalPoints != null && statisticalPoints.size() > 0) {
             userProfileBinding.rvStatisticalPoint.setDivider();
             StatisticalPointAdapter pointAdapter
@@ -221,7 +233,10 @@ public class UserProfileActivity extends BaseActivity {
                 .build();
 
         Realm realm = Realm.getInstance(settingConfig);
-        listPoint = realm.where(Point.class).findAllSorted("time", Sort.DESCENDING);
+        listPoint = realm
+                .where(Point.class)
+                .equalTo("userID", userID)
+                .findAllSorted("time", Sort.DESCENDING);
     }
 
     private void initChart() {

@@ -1,6 +1,7 @@
 package com.app.maththpt.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,6 +12,7 @@ import android.util.Log;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.DetailPointAdapter;
+import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.ChiTietDiem;
@@ -53,6 +55,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     int soCauDung = 0;
     private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,8 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         Intent intent = getIntent();
         list = intent.getParcelableArrayListExtra("listAnswer");
         listCategory = intent.getParcelableArrayListExtra("listCate");
+        SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        userID = sharedPreferences.getString(Configuaration.KEY_ID, "");
     }
 
     private void initChart() {
@@ -161,34 +166,38 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             }
             ChiTietDiem chiTietDiem = new ChiTietDiem(listCategory.get(i).name, demSum, demTrue);
             chiTietDiems.add(chiTietDiem);
-            boolean isExistCateId = realStatistical
-                    .where(StatisticalPoint.class)
-                    .equalTo("cateID", listCategory.get(i).id)
-                    .count() > 0;
-            if (isExistCateId) {
-                realStatistical.beginTransaction();
-                StatisticalPoint statisticalPoint =
-                        realStatistical.where(StatisticalPoint.class)
-                                .equalTo("cateID", listCategory.get(i).id)
-                                .findFirst();
-                statisticalPoint.setTotalQuestion(statisticalPoint.getTotalQuestion() + demSum);
-                statisticalPoint.setTotalQuestionTrue(
-                        statisticalPoint.getTotalQuestionTrue() + demTrue);
+            if (!userID.isEmpty()) {
+                boolean isExistCateId = realStatistical
+                        .where(StatisticalPoint.class)
+                        .equalTo("cateID", listCategory.get(i).id)
+                        .count() > 0;
+                if (isExistCateId) {
+                    realStatistical.beginTransaction();
+                    StatisticalPoint statisticalPoint =
+                            realStatistical.where(StatisticalPoint.class)
+                                    .equalTo("cateID", listCategory.get(i).id)
+                                    .findFirst();
+                    statisticalPoint.setTotalQuestion(statisticalPoint.getTotalQuestion() + demSum);
+                    statisticalPoint.setTotalQuestionTrue(
+                            statisticalPoint.getTotalQuestionTrue() + demTrue);
 //                statisticalPointDatabase.updateStatisticalPointByCateID(statisticalPoint);
-                realStatistical.insertOrUpdate(statisticalPoint);
-                realStatistical.commitTransaction();
-            } else {
-                StatisticalPoint statisticalPoint =
-                        new StatisticalPoint(
-                                demTrue,
-                                demSum,
-                                listCategory.get(i).id,
-                                listCategory.get(i).name);
-                realStatistical.beginTransaction();
-                realStatistical.insertOrUpdate(statisticalPoint);
-                realStatistical.commitTransaction();
+                    realStatistical.insertOrUpdate(statisticalPoint);
+                    realStatistical.commitTransaction();
+                } else {
+                    StatisticalPoint statisticalPoint =
+                            new StatisticalPoint(
+                                    demTrue,
+                                    demSum,
+                                    listCategory.get(i).id,
+                                    listCategory.get(i).name,
+                                    userID);
+                    realStatistical.beginTransaction();
+                    realStatistical.insertOrUpdate(statisticalPoint);
+                    realStatistical.commitTransaction();
 
+                }
             }
+
         }
         adapter.addAll(chiTietDiems);
 //        statisticalPointDatabase.close();
@@ -209,10 +218,13 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             }
             chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
             long dtMili = System.currentTimeMillis();
-            Point point = new Point(soCauDung * 10 / list.size(), dtMili + "");
-            realmHistory.beginTransaction();
-            realmHistory.insert(point);
-            realmHistory.commitTransaction();
+            if (!userID.isEmpty()) {
+                Point point = new Point(soCauDung * 10 / list.size(), dtMili + "", userID);
+                realmHistory.beginTransaction();
+                realmHistory.insert(point);
+                realmHistory.commitTransaction();
+            }
+
         }
 
     }

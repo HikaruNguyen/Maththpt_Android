@@ -1,6 +1,8 @@
 package com.app.maththpt.fragment;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.HistoryAdapter;
+import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.FragmentHistoryBinding;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.realm.HistoryModule;
@@ -27,6 +30,7 @@ public class HistoryFragment extends Fragment {
     private FragmentHistoryBinding historyBinding;
     private HistoryViewModel historyViewModel;
     private HistoryAdapter historyAdapter;
+    private String userID;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -47,23 +51,33 @@ public class HistoryFragment extends Fragment {
     }
 
     private void bindData() {
-        Realm.init(getActivity());
-        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
-                .name("history.realm")
-                .modules(Realm.getDefaultModule(), new HistoryModule())
-                .build();
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences(Configuaration.Pref, Context.MODE_PRIVATE);
+        userID = sharedPreferences.getString(Configuaration.KEY_ID, "");
+        if (!userID.isEmpty()) {
+            Realm.init(getActivity());
+            RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                    .name("history.realm")
+                    .modules(Realm.getDefaultModule(), new HistoryModule())
+                    .build();
 
-        Realm realm = Realm.getInstance(settingConfig);
-        RealmResults<Point> listPoints =
-                realm.where(Point.class).findAllSorted("time", Sort.DESCENDING);
-        historyAdapter.addAll(listPoints);
-        historyBinding.rvHistory.setAdapter(historyAdapter);
+            Realm realm = Realm.getInstance(settingConfig);
+            RealmResults<Point> listPoints = realm
+                    .where(Point.class)
+                    .equalTo("userID", userID)
+                    .findAllSorted("time", Sort.DESCENDING);
+            historyAdapter.addAll(listPoints);
+            historyBinding.rvHistory.setAdapter(historyAdapter);
 //        historyDatabase.close();
-        if (historyAdapter.getItemCount() > 0) {
-            historyViewModel.setVisiableError(false);
+            if (historyAdapter.getItemCount() > 0) {
+                historyViewModel.setVisiableError(false);
+            } else {
+                historyViewModel.setVisiableError(true);
+            }
         } else {
             historyViewModel.setVisiableError(true);
         }
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.app.maththpt.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -47,6 +48,7 @@ public class LoginActivity extends BaseActivity {
         event();
     }
 
+    @SuppressLint("CommitPrefEdits")
     private void bindData() {
         callbackManager = CallbackManager.Factory.create();
         SharedPreferences sharedPreferences = getSharedPreferences(
@@ -61,9 +63,11 @@ public class LoginActivity extends BaseActivity {
                                 (object, response) -> {
                                     if (object != null) {
                                         String email = object.optString("email");
+                                        String fbid = object.optString("id");
                                         String name = object.optString("name");
                                         editor.putString(Configuaration.KEY_NAME, name);
                                         editor.putString(Configuaration.KEY_EMAIL, email);
+                                        editor.putString(Configuaration.KEY_ID, fbid);
                                         editor.commit();
                                         setResult(RESULT_OK);
                                         finish();
@@ -78,6 +82,7 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
+
                     public void onCancel() {
                         runOnUiThread(() -> Toast.makeText(
                                 LoginActivity.this, "Login Cancel", Toast.LENGTH_LONG).show());
@@ -132,6 +137,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         if (mLoginResult.success && mLoginResult.status == 200) {
+                            editor.putString(Configuaration.KEY_ID, mLoginResult.data.id);
                             editor.putString(Configuaration.KEY_NAME, mLoginResult.data.fullname);
                             editor.putString(Configuaration.KEY_EMAIL, mLoginResult.data.email);
                             editor.putString(Configuaration.KEY_TOKEN, mLoginResult.data.token);

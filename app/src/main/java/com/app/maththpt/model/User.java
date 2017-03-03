@@ -5,7 +5,7 @@ package com.app.maththpt.model;
  */
 
 public class User {
-    public Integer id;
+    public String id;
     public String username;
     public String fullname;
     public String email;

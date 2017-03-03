@@ -215,6 +215,8 @@ public class MainActivity extends AppCompatActivity
             bindNav();
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
+            changeFragment(new TestsFragment());
+            setMenuSelect(R.id.nav_tests);
         });
         builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
         builder.show();
