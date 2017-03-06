@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Math THPT</string>
+    <string name="app_name">TOÁN THPT</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -67,4 +67,9 @@
     <string name="yes">Đồng ý</string>
     <string name="late">Để sau</string>
     <string name="coming_soon">Chức năng đang phát triển</string>
+    <string name="shareSucess">Chia sẽ thành công</string>
+    <string name="title_activity_test_bottom">TestBottom</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

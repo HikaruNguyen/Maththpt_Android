@@ -21,7 +21,7 @@ import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.ActivityQuestionBinding;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
-import com.app.maththpt.eventbus.XemDapAnEvent;
+import com.app.maththpt.eventbus.CheckAnswerQuestionEvent;
 import com.app.maththpt.fragment.QuestionWVFragment;
 import com.app.maththpt.model.Answer;
 import com.app.maththpt.model.Category;
@@ -104,7 +104,7 @@ public class QuestionActivity extends BaseActivity {
         activityQuestionBinding.fab.setOnClickListener(v -> {
             if (list != null && list.size() > 0)
                 EventBus.getDefault().post(
-                        new XemDapAnEvent(positionCurrent + 1, XemDapAnEvent.TYPE_CHECK));
+                        new CheckAnswerQuestionEvent(positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_CHECK));
         });
     }
 
@@ -387,7 +387,7 @@ public class QuestionActivity extends BaseActivity {
             onBackPressed();
         } else if (id == R.id.action_xemDA) {
             if (list != null && list.size() > 0)
-                EventBus.getDefault().post(new XemDapAnEvent(positionCurrent + 1, XemDapAnEvent.TYPE_DETAIL));
+                EventBus.getDefault().post(new CheckAnswerQuestionEvent(positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_DETAIL));
         } else if (id == R.id.action_Share) {
             if (list != null && list.size() > 0) {
                 EventBus.getDefault().post(new ShareQuestionEvent(positionCurrent + 1));

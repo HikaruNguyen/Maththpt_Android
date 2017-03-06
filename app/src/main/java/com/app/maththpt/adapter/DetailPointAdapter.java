@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.maththpt.R;
-import com.app.maththpt.model.ChiTietDiem;
+import com.app.maththpt.model.DetailPoint;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import java.util.List;
  */
 
 public class DetailPointAdapter extends
-        BaseRecyclerAdapter<ChiTietDiem, DetailPointAdapter.ViewHolder> {
-    public DetailPointAdapter(Context context, List<ChiTietDiem> list) {
+        BaseRecyclerAdapter<DetailPoint, DetailPointAdapter.ViewHolder> {
+    public DetailPointAdapter(Context context, List<DetailPoint> list) {
         super(context, list);
     }
 
@@ -52,7 +52,7 @@ public class DetailPointAdapter extends
             });
         }
 
-        public void bindData(ChiTietDiem chiTietDiem) {
+        public void bindData(DetailPoint chiTietDiem) {
             tvName.setText(chiTietDiem.name);
             tvPoint.setText(chiTietDiem.trueQuestion + "/" + chiTietDiem.sumQuestion);
         }

@@ -1,7 +1,6 @@
 package com.app.maththpt.widget;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -12,7 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.app.maththpt.R;
-import com.app.maththpt.activity.QuestionActivity;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 
@@ -131,7 +129,7 @@ public class CustomeWebView extends WebView {
         super.loadUrl(url);
     }
 
-    public class WebAppInterface {
+    private class WebAppInterface {
         Context mContext;
 
         /**

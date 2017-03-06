@@ -15,7 +15,7 @@ import com.app.maththpt.adapter.DetailPointAdapter;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.ActivityMarkPointBinding;
 import com.app.maththpt.model.Category;
-import com.app.maththpt.model.ChiTietDiem;
+import com.app.maththpt.model.DetailPoint;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.model.StatisticalPoint;
@@ -141,7 +141,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     }
 
     private void getStatistical() {
-        List<ChiTietDiem> chiTietDiems = new ArrayList<>();
+        List<DetailPoint> chiTietDiems = new ArrayList<>();
 //        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
 //                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
 //        statisticalPointDatabase.open();
@@ -164,7 +164,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 }
 
             }
-            ChiTietDiem chiTietDiem = new ChiTietDiem(listCategory.get(i).name, demSum, demTrue);
+            DetailPoint chiTietDiem = new DetailPoint(listCategory.get(i).name, demSum, demTrue);
             chiTietDiems.add(chiTietDiem);
             if (!userID.isEmpty()) {
                 boolean isExistCateId = realStatistical

@@ -1,8 +1,8 @@
 package com.app.maththpt.fragment;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,10 +15,14 @@ import android.widget.Toast;
 import com.app.maththpt.R;
 import com.app.maththpt.databinding.FragmentQuestionBinding;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
-import com.app.maththpt.eventbus.XemDapAnEvent;
+import com.app.maththpt.eventbus.CheckAnswerQuestionEvent;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.utils.MathUtils;
 import com.app.maththpt.utils.Utils;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -39,6 +43,7 @@ public class QuestionWVFragment extends Fragment {
     ShareDialog shareDialog;
     public FragmentQuestionBinding fragmentQuestionBinding;
     private boolean isCheckedKQ = false;
+    CallbackManager callbackManager;
 
     public QuestionWVFragment() {
         // Required empty public constructor
@@ -74,10 +79,28 @@ public class QuestionWVFragment extends Fragment {
 
 
     private void bindData() {
+        callbackManager = CallbackManager.Factory.create();
 //        webView.loadUrl("file:///android_asset/MathView/demo.html");
         fragmentQuestionBinding.webView.setProgress_wheel(fragmentQuestionBinding.progressWheel);
         fragmentQuestionBinding.webView.setPosition(position - 1);
         shareDialog = new ShareDialog(getActivity());
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Toast.makeText(getActivity(), getString(R.string.shareSucess), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel() {
+//                Toast.makeText(getActivity(), "cancel", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                error.printStackTrace();
+//                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+            }
+        });
         if (question != null) {
 //            Collections.shuffle(question.answerList);
             MathUtils mathUtils = new MathUtils();
@@ -139,8 +162,8 @@ public class QuestionWVFragment extends Fragment {
     }
 
     @Subscribe
-    public void onEvent(XemDapAnEvent event) {
-        if (event.type == XemDapAnEvent.TYPE_CHECK) {
+    public void onEvent(CheckAnswerQuestionEvent event) {
+        if (event.type == CheckAnswerQuestionEvent.TYPE_CHECK) {
             if (position == event.position) {
                 if (!isCheckedKQ) {
                     if (question.answerList.get(0).isCorrect) {
@@ -161,13 +184,18 @@ public class QuestionWVFragment extends Fragment {
                 }
                 isCheckedKQ = !isCheckedKQ;
             }
-        } else if (event.type == XemDapAnEvent.TYPE_DETAIL) {
+        } else if (event.type == CheckAnswerQuestionEvent.TYPE_DETAIL) {
             Toast.makeText(
                     getActivity(),
-                    getString(R.string.coming_soon),
+                    getString(R.string.no_data),
                     Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
