@@ -51,6 +51,7 @@
                     android:gravity="center_horizontal"
                     android:text="@string/login"
                     android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_size_30sp"
                     android:textStyle="bold" />
 
@@ -65,32 +66,34 @@
                         android:layout_height="wrap_content"
                         android:text="@string/username"
                         android:textSize="@dimen/text_size_14sp"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edUserName"
                         android:layout_width="match_parent"
-                        android:textSize="@dimen/text_size_14sp"
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{loginViewModel.watcherUserName}"
                         android:inputType="text"
-                        android:text="@{loginViewModel.username}" />
+                        android:text="@{loginViewModel.username}"
+                        android:textSize="@dimen/text_size_14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/password"
                         android:textSize="@dimen/text_size_14sp"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{loginViewModel.watcherPassword}"
                         android:inputType="textPassword"
-                        android:text="@{loginViewModel.password}" />
+                        android:text="@{loginViewModel.password}"
+                        android:textSize="@dimen/text_size_14sp" />
                 </LinearLayout>
 
                 <Button
@@ -100,8 +103,8 @@
                     android:layout_marginTop="@dimen/margin_20dp"
                     android:background="@drawable/bg_button_primary"
                     android:text="@string/login"
-                    android:textSize="@dimen/text_size_14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
 
                 <Button
                     android:id="@+id/btnLoginFB"
@@ -110,8 +113,8 @@
                     android:layout_marginTop="@dimen/margin_10dp"
                     android:background="@drawable/bg_button_fb"
                     android:text="@string/loginFB"
-                    android:textSize="@dimen/text_size_14sp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
 
                 <TextView
                     android:id="@+id/tvRegister"

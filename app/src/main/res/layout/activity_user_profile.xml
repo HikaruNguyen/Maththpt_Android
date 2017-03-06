@@ -71,6 +71,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="@dimen/margin_5dp"
+                            android:textColor="@color/black"
                             android:text="@{userProfileViewModel.userNameProfile}"
                             android:textSize="@dimen/text_size_15sp"
                             android:textStyle="bold" />
@@ -80,6 +81,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:maxLines="1"
+                            android:textColor="@color/black"
                             android:text="@{userProfileViewModel.emailProfile}"
                             android:textSize="@dimen/text_size_12sp" />
                     </LinearLayout>
@@ -96,6 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/point_chart"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
@@ -115,7 +118,7 @@
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1"  android:textColor="@color/black"
                             android:text="@string/so_bai_kt"
                             android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
@@ -136,7 +139,7 @@
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1"  android:textColor="@color/black"
                             android:text="@string/diem_trung_binh"
                             android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
@@ -157,7 +160,7 @@
                         <TextView
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="1"  android:textColor="@color/black"
                             android:text="@string/xep_loai"
                             android:textSize="@dimen/text_size_14sp"
                             android:textStyle="bold" />
@@ -181,7 +184,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tiLeLamBaiDung"
-                        android:textSize="@dimen/text_size_14sp"
+                        android:textSize="@dimen/text_size_14sp"  android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <TextView

@@ -2,10 +2,12 @@ package com.app.maththpt.activity;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.app.maththpt.config.MathThptService;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import rx.Scheduler;
 
@@ -14,6 +16,7 @@ import rx.Scheduler;
  */
 
 public class MyApplication extends Application {
+    private static final String TAG = MyApplication.class.getSimpleName();
     private MathThptService mathThptService;
     private Scheduler defaultSubscribeScheduler;
 
@@ -22,6 +25,8 @@ public class MyApplication extends Application {
         super.onCreate();
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        Log.d(TAG, "Subscribed to news topic");
     }
 
     public MathThptService getMaththptSerivce() {

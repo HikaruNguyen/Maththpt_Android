@@ -47,10 +47,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:gravity="center_horizontal"
                     android:text="@string/register"
                     android:textAllCaps="true"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_size_30sp"
                     android:textStyle="bold" />
 
@@ -63,39 +63,42 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:text="@string/username"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edFullName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{registerViewModel.watcherUserName}"
                         android:inputType="text"
-                        android:text="@{registerViewModel.user.username}" />
+                        android:text="@{registerViewModel.user.username}"
+                        android:textSize="@dimen/text_size_14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:layout_height="wrap_content"
                         android:text="@string/fullName"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edUserName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{registerViewModel.watcherFullName}"
                         android:inputType="text"
-                        android:text="@{registerViewModel.user.fullname}" />
+                        android:text="@{registerViewModel.user.fullname}"
+                        android:textSize="@dimen/text_size_14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/email"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
@@ -103,31 +106,33 @@
                         android:id="@+id/edEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{registerViewModel.watcherEmail}"
                         android:inputType="textEmailAddress"
-                        android:text="@{registerViewModel.user.email}" />
+                        android:text="@{registerViewModel.user.email}"
+                        android:textSize="@dimen/text_size_14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:text="@string/password"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/edPassword"
-                        android:textSize="@dimen/text_size_14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:addTextChangedListener="@{registerViewModel.watcherPassword}"
                         android:inputType="textPassword"
-                        android:text="@{registerViewModel.user.password}" />
+                        android:text="@{registerViewModel.user.password}"
+                        android:textSize="@dimen/text_size_14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/repass"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_14sp"
                         android:textStyle="bold" />
 
@@ -135,10 +140,10 @@
                         android:id="@+id/edRePassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_14sp"
                         android:addTextChangedListener="@{registerViewModel.watcherRepassword}"
                         android:inputType="textPassword"
-                        android:text="@{registerViewModel.repass}" />
+                        android:text="@{registerViewModel.repass}"
+                        android:textSize="@dimen/text_size_14sp" />
                 </LinearLayout>
 
                 <Button
@@ -146,10 +151,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_20dp"
-                    android:textSize="@dimen/text_size_14sp"
                     android:background="@drawable/bg_button_primary"
                     android:text="@string/register"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
 
             </LinearLayout>
         </ScrollView>

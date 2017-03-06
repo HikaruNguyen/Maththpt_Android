@@ -15,15 +15,19 @@ import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.FragmentTestsBinding;
 import com.app.maththpt.model.Tests;
 import com.app.maththpt.modelresult.TestsResult;
+import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.TestsViewModel;
 import com.app.maththpt.widget.PullToRefreshHeader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -39,6 +43,7 @@ public class TestsFragment extends Fragment {
     private TestsAdapter adapter;
     private Subscription mSubscription;
     private TestsResult mTestResult;
+    private Realm realm;
 
     public TestsFragment() {
         // Required empty public constructor
@@ -81,6 +86,17 @@ public class TestsFragment extends Fragment {
     }
 
     private void bindData() {
+        Realm.init(getActivity());
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("tests.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .build();
+
+        realm = Realm.getInstance(settingConfig);
+        callAPIGetData();
+    }
+
+    private void callAPIGetData() {
         MathThptService apiService = MyApplication.with(getActivity()).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = apiService.getTests()
@@ -96,8 +112,25 @@ public class TestsFragment extends Fragment {
                         adapter = new TestsAdapter(getActivity(), new ArrayList<Tests>());
                         if (mTestResult != null
                                 && mTestResult.data != null
-                                && mTestResult.data.size() > 0)
+                                && mTestResult.data.size() > 0) {
+                            Collections.reverse(mTestResult.data);
+                            for (int i = 0; i < mTestResult.data.size(); i++) {
+                                boolean isExits = realm
+                                        .where(Tests.class)
+                                        .equalTo("id", mTestResult.data.get(i).id)
+                                        .count() > 0;
+                                if (!isExits) {
+                                    realm.beginTransaction();
+                                    realm.copyToRealmOrUpdate(mTestResult.data.get(i));
+                                    realm.commitTransaction();
+                                    mTestResult.data.get(i).isNew = true;
+                                } else {
+                                    mTestResult.data.get(i).isNew = false;
+                                }
+                            }
                             adapter.addAll(mTestResult.data);
+                        }
+
                         testsBinding.rvTests.setAdapter(adapter);
                     }
 
@@ -107,14 +140,14 @@ public class TestsFragment extends Fragment {
                             testsBinding.ptrTests.refreshComplete();
                         }
                         testsViewModel.setErrorVisiable(true);
-                        CLog.d(TAG, "getListTest Error");                    }
+                        CLog.d(TAG, "getListTest Error");
+                    }
 
                     @Override
                     public void onNext(TestsResult testsResult) {
                         mTestResult = testsResult;
                     }
                 });
-
     }
 
     @Override
@@ -124,5 +157,8 @@ public class TestsFragment extends Fragment {
             mSubscription.unsubscribe();
         }
         mSubscription = null;
+        if (realm != null && !realm.isClosed()) {
+            realm.close();
+        }
     }
 }

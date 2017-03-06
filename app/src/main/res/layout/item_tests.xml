@@ -3,29 +3,50 @@
 
     <data>
 
+        <import type="android.view.View" />
+        <import type="android.graphics.Typeface"/>
         <variable
             name="test"
             type="com.app.maththpt.model.Tests" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_16dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvName"
+        <LinearLayout
+            android:id="@+id/lnView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{test.displayname}"
-            android:textSize="@dimen/text_size_14sp" />
+            android:orientation="vertical"
+            android:padding="@dimen/margin_16dp">
 
-        <TextView
-            android:id="@+id/tvAuthor"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{test.displayname}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_14sp"
+                android:typeface='@{test.isNew ? "bold" : "normal"}' />/>
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{test.author}"
+                android:textSize="@dimen/text_size_12sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+        <com.app.maththpt.widget.BadgeView
+            android:id="@+id/badgeView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{test.author}"
-            android:textSize="@dimen/text_size_12sp" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/margin_5dp"
+            android:text="@string/newNoti"
+            android:visibility="@{test.isNew?View.VISIBLE:View.GONE}" />
+    </RelativeLayout>
+
 </layout>

@@ -30,17 +30,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_14sp"
                     android:text="@string/soCauKT"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvSoCau"
                     android:layout_width="wrap_content"
-                    android:textSize="@dimen/text_size_14sp"
                     android:layout_height="wrap_content"
-                    android:text="@{beforeExamViewModel.number}" />
+                    android:text="@{beforeExamViewModel.number}"
+                    android:textSize="@dimen/text_size_14sp" />
             </LinearLayout>
 
             <View
@@ -60,16 +60,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/thoiGianLamBai"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/text_size_14sp"
-                    android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvThoiGian"
                     android:layout_width="wrap_content"
-                    android:textSize="@dimen/text_size_14sp"
                     android:layout_height="wrap_content"
-                    android:text="@{beforeExamViewModel.time}" />
+                    android:text="@{beforeExamViewModel.time}"
+                    android:textSize="@dimen/text_size_14sp" />
             </LinearLayout>
 
             <View
@@ -82,9 +82,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_14sp"
                 android:text="@string/chonChuDe"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_14sp"
                 android:textStyle="bold" />
 
             <com.app.maththpt.widget.DisableScrollRecyclerView
@@ -98,9 +98,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20dp"
                 android:background="@drawable/bg_button_primary"
-                android:textSize="@dimen/text_size_14sp"
                 android:text="@string/lamBai"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14sp" />
         </LinearLayout>
 
     </ScrollView>

@@ -13,6 +13,7 @@ import com.app.maththpt.R;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Tests;
+import com.app.maththpt.widget.BadgeView;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  */
 
 public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHolder> {
+
     public TestsAdapter(Context context, List<Tests> list) {
         super(context, list);
     }
@@ -30,6 +32,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ViewDataBinding viewDataBinding = holder.getViewDataBinding();
         viewDataBinding.setVariable(BR.test, list.get(position));
+
     }
 
     @Override
@@ -41,7 +44,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-
+        private BadgeView badgeView;
         private ViewDataBinding mViewDataBinding;
 
         ViewHolder(ViewDataBinding viewDataBinding) {
@@ -60,6 +63,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
 
         ViewDataBinding getViewDataBinding() {
             return mViewDataBinding;
+
         }
     }
 }
