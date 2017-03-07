@@ -105,7 +105,8 @@ public class QuestionActivity extends BaseActivity {
         activityQuestionBinding.fab.setOnClickListener(v -> {
             if (list != null && list.size() > 0)
                 EventBus.getDefault().post(
-                        new CheckAnswerQuestionEvent(positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_CHECK));
+                        new CheckAnswerQuestionEvent(
+                                positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_CHECK));
         });
     }
 
@@ -387,7 +388,8 @@ public class QuestionActivity extends BaseActivity {
             onBackPressed();
         } else if (id == R.id.action_xemDA) {
             if (list != null && list.size() > 0)
-                EventBus.getDefault().post(new CheckAnswerQuestionEvent(positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_DETAIL));
+                EventBus.getDefault().post(new CheckAnswerQuestionEvent(
+                        positionCurrent + 1, CheckAnswerQuestionEvent.TYPE_DETAIL));
         } else if (id == R.id.action_Share) {
             if (list != null && list.size() > 0) {
                 EventBus.getDefault().post(new ShareQuestionEvent(positionCurrent + 1));
@@ -403,8 +405,10 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void nopBai() {
+        List<Question> questionList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             QuestionWVFragment fragment = (QuestionWVFragment) pagerAdapter.getItem(i);
+            Question question = new Question(list.get(i).id);
             if (fragment.fragmentQuestionBinding == null
                     || fragment.fragmentQuestionBinding.webView == null
                     || fragment.fragmentQuestionBinding.webView.answer == 0) {
@@ -421,11 +425,14 @@ public class QuestionActivity extends BaseActivity {
                 }
 
             }
-
+            question.isCorrect = list.get(i).isCorrect;
+            question.cateID = list.get(i).cateID;
+            questionList.add(question);
         }
+
         Intent intent = new Intent(this, MarkPointActivity.class);
         intent.putParcelableArrayListExtra(
-                "listAnswer", (ArrayList<? extends Parcelable>) list);
+                "listAnswer", (ArrayList<? extends Parcelable>) questionList);
         intent.putParcelableArrayListExtra(
                 "listCate", (ArrayList<? extends Parcelable>) listCategory);
         startActivityForResult(intent, CODE_CHAM_DIEM);
