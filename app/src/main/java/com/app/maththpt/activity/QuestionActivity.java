@@ -20,8 +20,8 @@ import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.ActivityQuestionBinding;
-import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.eventbus.CheckAnswerQuestionEvent;
+import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.fragment.QuestionWVFragment;
 import com.app.maththpt.model.Answer;
 import com.app.maththpt.model.Category;
@@ -61,6 +61,7 @@ public class QuestionActivity extends BaseActivity {
     private Subscription mSubscription;
     private DetailTestsResult mDetailTestsResult;
     public static ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,21 +111,20 @@ public class QuestionActivity extends BaseActivity {
 
     private void getData() {
         Intent intent = getIntent();
-        type = intent.getIntExtra("type", Configuaration.TYPE_ONTAP);
-        if (type == Configuaration.TYPE_ONTAP) {
+        type = intent.getIntExtra("type", Configuaration.TYPE_CATEGORY);
+        if (type == Configuaration.TYPE_CATEGORY) {
             title = intent.getStringExtra("title");
             cateID = intent.getIntExtra("cateID", 0);
-        } else if (type == Configuaration.TYPE_KIEMTRA) {
+        } else if (type == Configuaration.TYPE_EXAM) {
             title = getString(R.string.exam);
             cateID = 0;
             listCategory = intent.getParcelableArrayListExtra("listCate");
             CLog.d(TAG, "listCategory SIZE:" + listCategory.size());
             soCau = intent.getIntExtra("soCau", 5);
             time = intent.getLongExtra("time", (long) (60 * 1000 * 0.5));
-        } else if (type == Configuaration.TYPE_BODE) {
+        } else if (type == Configuaration.TYPE_TESTS) {
             title = intent.getStringExtra("title");
             testID = intent.getStringExtra("testID");
-//            Toast.makeText(this, testID, Toast.LENGTH_SHORT).show();
         }
         questionViewModel = new QuestionViewModel(this, title, type);
     }
@@ -161,7 +161,7 @@ public class QuestionActivity extends BaseActivity {
     private void bindData() {
         list = new ArrayList<>();
         MathThptService apiService;
-        if (type == Configuaration.TYPE_BODE) {
+        if (type == Configuaration.TYPE_TESTS) {
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
                 mSubscription.unsubscribe();
@@ -190,7 +190,7 @@ public class QuestionActivity extends BaseActivity {
                             }
                         }
                     });
-        } else if (type == Configuaration.TYPE_ONTAP) {
+        } else if (type == Configuaration.TYPE_CATEGORY) {
 //                list = QuestionDBHelper.getListQuestionByCateID(QuestionActivity.this, cateID);
             apiService = MyApplication.with(this).getMaththptSerivce();
             if (mSubscription != null && !mSubscription.isUnsubscribed())
@@ -221,7 +221,7 @@ public class QuestionActivity extends BaseActivity {
                         }
                     });
 
-        } else if (type == Configuaration.TYPE_KIEMTRA) {
+        } else if (type == Configuaration.TYPE_EXAM) {
 //            list = QuestionDBHelper.getListQuestionByListCateID(QuestionActivity.this, listCategory, soCau);
 //            if (list.size() > 0) {
 //                Collections.shuffle(list);
@@ -312,7 +312,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void genQuestion() {
         if (list != null && list.size() > 0) {
-            if (type == Configuaration.TYPE_KIEMTRA) {
+            if (type == Configuaration.TYPE_EXAM) {
                 Collections.shuffle(list);
 
             }
@@ -326,7 +326,7 @@ public class QuestionActivity extends BaseActivity {
             pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragmentList, false);
             activityQuestionBinding.viewpager.setAdapter(pagerAdapter);
 //            activityQuestionBinding.viewpager.setOffscreenPageLimit(list.size());
-            if (type == Configuaration.TYPE_KIEMTRA) {
+            if (type == Configuaration.TYPE_EXAM) {
                 countDown();
             }
         } else {
@@ -371,7 +371,7 @@ public class QuestionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (type == Configuaration.TYPE_ONTAP || type == Configuaration.TYPE_BODE) {
+        if (type == Configuaration.TYPE_CATEGORY || type == Configuaration.TYPE_TESTS) {
             getMenuInflater().inflate(R.menu.menu_quiz, menu);
         } else {
             getMenuInflater().inflate(R.menu.menu_kiemtra, menu);
@@ -460,7 +460,7 @@ public class QuestionActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (type == Configuaration.TYPE_KIEMTRA) {
+        if (type == Configuaration.TYPE_EXAM) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.confirmQuitExam));
             builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish());

@@ -76,7 +76,7 @@ public class BeforeExamFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), QuestionActivity.class);
                 intent.putParcelableArrayListExtra(
                         "listCate", (ArrayList<? extends Parcelable>) categories);
-                intent.putExtra("type", Configuaration.TYPE_KIEMTRA);
+                intent.putExtra("type", Configuaration.TYPE_EXAM);
                 intent.putExtra("soCau", soCau);
                 intent.putExtra("time", time);
                 startActivityForResult(intent, CODE_CHAM_DIEM);

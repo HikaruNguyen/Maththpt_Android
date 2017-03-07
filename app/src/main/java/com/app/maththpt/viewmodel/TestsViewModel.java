@@ -1,6 +1,5 @@
 package com.app.maththpt.viewmodel;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 
@@ -8,7 +7,7 @@ import android.view.View;
  * Created by FRAMGIA\nguyen.duc.manh on 16/02/2017.
  */
 
-public class TestsViewModel extends BaseObservable {
+public class TestsViewModel extends BaseViewModel {
 
     @Bindable
     public int errorVisiable;

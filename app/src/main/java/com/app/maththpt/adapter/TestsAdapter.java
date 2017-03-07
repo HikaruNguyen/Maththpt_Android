@@ -13,9 +13,12 @@ import com.app.maththpt.R;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Tests;
-import com.app.maththpt.widget.BadgeView;
+import com.app.maththpt.realm.HistoryModule;
 
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 /**
@@ -23,9 +26,16 @@ import java.util.List;
  */
 
 public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHolder> {
+    private Realm realm;
 
     public TestsAdapter(Context context, List<Tests> list) {
         super(context, list);
+        Realm.init(context);
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("tests.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .build();
+        realm = Realm.getInstance(settingConfig);
     }
 
     @Override
@@ -44,20 +54,29 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private BadgeView badgeView;
         private ViewDataBinding mViewDataBinding;
 
         ViewHolder(ViewDataBinding viewDataBinding) {
             super(viewDataBinding.getRoot());
-
             mViewDataBinding = viewDataBinding;
             mViewDataBinding.executePendingBindings();
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(mContext, QuestionActivity.class);
                 intent.putExtra("title", list.get(getAdapterPosition()).displayname);
-                intent.putExtra("type", Configuaration.TYPE_BODE);
+                intent.putExtra("type", Configuaration.TYPE_TESTS);
                 intent.putExtra("testID", list.get(getAdapterPosition()).id + "");
+                if (!list.get(getAdapterPosition()).isSeen) {
+                    realm.beginTransaction();
+//                    Tests tests = realm.where(Tests.class).equalTo("id", list.get(getAdapterPosition()).id).findFirst();
+//                    tests.isSeen = true;
+                    list.get(getAdapterPosition()).isSeen = true;
+                    realm.copyToRealmOrUpdate(list.get(getAdapterPosition()));
+                    realm.commitTransaction();
+
+                }
                 mContext.startActivity(intent);
+                viewDataBinding.notifyChange();
+                notifyDataSetChanged();
             });
         }
 

@@ -30,7 +30,7 @@ public class QuestionViewModel extends BaseViewModel {
 
     @Bindable
     public int getType() {
-        if (type == Configuaration.TYPE_KIEMTRA) {
+        if (type == Configuaration.TYPE_EXAM) {
             return View.GONE;
         } else {
             return View.VISIBLE;

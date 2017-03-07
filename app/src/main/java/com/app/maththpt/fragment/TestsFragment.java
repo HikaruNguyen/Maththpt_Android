@@ -22,12 +22,14 @@ import com.app.maththpt.widget.PullToRefreshHeader;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.Sort;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -80,7 +82,8 @@ public class TestsFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                bindData();
+                callAPIGetData();
+                ;
             }
         });
     }
@@ -93,10 +96,15 @@ public class TestsFragment extends Fragment {
                 .build();
 
         realm = Realm.getInstance(settingConfig);
+
         callAPIGetData();
     }
 
     private void callAPIGetData() {
+        adapter = new TestsAdapter(getActivity(), new ArrayList<>());
+        if (adapter != null && adapter.getItemCount() > 0) {
+            adapter.clear();
+        }
         MathThptService apiService = MyApplication.with(getActivity()).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = apiService.getTests()
@@ -108,11 +116,11 @@ public class TestsFragment extends Fragment {
                         if (testsBinding.ptrTests.isRefreshing()) {
                             testsBinding.ptrTests.refreshComplete();
                         }
-                        testsViewModel.setErrorVisiable(false);
-                        adapter = new TestsAdapter(getActivity(), new ArrayList<Tests>());
+
                         if (mTestResult != null
                                 && mTestResult.data != null
                                 && mTestResult.data.size() > 0) {
+                            testsViewModel.setErrorVisiable(false);
                             Collections.reverse(mTestResult.data);
                             for (int i = 0; i < mTestResult.data.size(); i++) {
                                 boolean isExits = realm
@@ -126,12 +134,24 @@ public class TestsFragment extends Fragment {
                                     mTestResult.data.get(i).isNew = true;
                                 } else {
                                     mTestResult.data.get(i).isNew = false;
+                                    Tests tests = realm
+                                            .where(Tests.class)
+                                            .equalTo("id", mTestResult.data.get(i).id).findFirst();
+                                    if(tests.isSeen){
+                                        mTestResult.data.get(i).isSeen = true;
+                                    }else {
+                                        mTestResult.data.get(i).isSeen = false;
+                                    }
+
                                 }
                             }
+                            testsBinding.rvTests.setAdapter(adapter);
                             adapter.addAll(mTestResult.data);
+                        } else {
+                            testsViewModel.setVisiableError(true);
+                            testsViewModel.setMessageError(getString(R.string.no_data));
                         }
 
-                        testsBinding.rvTests.setAdapter(adapter);
                     }
 
                     @Override
@@ -139,8 +159,18 @@ public class TestsFragment extends Fragment {
                         if (testsBinding.ptrTests.isRefreshing()) {
                             testsBinding.ptrTests.refreshComplete();
                         }
-                        testsViewModel.setErrorVisiable(true);
-                        CLog.d(TAG, "getListTest Error");
+
+                        List<Tests> testsListCache = realm
+                                .where(Tests.class)
+                                .findAllSorted("id", Sort.DESCENDING);
+                        if (testsListCache != null && testsListCache.size() > 0) {
+                            testsBinding.rvTests.setAdapter(adapter);
+                            adapter.addAll(testsListCache);
+                        } else {
+                            testsViewModel.setErrorVisiable(true);
+                            testsViewModel.setMessageError(getString(R.string.error_connect));
+                            CLog.d(TAG, "getListTest Error");
+                        }
                     }
 
                     @Override

@@ -11,7 +11,7 @@ public class Configuaration {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_TOKEN = "access_token";
     public static final String KEY_TYPE = "user_type";
-    public static final int TYPE_ONTAP = 1;
-    public static final int TYPE_KIEMTRA = 2;
-    public static final int TYPE_BODE = 3;
+    public static final int TYPE_CATEGORY = 1;
+    public static final int TYPE_EXAM = 2;
+    public static final int TYPE_TESTS = 3;
 }

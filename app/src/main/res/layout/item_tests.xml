@@ -4,7 +4,9 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="android.graphics.Typeface"/>
+
+        <import type="android.graphics.Typeface" />
+
         <variable
             name="test"
             type="com.app.maththpt.model.Tests" />
@@ -28,7 +30,7 @@
                 android:text="@{test.displayname}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
-                android:typeface='@{test.isNew ? "bold" : "normal"}' />/>
+                android:typeface='@{test.isSeen ? "normal" : "bold"}' />/>
 
             <TextView
                 android:id="@+id/tvAuthor"

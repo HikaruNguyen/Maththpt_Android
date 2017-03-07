@@ -18,20 +18,23 @@ public class Tests extends RealmObject {
     public String author;
     @Ignore
     public boolean isNew;
+    public boolean isSeen;
 
     public Tests() {
-
+        isSeen = false;
     }
 
     public Tests(int id, String name, String author) {
         this.id = id;
         this.displayname = name;
         this.author = author;
+        isSeen = false;
     }
 
     public Tests(String name, String author) {
         this.displayname = name;
         this.author = author;
+        isSeen = false;
     }
 
     @android.databinding.BindingAdapter("android:typeface")

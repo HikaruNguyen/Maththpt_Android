@@ -44,11 +44,8 @@ public class DetailPointAdapter extends
             tvPoint = (TextView) view.findViewById(R.id.tvPoint);
             tvName = (TextView) view.findViewById(R.id.tvName);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(v -> {
 
-                }
             });
         }
 
