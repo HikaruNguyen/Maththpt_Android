@@ -15,7 +15,7 @@ import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.databinding.FragmentTestsBinding;
 import com.app.maththpt.model.Tests;
 import com.app.maththpt.modelresult.TestsResult;
-import com.app.maththpt.realm.HistoryModule;
+import com.app.maththpt.realm.TestsModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.TestsViewModel;
 import com.app.maththpt.widget.PullToRefreshHeader;
@@ -95,7 +95,7 @@ public class TestsFragment extends Fragment {
         Realm.init(getActivity());
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("tests.realm")
-                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .modules(Realm.getDefaultModule(), new TestsModule())
                 .build();
 
         realm = Realm.getInstance(settingConfig);

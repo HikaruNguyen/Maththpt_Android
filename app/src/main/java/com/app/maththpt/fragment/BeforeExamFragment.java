@@ -19,14 +19,17 @@ import com.app.maththpt.activity.MainActivity;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.adapter.CategoryCheckAdapter;
 import com.app.maththpt.config.Configuaration;
-import com.app.maththpt.database.CategoryDBHelper;
 import com.app.maththpt.databinding.FragmentBeforeExamBinding;
 import com.app.maththpt.model.Category;
+import com.app.maththpt.realm.CategoryModule;
 import com.app.maththpt.viewmodel.BeforeExamViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -122,7 +125,13 @@ public class BeforeExamFragment extends Fragment {
     }
 
     private void bindData() {
-        List<Category> list = CategoryDBHelper.getAllListCategory(getActivity());
+        Realm.init(getActivity());
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("category.realm")
+                .modules(Realm.getDefaultModule(), new CategoryModule())
+                .build();
+        Realm realm = Realm.getInstance(settingConfig);
+        List<Category> list = realm.where(Category.class).findAll();
         adapter.addAll(list);
     }
 

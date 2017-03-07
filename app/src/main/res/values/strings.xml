@@ -73,4 +73,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="newNoti">New</string>
+    <string name="needLogin">Bạn cần phải đăng nhập trước!</string>
 </resources>

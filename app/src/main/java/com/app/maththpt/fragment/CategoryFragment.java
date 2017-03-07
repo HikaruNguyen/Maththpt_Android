@@ -12,9 +12,13 @@ import com.app.maththpt.R;
 import com.app.maththpt.adapter.CategoryAdapter;
 import com.app.maththpt.databinding.FragmentCategoryBinding;
 import com.app.maththpt.model.Category;
+import com.app.maththpt.realm.CategoryModule;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,21 +45,13 @@ public class CategoryFragment extends Fragment {
 
     private void bindData() {
         CategoryAdapter adapter = new CategoryAdapter(getActivity(), new ArrayList<>());
-        List<Category> list = new ArrayList<>();
-        Category category = new Category(1, "Khảo sát đồ thị hàm số", R.mipmap.icon_khaosat);
-        list.add(category);
-        category = new Category(2, "Lũy thừa, logarit", R.mipmap.ic_luythua);
-        list.add(category);
-        category = new Category(3, "Nguyên hàm, tích phân", R.mipmap.ic_tichphan);
-        list.add(category);
-        category = new Category(4, "Số phức", R.mipmap.ic_sophuc);
-        list.add(category);
-        category = new Category(5, "Thể tích khối đa diện", R.mipmap.ic_khoidadien);
-        list.add(category);
-        category = new Category(6, "Thể tích khối tròn xoay", R.mipmap.ic_khoitronxoay);
-        list.add(category);
-        category = new Category(7, "Phương pháp tọa độ trong không gian Oxyz", R.mipmap.ic_oxyz);
-        list.add(category);
+        Realm.init(getActivity());
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("category.realm")
+                .modules(Realm.getDefaultModule(), new CategoryModule())
+                .build();
+        Realm realm = Realm.getInstance(settingConfig);
+        List<Category> list = realm.where(Category.class).findAll();
         adapter.addAll(list);
         categoryBinding.rvChuyenDe.setAdapter(adapter);
     }

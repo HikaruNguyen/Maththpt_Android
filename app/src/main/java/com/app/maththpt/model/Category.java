@@ -3,15 +3,25 @@ package com.app.maththpt.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by manhi on 3/1/2017.
  */
 
-public class Category implements Parcelable {
+public class Category extends RealmObject implements Parcelable {
+    @PrimaryKey
     public int id;
     public String name;
     public int icon;
+    @Ignore
     public boolean isChecked;
+
+    public Category() {
+        isChecked = false;
+    }
 
     public Category(int id, String name) {
         this.id = id;

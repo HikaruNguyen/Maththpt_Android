@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.DetailPointAdapter;
@@ -21,6 +22,7 @@ import com.app.maththpt.model.Question;
 import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.realm.StatisticalModule;
+import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -71,10 +73,17 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
 
     private void event() {
         chamDiemBinding.btnHistory.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.putExtra("menu_item", R.id.nav_history);
-            setResult(RESULT_OK, intent);
-            finish();
+            String token = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE)
+                    .getString(Configuaration.KEY_TOKEN, "");
+            if (!FacebookUtils.getFacebookID().isEmpty() || !token.isEmpty()) {
+                Intent intent = new Intent();
+                intent.putExtra("menu_item", R.id.nav_history);
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                Toast.makeText(this, getString(R.string.needLogin), Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
 

@@ -13,7 +13,7 @@ import com.app.maththpt.R;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Tests;
-import com.app.maththpt.realm.HistoryModule;
+import com.app.maththpt.realm.TestsModule;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
         Realm.init(context);
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("tests.realm")
-                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .modules(Realm.getDefaultModule(), new TestsModule())
                 .build();
         realm = Realm.getInstance(settingConfig);
     }
