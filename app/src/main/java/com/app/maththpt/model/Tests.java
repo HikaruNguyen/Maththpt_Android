@@ -3,6 +3,8 @@ package com.app.maththpt.model;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
+import java.util.Comparator;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -46,6 +48,46 @@ public class Tests extends RealmObject {
             default:
                 v.setTypeface(null, Typeface.NORMAL);
                 break;
+        }
+    }
+
+    public enum TestsComparator implements Comparator<Tests> {
+        ID_SORT {
+            public int compare(Tests o1, Tests o2) {
+                return Integer.valueOf(o1.id).compareTo(o2.id);
+            }
+        },
+        SEEN_SORT {
+            public int compare(Tests o1, Tests o2) {
+                Integer a, b;
+                if (o1.isSeen) {
+                    a = 1;
+                } else {
+                    a = 0;
+                }
+                if (o2.isSeen) {
+                    b = 1;
+                } else {
+                    b = 0;
+                }
+                return b.compareTo(a);
+            }
+        };
+
+        public static Comparator<Tests> decending(final Comparator<Tests> other) {
+            return (o1, o2) -> -1 * other.compare(o1, o2);
+        }
+
+        public static Comparator<Tests> getComparator(final TestsComparator... multipleOptions) {
+            return (o1, o2) -> {
+                for (TestsComparator option : multipleOptions) {
+                    int result = option.compare(o1, o2);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            };
         }
     }
 }

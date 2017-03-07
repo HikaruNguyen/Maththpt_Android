@@ -35,6 +35,9 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.app.maththpt.model.Tests.TestsComparator.ID_SORT;
+import static com.app.maththpt.model.Tests.TestsComparator.SEEN_SORT;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -121,7 +124,7 @@ public class TestsFragment extends Fragment {
                                 && mTestResult.data != null
                                 && mTestResult.data.size() > 0) {
                             testsViewModel.setErrorVisiable(false);
-                            Collections.reverse(mTestResult.data);
+//                            Collections.reverse(mTestResult.data);
                             for (int i = 0; i < mTestResult.data.size(); i++) {
                                 boolean isExits = realm
                                         .where(Tests.class)
@@ -137,14 +140,11 @@ public class TestsFragment extends Fragment {
                                     Tests tests = realm
                                             .where(Tests.class)
                                             .equalTo("id", mTestResult.data.get(i).id).findFirst();
-                                    if(tests.isSeen){
-                                        mTestResult.data.get(i).isSeen = true;
-                                    }else {
-                                        mTestResult.data.get(i).isSeen = false;
-                                    }
+                                    mTestResult.data.get(i).isSeen = tests.isSeen;
 
                                 }
                             }
+                            Collections.sort(mTestResult.data, Tests.TestsComparator.decending(Tests.TestsComparator.getComparator(SEEN_SORT, ID_SORT)));
                             testsBinding.rvTests.setAdapter(adapter);
                             adapter.addAll(mTestResult.data);
                         } else {
@@ -162,7 +162,7 @@ public class TestsFragment extends Fragment {
 
                         List<Tests> testsListCache = realm
                                 .where(Tests.class)
-                                .findAllSorted("id", Sort.DESCENDING);
+                                .findAllSorted("isSeen", Sort.ASCENDING, "id", Sort.DESCENDING);
                         if (testsListCache != null && testsListCache.size() > 0) {
                             testsBinding.rvTests.setAdapter(adapter);
                             adapter.addAll(testsListCache);
