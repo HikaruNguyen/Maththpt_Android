@@ -157,6 +157,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("statisticalPoint.realm")
                 .modules(Realm.getDefaultModule(), new StatisticalModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realStatistical = Realm.getInstance(settingConfig);
@@ -216,6 +217,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realmHistory = Realm.getInstance(settingConfig);

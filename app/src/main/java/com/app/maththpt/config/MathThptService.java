@@ -71,14 +71,13 @@ public interface MathThptService {
                     .baseUrl(APIConfig.DOMAIN_HOST)
                     .client(getOkHttp(context))
                     .addConverterFactory(new NullOnEmptyConverterFactory())
-                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                     .build();
             return retrofit.create(MathThptService.class);
         }
 
-        public static OkHttpClient getOkHttp(Context context) {
+        static OkHttpClient getOkHttp(Context context) {
             // Config Log
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -89,7 +88,11 @@ public interface MathThptService {
                 Request request = chain.request().newBuilder()
 //                        .addHeader("Accept", "application/json")
                         .addHeader("X-Math-Api-Key", APIConfig.X_Math_Api_Key).build();
-                return chain.proceed(request).newBuilder().build();
+                return chain.proceed(request)
+                        .newBuilder()
+//                        .addHeader("Cache-Control"
+//                                ,String.format("max-age=%d, only-if-cached, max-stale=%d", 120, 0))
+                        .build();
             });
             httpClient.connectTimeout(5, TimeUnit.SECONDS);
             httpClient.readTimeout(5, TimeUnit.SECONDS);

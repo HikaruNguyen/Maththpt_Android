@@ -59,6 +59,7 @@ public class HistoryFragment extends Fragment {
             RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                     .name("history.realm")
                     .modules(Realm.getDefaultModule(), new HistoryModule())
+                    .deleteRealmIfMigrationNeeded()
                     .build();
 
             Realm realm = Realm.getInstance(settingConfig);

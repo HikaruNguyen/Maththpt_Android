@@ -34,6 +34,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("tests.realm")
                 .modules(Realm.getDefaultModule(), new TestsModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
         realm = Realm.getInstance(settingConfig);
     }

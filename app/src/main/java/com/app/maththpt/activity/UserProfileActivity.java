@@ -99,6 +99,7 @@ public class UserProfileActivity extends BaseActivity {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("statisticalPoint.realm")
                 .modules(Realm.getDefaultModule(), new StatisticalModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realStatistical = Realm.getInstance(settingConfig);
@@ -230,6 +231,7 @@ public class UserProfileActivity extends BaseActivity {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realm = Realm.getInstance(settingConfig);

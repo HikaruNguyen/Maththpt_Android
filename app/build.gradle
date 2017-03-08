@@ -24,7 +24,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -45,7 +46,7 @@ android {
 def retrofitVersion = '2.1.0'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/chunk-templates-3.0.1.jar')
+//    compile files('libs/chunk-templates-3.0.1.jar')
     //    compile 'io.github.kexanie.library:MathView:0.0.6'
     //    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     //    compile "com.jakewharton.rxbinding:rxbinding:$rxbindingVersion"
