@@ -97,6 +97,40 @@
 
 -adaptclassstrings com.example.Test
 
+
+#-keep class retrofit.** { *; }
+#-keepclasseswithmembers class * {
+#    @retrofit.http.* <methods>;
+#}
+#-keepclasseswithmembers interface * {
+#    @retrofit2.* <methods>;
+#}
+-keep class com.app.maththpt.config.** { *; }
+
+## Retrofit
+## Platform calls Class.forName on types which do not exist on Android to determine platform.
+#-dontnote retrofit2.Platform
+## Platform used when running on RoboVM on iOS. Will not be used at runtime.
+#-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+## Platform used when running on Java 8 VMs. Will not be used at runtime.
+#-dontwarn retrofit2.Platform$Java8
+## Retain generic type information for use by reflection by converters and adapters.
+#-keepattributes Signature
+## Retain declared checked exceptions for use by a Proxy instance.
+#-keepattributes Exceptions
+
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+#// all classes in a package
+-keep class com.example.app.json.** { *; }
+#// or a specific class
+-keep class com.example.app.json.SpecificClass { *; }
 # OkHttp
 -keepattributes Signature
 -keepattributes *Annotation*
@@ -114,22 +148,7 @@
 -dontwarn rx.**
 -dontwarn retrofit.**
 -dontwarn okio.**
--keep class retrofit.** { *; }
--keepclasseswithmembers class * {
-    @retrofit.http.* <methods>;
-}
 
-# Retrofit
-# Platform calls Class.forName on types which do not exist on Android to determine platform.
--dontnote retrofit2.Platform
-# Platform used when running on RoboVM on iOS. Will not be used at runtime.
--dontnote retrofit2.Platform$IOS$MainThreadExecutor
-# Platform used when running on Java 8 VMs. Will not be used at runtime.
--dontwarn retrofit2.Platform$Java8
-# Retain generic type information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy instance.
--keepattributes Exceptions
 
 # Facebook
 -keep,allowobfuscation @interface com.facebook.common.internal.DoNotStrip
@@ -163,20 +182,12 @@
     long consumerNode;
 }
 
--dontwarn org.mockito.**
--dontwarn org.junit.**
--dontwarn org.robolectric.*
-
--dontwarn android.support.**
--dontwarn java.lang.invoke**
--dontwarn com.google.android.gms.internal.**
 
 # Proguard Configuration for Realm (http://realm.io)
 # For detailed discussion see: https://groups.google.com/forum/#!topic/realm-java/umqKCc50JGU
 # Additionally you need to keep your Realm Model classes as well
 # For example:
-# -keep class com.yourcompany.realm.** { *; }
-
+ -keep class com.app.maththpt.realm.** { *; }
 -keep class io.realm.annotations.RealmModule
 -keep @io.realm.annotations.RealmModule class *
 -keep class io.realm.internal.Keep
@@ -198,3 +209,26 @@
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+##---------------Begin: proguard configuration for Gson  ----------
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
+
+##---------------End: proguard configuration for Gson  ----------
+-dontwarn org.mockito.**
+-dontwarn org.junit.**
+-dontwarn org.robolectric.*
+
+-dontwarn android.support.**
+-dontwarn java.lang.invoke**
+-dontwarn com.google.android.gms.internal.**

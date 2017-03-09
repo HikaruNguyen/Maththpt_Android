@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.app.maththpt.R;
 import com.app.maththpt.activity.MyApplication;
@@ -104,12 +105,14 @@ public class TestsFragment extends Fragment {
         callAPIGetData();
     }
 
+    MathThptService apiService;
+
     private void callAPIGetData() {
         adapter = new TestsAdapter(getActivity(), new ArrayList<>());
         if (adapter != null && adapter.getItemCount() > 0) {
             adapter.clear();
         }
-        MathThptService apiService = MyApplication.with(getActivity()).getMaththptSerivce();
+        apiService = MyApplication.with(getActivity()).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = apiService.getTests()
                 .subscribeOn(Schedulers.newThread())
@@ -177,6 +180,7 @@ public class TestsFragment extends Fragment {
                     @Override
                     public void onNext(TestsResult testsResult) {
                         mTestResult = testsResult;
+                        Toast.makeText(getActivity(), testsResult.status + "", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
