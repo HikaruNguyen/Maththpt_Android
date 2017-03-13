@@ -11,7 +11,7 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.app.maththpt"
         minSdkVersion 15
@@ -30,14 +30,20 @@ android {
             applicationVariants.all { variant ->
                 renameAPK(variant, defaultConfig, 'R')
             }
+//            debuggable true
+//            jniDebuggable true
+//            proguardFile '/home/nguyen.duc.manh/Desktop/Myproject/Maththpt_Android/app/proguard-rules.pro'
         }
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
             applicationVariants.all { variant ->
-                renameAPK(variant, defaultConfig, 'R')
+                renameAPK(variant, defaultConfig, 'D')
             }
+//            debuggable true
+//            jniDebuggable true
+//            proguardFile '/home/nguyen.duc.manh/Desktop/Myproject/Maththpt_Android/app/proguard-rules.pro'
         }
     }
     productFlavors {
@@ -55,7 +61,8 @@ def renameAPK(variant, defaultConfig, buildType) {
         def formattedDate = new Date().format('yyMMdd')
 
         def file = output.packageApplication.outputFile
-        def fileName = applicationName + "_V" + defaultConfig.versionCode + "_" + formattedDate + "_" + buildType + ".apk"
+        def fileName = applicationName + "_V"
+        + defaultConfig.versionCode + "_" + formattedDate + "_" + buildType + ".apk"
         output.packageApplication.outputFile = new File(file.parent, fileName)
     }
 }
