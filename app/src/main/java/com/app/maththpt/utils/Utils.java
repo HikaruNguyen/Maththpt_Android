@@ -8,10 +8,6 @@ import android.util.Base64;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by manhi on 3/1/2017.
@@ -51,10 +47,15 @@ public class Utils {
 
     public static String replaceMath(String string) {
         if (string != null) {
-            string = string.replace("<p>", "")
-                    .replace("</p>", "")
+            string = string
                     .replace("xmlns=\"http://www.w3.org/1998/Math/MathML\"", "")
                     .replace("xmlns='http://www.w3.org/1998/Math/MathML'", "");
+            if (string.startsWith("<p>")) {
+                string = string.substring(3, string.length());
+            }
+            if (string.endsWith("</p>")) {
+                string = string.substring(0, string.length() - 4);
+            }
         } else {
             return "";
         }

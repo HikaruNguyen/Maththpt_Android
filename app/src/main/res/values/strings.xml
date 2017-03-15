@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TOÁN THPT</string>
+    <string name="app_name">Trắc Nghiệm Toán THPT</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -79,4 +79,6 @@
     <string name="my_own_rate">Rate now</string>
     <string name="my_own_thanks">No, Thanks</string>
     <string name="my_own_cancel">Late</string>
+    <string name="app_name_short">TOÁN THPT</string>
+    <string name="tracNghiem">Trắc nghiệm</string>
 </resources>
