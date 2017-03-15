@@ -74,4 +74,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="newNoti">New</string>
     <string name="needLogin">Bạn cần phải đăng nhập trước!</string>
+    <string name="my_own_title">Rate me</string>
+    <string name="my_own_message">Nếu thấy ứng dụng này bổ ích, hãy dành bình chọn 5 sao cho nó. Cảm ơn bạn đã sử dụng ứng dụng</string>
+    <string name="my_own_rate">Rate now</string>
+    <string name="my_own_thanks">No, Thanks</string>
+    <string name="my_own_cancel">Late</string>
 </resources>

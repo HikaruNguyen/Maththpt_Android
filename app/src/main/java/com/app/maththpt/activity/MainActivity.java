@@ -33,6 +33,7 @@ import com.app.maththpt.fragment.CategoryFragment;
 import com.app.maththpt.fragment.HistoryFragment;
 import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
+import com.app.maththpt.utils.RateThisApp;
 import com.app.maththpt.viewmodel.MainViewModel;
 import com.app.maththpt.viewmodel.NavHeaderMainViewModel;
 import com.facebook.login.LoginManager;
@@ -76,6 +77,16 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+        rateApp();
+    }
+
+    private void rateApp() {
+        RateThisApp.Config config = new RateThisApp.Config(3, 5);
+        config.setTitle(R.string.my_own_title);
+        config.setMessage(R.string.my_own_message);
+        config.setYesButtonText(R.string.my_own_rate);
+        config.setCancelButtonText(R.string.my_own_cancel);
+        RateThisApp.init(config);
 
     }
 
@@ -265,4 +276,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Monitor launch times and interval from installation
+        RateThisApp.onStart(this);
+        // Show a dialog if criteria is satisfied
+        RateThisApp.showRateDialogIfNeeded(this);
+    }
 }
