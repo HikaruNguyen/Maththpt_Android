@@ -63,7 +63,7 @@ public class UserProfileActivity extends BaseActivity {
         setSupportActionBar(userProfileBinding.toolbar);
         setBackButtonToolbar();
         userProfileViewModel = new UserProfileViewModel(this, getString(R.string.user_profile), userName, email,
-                avatar);
+                avatar,userID);
         userProfileBinding.setUserProfileViewModel(userProfileViewModel);
 
         bindData();

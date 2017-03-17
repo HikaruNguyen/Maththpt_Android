@@ -71,6 +71,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
 //                    Tests tests = realm.where(Tests.class).equalTo("id", list.get(getAdapterPosition()).id).findFirst();
 //                    tests.isSeen = true;
                     list.get(getAdapterPosition()).isSeen = true;
+                    list.get(getAdapterPosition()).isNew = false;
                     realm.copyToRealmOrUpdate(list.get(getAdapterPosition()));
                     realm.commitTransaction();
 

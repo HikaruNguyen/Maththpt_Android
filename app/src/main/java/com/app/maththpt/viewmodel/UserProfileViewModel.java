@@ -29,13 +29,15 @@ public class UserProfileViewModel extends BaseViewModel {
     @Bindable
     public String classification;
 
+    private String userID;
 
     public UserProfileViewModel(Activity activity, String title, String userName, String email,
-                                String avatarProfile) {
+                                String avatarProfile, String userId) {
         super(activity, title);
         this.userNameProfile = userName;
         this.emailProfile = email;
         this.avatarProfile = avatarProfile;
+        this.userID = userId;
         setAveragePoint();
     }
 
@@ -46,12 +48,17 @@ public class UserProfileViewModel extends BaseViewModel {
     }
 
     private void setAveragePoint() {
-        /*HistoryDBHelper.HistoryDatabase historyDatabase =
-                new HistoryDBHelper.HistoryDatabase(activity);
-        historyDatabase.open();
-        int count = historyDatabase.getCountHistory();
+        Realm.init(activity);
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("history.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        Realm realm = Realm.getInstance(settingConfig);
+        long count = realm.where(Point.class).equalTo("userID", userID).count();
         if (count > 0) {
-            float diem = historyDatabase.getAveragePoint();
+            double diem = realm.where(Point.class).equalTo("userID", userID).average("point");
             averagePoint = String.format("%.1f", diem);
             countPoint = count + "";
             if (diem >= 8) {
@@ -64,35 +71,6 @@ public class UserProfileViewModel extends BaseViewModel {
                 classification = activity.getString(R.string.weak);
             }
         } else {
-            classification = activity.getString(R.string.no_data);
-            countPoint = activity.getString(R.string.no_data);
-            averagePoint = activity.getString(R.string.no_data);
-
-        }
-        historyDatabase.close();*/
-        Realm.init(activity);
-        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
-                .name("history.realm")
-                .modules(Realm.getDefaultModule(), new HistoryModule())
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        Realm realm = Realm.getInstance(settingConfig);
-        long count = realm.where(Point.class).count();
-        if (count > 0) {
-            double diem = realm.where(Point.class).average("point");
-            averagePoint = String.format("%.1f", diem);
-            countPoint = count + "";
-            if (diem >= 8) {
-                classification = activity.getString(R.string.good);
-            } else if (diem >= 6.5) {
-                classification = activity.getString(R.string.rather);
-            } else if (diem >= 4.5) {
-                classification = activity.getString(R.string.medium);
-            } else {
-                classification = activity.getString(R.string.weak);
-            }
-        }else {
             classification = activity.getString(R.string.no_data);
             countPoint = activity.getString(R.string.no_data);
             averagePoint = activity.getString(R.string.no_data);
