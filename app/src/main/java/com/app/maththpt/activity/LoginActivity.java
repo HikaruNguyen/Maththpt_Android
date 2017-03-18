@@ -19,6 +19,8 @@ import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 import rx.Subscriber;
@@ -35,6 +37,7 @@ public class LoginActivity extends BaseActivity {
     private LoginViewModel loginViewModel;
     private Subscription mSubscription;
     private com.app.maththpt.modelresult.LoginResult mLoginResult;
+    MathThptService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +65,7 @@ public class LoginActivity extends BaseActivity {
                                 loginResult.getAccessToken(),
                                 (object, response) -> {
                                     if (object != null) {
-                                        String email = object.optString("email");
-                                        String fbid = object.optString("id");
-                                        String name = object.optString("name");
-                                        editor.putString(Configuaration.KEY_NAME, name);
-                                        editor.putString(Configuaration.KEY_EMAIL, email);
-                                        editor.putString(Configuaration.KEY_ID, fbid);
-                                        editor.commit();
-                                        setResult(RESULT_OK);
-                                        finish();
-                                    } else {
-
+                                        registerFb(object);
                                     }
                                 });
                         Bundle parameters = new Bundle();
@@ -97,7 +90,51 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
+    private void registerFb(JSONObject object) {
+        String email = object.optString("email");
+        String fbid = object.optString("id");
+        String name = object.optString("name");
+        apiService = MyApplication.with(this).getMaththptSerivce();
+        if (mSubscription != null && !mSubscription.isUnsubscribed())
+            mSubscription.unsubscribe();
+        mSubscription = apiService.postRegisterFb(name, email, fbid)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<com.app.maththpt.modelresult.LoginResult>() {
+                    @Override
+                    public void onCompleted() {
+                        if (mLoginResult.success && mLoginResult.status == 200) {
+                            editor.putString(Configuaration.KEY_ID, mLoginResult.data.id);
+                            editor.putString(Configuaration.KEY_NAME, mLoginResult.data.username);
+                            editor.putString(Configuaration.KEY_EMAIL, mLoginResult.data.email);
+                            editor.putString(Configuaration.KEY_FBID, mLoginResult.data.fbId);
+                            editor.putString(Configuaration.KEY_TOKEN, mLoginResult.data.token);
+                            editor.commit();
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    mLoginResult.message, Toast.LENGTH_SHORT).show();
+                        }
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(
+                                LoginActivity.this,
+                                getString(R.string.error_connect), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(com.app.maththpt.modelresult.LoginResult loginResult) {
+                        if (loginResult != null) {
+                            mLoginResult = loginResult;
+                        }
+                    }
+                });
+    }
     private void event() {
         loginBinding.btnLoginFB.setOnClickListener(
                 view -> LoginManager.getInstance().
@@ -127,7 +164,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void loginAPI() {
-        MathThptService apiService = MyApplication.with(this).getMaththptSerivce();
+        apiService = MyApplication.with(this).getMaththptSerivce();
         if (mSubscription != null && !mSubscription.isUnsubscribed())
             mSubscription.unsubscribe();
         mSubscription = apiService.postLogin(loginViewModel.username, loginViewModel.password)

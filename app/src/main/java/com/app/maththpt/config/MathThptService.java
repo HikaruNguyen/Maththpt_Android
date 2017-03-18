@@ -59,8 +59,13 @@ public interface MathThptService {
     Observable<BaseResult> postRegister(@Field("username") String username,
                                         @Field("password") String password,
                                         @Field("fullname") String fullname,
-                                        @Field("email") String email,
-                                        @Field("avatar") String avatar);
+                                        @Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("user/registerFb.php")
+    Observable<LoginResult> postRegisterFb(@Field("fullname") String fullname,
+                                          @Field("email") String email,
+                                          @Field("fbId") String fbId);
 
     class Factory {
 
