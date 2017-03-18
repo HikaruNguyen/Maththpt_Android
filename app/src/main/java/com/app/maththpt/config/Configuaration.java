@@ -10,6 +10,7 @@ public class Configuaration {
     public static final String KEY_ID = "id_pref";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_TOKEN = "access_token";
+    public static final String KEY_FBID = "fb_id";
     public static final String KEY_TYPE = "user_type";
     public static final int TYPE_CATEGORY = 1;
     public static final int TYPE_EXAM = 2;

@@ -12,4 +12,5 @@ public class User {
     public String password;
     public int type;
     public String token;
+    public String fbId;
 }
