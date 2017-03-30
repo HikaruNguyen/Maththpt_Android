@@ -163,8 +163,8 @@ public class QuestionWVFragment extends Fragment {
     @Subscribe
     public void onEvent(CheckAnswerQuestionEvent event) {
         if (event.type == CheckAnswerQuestionEvent.TYPE_CHECK) {
-            if (position == event.position) {
-                if (!isCheckedKQ) {
+            if (position == event.position || event.isCheckAll) {
+                if (!isCheckedKQ || event.isCheckAll) {
                     if (question.answerList.get(0).isCorrect) {
                         fragmentQuestionBinding.webView.loadUrl(
                                 "javascript:setColor(checkAnswer(),1);");
@@ -181,7 +181,8 @@ public class QuestionWVFragment extends Fragment {
                 } else {
                     fragmentQuestionBinding.webView.loadUrl("javascript:resetColor();");
                 }
-                isCheckedKQ = !isCheckedKQ;
+                isCheckedKQ = event.isCheckAll || !isCheckedKQ;
+
             }
         } else if (event.type == CheckAnswerQuestionEvent.TYPE_DETAIL) {
             Toast.makeText(

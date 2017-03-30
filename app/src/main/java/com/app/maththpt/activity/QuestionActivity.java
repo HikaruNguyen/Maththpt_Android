@@ -61,7 +61,8 @@ public class QuestionActivity extends BaseActivity {
     private Subscription mSubscription;
     private DetailTestsResult mDetailTestsResult;
     public static ProgressDialog progressDialog;
-
+    private Menu menu;
+    private boolean isReview = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -372,6 +373,7 @@ public class QuestionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         if (type == Configuaration.TYPE_CATEGORY || type == Configuaration.TYPE_TESTS) {
             getMenuInflater().inflate(R.menu.menu_quiz, menu);
         } else {
@@ -403,6 +405,7 @@ public class QuestionActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void nopBai() {
         List<Question> questionList = new ArrayList<>();
@@ -457,17 +460,33 @@ public class QuestionActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_CHAM_DIEM) {
             if (resultCode == RESULT_OK) {
-                setResult(RESULT_OK, data);
-                finish();
+                isReview = data.getBooleanExtra("isReview", false);
+                if (isReview) {
+                    loadAnswer();
+                } else {
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+
             } else {
                 finish();
             }
         }
     }
 
+    private void loadAnswer() {
+        activityQuestionBinding.viewpager.setCurrentItem(0);
+        questionViewModel.setTitle(getString(R.string.dapAn));
+        if (menu != null) {
+            MenuItem item_down = menu.findItem(R.id.action_nopBai);
+            item_down.setVisible(false);
+        }
+        EventBus.getDefault().post(new CheckAnswerQuestionEvent());
+    }
+
     @Override
     public void onBackPressed() {
-        if (type == Configuaration.TYPE_EXAM) {
+        if (type == Configuaration.TYPE_EXAM && !isReview) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.confirmQuitExam));
             builder.setPositiveButton(getString(R.string.yes), (dialog, which) -> finish());

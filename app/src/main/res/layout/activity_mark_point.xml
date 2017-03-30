@@ -74,6 +74,16 @@
                     android:layout_height="wrap_content" />
 
                 <Button
+                    android:id="@+id/btnReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:background="@drawable/bg_button_primary"
+                    android:text="@string/xemLaiDA"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14sp" />
+
+                <Button
                     android:id="@+id/btnHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -7,9 +7,10 @@
 
     <CheckBox
         android:id="@+id/checkbox"
-        android:textSize="@dimen/text_size_14sp"
-        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_5dp" />
+        android:checked="true"
+        android:padding="@dimen/margin_5dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14sp" />
 </LinearLayout>

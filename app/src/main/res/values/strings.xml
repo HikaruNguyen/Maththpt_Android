@@ -81,4 +81,6 @@
     <string name="my_own_cancel">Late</string>
     <string name="app_name_short">TOÁN THPT</string>
     <string name="tracNghiem">Trắc nghiệm</string>
+    <string name="xemLaiDA">Xem lại đáp án</string>
+    <string name="dapAn">Đáp án</string>
 </resources>

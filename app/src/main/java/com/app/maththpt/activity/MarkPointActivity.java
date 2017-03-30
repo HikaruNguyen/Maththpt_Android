@@ -85,6 +85,12 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             }
 
         });
+        chamDiemBinding.btnReview.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("isReview", true);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
     }
 
     private void getData() {

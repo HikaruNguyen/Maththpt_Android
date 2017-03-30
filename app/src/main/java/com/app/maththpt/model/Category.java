@@ -20,13 +20,13 @@ public class Category extends RealmObject implements Parcelable {
     public boolean isChecked;
 
     public Category() {
-        isChecked = false;
+        isChecked = true;
     }
 
     public Category(int id, String name) {
         this.id = id;
         this.name = name;
-        isChecked = false;
+        isChecked = true;
     }
 
     public Category(int id, String name, boolean isChecked) {
@@ -40,6 +40,7 @@ public class Category extends RealmObject implements Parcelable {
         this.id = id;
         this.name = name;
         this.icon = icon;
+        this.isChecked = true;
     }
 
     protected Category(Parcel in) {
