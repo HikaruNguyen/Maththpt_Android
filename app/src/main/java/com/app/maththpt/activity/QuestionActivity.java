@@ -24,11 +24,16 @@ import com.app.maththpt.eventbus.CheckAnswerQuestionEvent;
 import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.fragment.QuestionWVFragment;
 import com.app.maththpt.model.Answer;
+import com.app.maththpt.model.CacheCategory;
+import com.app.maththpt.model.CacheTests;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.modelresult.DetailTestsResult;
+import com.app.maththpt.realm.CacheCategoryModule;
+import com.app.maththpt.realm.CacheTestsModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.QuestionViewModel;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,6 +42,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -159,8 +166,26 @@ public class QuestionActivity extends BaseActivity {
 
     ViewPagerAdapter pagerAdapter;
     private int page = 1;
+    Realm realm;
+    RealmConfiguration settingConfig;
 
     private void bindData() {
+        Realm.init(QuestionActivity.this);
+        if (type == Configuaration.TYPE_TESTS) {
+            settingConfig = new RealmConfiguration.Builder()
+                    .name("contentTest.realm")
+                    .modules(Realm.getDefaultModule(), new CacheTestsModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .build();
+
+        } else {
+            settingConfig = new RealmConfiguration.Builder()
+                    .name("contentCate.realm")
+                    .modules(Realm.getDefaultModule(), new CacheCategoryModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .build();
+        }
+        realm = Realm.getInstance(settingConfig);
         list = new ArrayList<>();
         MathThptService apiService;
         if (type == Configuaration.TYPE_TESTS) {
@@ -174,13 +199,30 @@ public class QuestionActivity extends BaseActivity {
                         @Override
                         public void onCompleted() {
                             convertResultToListQuestion(mDetailTestsResult);
+                            realm.beginTransaction();
+                            Gson gson = new Gson();
+                            CacheTests cacheContent = new CacheTests(testID,
+                                    gson.toJson(mDetailTestsResult));
+                            realm.copyToRealmOrUpdate(cacheContent);
+                            realm.commitTransaction();
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             CLog.d(TAG, "getListTest Error");
-                            questionViewModel.setVisiableError(true);
-                            questionViewModel.setMessageError(getString(R.string.error_connect));
+                            CacheTests cacheTests = realm
+                                    .where(CacheTests.class)
+                                    .equalTo("testID", testID)
+                                    .findFirst();
+                            if (cacheTests != null && cacheTests.json != null) {
+                                DetailTestsResult detailTestsResult =
+                                        new Gson().fromJson(cacheTests.json, DetailTestsResult.class);
+                                if (detailTestsResult != null)
+                                    convertResultToListQuestion(detailTestsResult);
+                            } else {
+                                questionViewModel.setVisiableError(true);
+                                questionViewModel.setMessageError(getString(R.string.error_connect));
+                            }
                         }
 
                         @Override
@@ -204,13 +246,30 @@ public class QuestionActivity extends BaseActivity {
                         @Override
                         public void onCompleted() {
                             convertResultToListQuestion(mDetailTestsResult);
+                            realm.beginTransaction();
+                            Gson gson = new Gson();
+                            CacheCategory cacheContent = new CacheCategory(cateID,
+                                    gson.toJson(mDetailTestsResult));
+                            realm.copyToRealmOrUpdate(cacheContent);
+                            realm.commitTransaction();
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             CLog.d(TAG, "getListTest Error");
-                            questionViewModel.setVisiableError(true);
-                            questionViewModel.setMessageError(getString(R.string.error_connect));
+                            CacheCategory cacheCategory = realm
+                                    .where(CacheCategory.class)
+                                    .equalTo("cateID", cateID)
+                                    .findFirst();
+                            if (cacheCategory != null && cacheCategory.json != null) {
+                                DetailTestsResult detailTestsResult =
+                                        new Gson().fromJson(cacheCategory.json, DetailTestsResult.class);
+                                if (detailTestsResult != null)
+                                    convertResultToListQuestion(detailTestsResult);
+                            } else {
+                                questionViewModel.setVisiableError(true);
+                                questionViewModel.setMessageError(getString(R.string.error_connect));
+                            }
                         }
 
                         @Override

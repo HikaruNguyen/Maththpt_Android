@@ -11,7 +11,7 @@ public class MathUtils {
             "    <meta charset=\"UTF-8\">\n" +
             "    <title>Title</title>\n" +
             "    <script type=\"text/javascript\" async\n" +
-            "            src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_CHTML\">\n" +
+            "            src=\"mathjax/2.7-latest/MathJax.js?config=MML_CHTML\">\n" +
             "    </script>\n" +
             "</head>\n" +
             "<body>\n" +

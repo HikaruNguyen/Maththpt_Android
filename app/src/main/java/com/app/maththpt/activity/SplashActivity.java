@@ -39,6 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("category.realm")
                 .modules(Realm.getDefaultModule(), new CategoryModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         realm.beginTransaction();
