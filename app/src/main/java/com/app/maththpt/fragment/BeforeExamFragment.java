@@ -129,6 +129,7 @@ public class BeforeExamFragment extends Fragment {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("category.realm")
                 .modules(Realm.getDefaultModule(), new CategoryModule())
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         List<Category> list = realm.where(Category.class).findAll();

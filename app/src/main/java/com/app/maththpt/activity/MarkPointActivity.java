@@ -233,10 +233,10 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                     soCauDung++;
                 }
             }
-            chamDiemViewModel.setYourPoint(soCauDung * 10 / list.size());
+            chamDiemViewModel.setYourPoint((float) (soCauDung * 10.0 / list.size()));
             long dtMili = System.currentTimeMillis();
             if (!userID.isEmpty()) {
-                Point point = new Point(soCauDung * 10 / list.size(), dtMili + "", userID);
+                Point point = new Point((float) (soCauDung * 10.0 / list.size()), dtMili + "", userID);
                 realmHistory.beginTransaction();
                 realmHistory.insert(point);
                 realmHistory.commitTransaction();
