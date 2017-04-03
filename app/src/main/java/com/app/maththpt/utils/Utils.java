@@ -1,9 +1,11 @@
 package com.app.maththpt.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.util.Base64;
 import android.view.View;
 
@@ -60,5 +62,12 @@ public class Utils {
             return "";
         }
         return string;
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
@@ -23,6 +24,7 @@ import com.app.maththpt.model.StatisticalPoint;
 import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.realm.StatisticalModule;
 import com.app.maththpt.utils.FacebookUtils;
+import com.app.maththpt.utils.Utils;
 import com.app.maththpt.viewmodel.ChamDiemViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -35,6 +37,10 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +64,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     private ActivityMarkPointBinding chamDiemBinding;
     private ChamDiemViewModel chamDiemViewModel;
     private String userID;
+    InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +72,48 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         chamDiemBinding = DataBindingUtil.setContentView(this, R.layout.activity_mark_point);
         chamDiemViewModel = new ChamDiemViewModel(this, getString(R.string.yourPoint));
         chamDiemBinding.setChamDiemViewModel(chamDiemViewModel);
+        initBanner();
+        initInterstitial();
         getData();
         initUI();
         bindData();
         event();
+    }
+
+    private void initBanner() {
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdOpened() {
+                // Save app state before going to the ad overlay.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+            }
+        });
+        if (Utils.isNetworkConnected(MarkPointActivity.this)) {
+            mAdView.setVisibility(View.VISIBLE);
+        } else {
+            mAdView.setVisibility(View.GONE);
+        }
+    }
+
+    private void initInterstitial() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
+
+        requestNewInterstitial();
     }
 
     private void event() {
@@ -86,11 +131,29 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
 
         });
         chamDiemBinding.btnReview.setOnClickListener(v -> {
+            loadInterstitialAd();
             Intent intent = new Intent();
             intent.putExtra("isReview", true);
             setResult(RESULT_OK, intent);
             finish();
         });
+    }
+
+    private void loadInterstitialAd() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+
+        }
+
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
     }
 
     private void getData() {

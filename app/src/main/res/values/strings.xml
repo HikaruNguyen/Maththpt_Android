@@ -83,4 +83,6 @@
     <string name="tracNghiem">Trắc nghiệm</string>
     <string name="xemLaiDA">Xem lại đáp án</string>
     <string name="dapAn">Đáp án</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1264100138002498/5027825368</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-1264100138002498/2434285766</string>
 </resources>

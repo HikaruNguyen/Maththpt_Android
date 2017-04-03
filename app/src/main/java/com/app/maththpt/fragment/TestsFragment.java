@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.maththpt.R;
+import com.app.maththpt.activity.MainActivity;
 import com.app.maththpt.activity.MyApplication;
 import com.app.maththpt.adapter.TestsAdapter;
 import com.app.maththpt.config.MathThptService;
@@ -86,7 +87,7 @@ public class TestsFragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 callAPIGetData();
-                ;
+                ((MainActivity) getActivity()).ads();
             }
         });
     }

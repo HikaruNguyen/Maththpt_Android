@@ -4,9 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.app.maththpt.R;
 import com.app.maththpt.config.MathThptService;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import rx.Scheduler;
@@ -27,6 +29,7 @@ public class MyApplication extends Application {
         AppEventsLogger.activateApp(this);
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         Log.d(TAG, "Subscribed to news topic");
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id));
     }
 
     public MathThptService getMaththptSerivce() {

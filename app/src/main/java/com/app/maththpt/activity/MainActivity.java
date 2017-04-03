@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.app.maththpt.BuildConfig;
@@ -34,9 +35,13 @@ import com.app.maththpt.fragment.HistoryFragment;
 import com.app.maththpt.fragment.TestsFragment;
 import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.utils.RateThisApp;
+import com.app.maththpt.utils.Utils;
 import com.app.maththpt.viewmodel.MainViewModel;
 import com.app.maththpt.viewmodel.NavHeaderMainViewModel;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         mainViewModel = new MainViewModel(this);
         activityMainBinding.setViewModelMain(mainViewModel);
         sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+        ads();
         initUI();
         bindData();
         event();
@@ -78,6 +84,37 @@ public class MainActivity extends AppCompatActivity
             }
         }
         rateApp();
+
+    }
+
+    private boolean isLoadAdsSuccess = false;
+
+    public void ads() {
+        banner();
+    }
+
+    private void banner() {
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdOpened() {
+                // Save app state before going to the ad overlay.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                isLoadAdsSuccess = true;
+            }
+        });
+        if (Utils.isNetworkConnected(MainActivity.this)
+                || isLoadAdsSuccess) {
+            mAdView.setVisibility(View.VISIBLE);
+        } else {
+            mAdView.setVisibility(View.GONE);
+        }
     }
 
     private void rateApp() {
