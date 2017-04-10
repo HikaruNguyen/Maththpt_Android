@@ -12,7 +12,10 @@ public class Configuaration {
     public static final String KEY_TOKEN = "access_token";
     public static final String KEY_FBID = "fb_id";
     public static final String KEY_TYPE = "user_type";
+    public static final String KEY_FREE_TESTS_NUM = "free_test_num";
     public static final int TYPE_CATEGORY = 1;
     public static final int TYPE_EXAM = 2;
     public static final int TYPE_TESTS = 3;
+
+    public static final int FREE_TESTS_NUM = 5;
 }

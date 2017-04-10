@@ -3,6 +3,7 @@ package com.app.maththpt.fragment;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,6 +16,7 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
+import com.app.maththpt.activity.LoginActivity;
 import com.app.maththpt.activity.MainActivity;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.adapter.CategoryCheckAdapter;
@@ -22,6 +24,7 @@ import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.databinding.FragmentBeforeExamBinding;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.realm.CategoryModule;
+import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.BeforeExamViewModel;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,13 +80,45 @@ public class BeforeExamFragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.banChuaChonChuDe),
                         Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(getActivity(), QuestionActivity.class);
-                intent.putParcelableArrayListExtra(
-                        "listCate", (ArrayList<? extends Parcelable>) categories);
-                intent.putExtra("type", Configuaration.TYPE_EXAM);
-                intent.putExtra("soCau", soCau);
-                intent.putExtra("time", time);
-                startActivityForResult(intent, CODE_CHAM_DIEM);
+                SharedPreferences sharedPreferences = getActivity().
+                        getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String token = sharedPreferences.getString(Configuaration.KEY_TOKEN, "");
+                if (!FacebookUtils.getFacebookID().isEmpty() || !token.isEmpty()) {
+                    Intent intent = new Intent(getActivity(), QuestionActivity.class);
+                    intent.putParcelableArrayListExtra(
+                            "listCate", (ArrayList<? extends Parcelable>) categories);
+                    intent.putExtra("type", Configuaration.TYPE_EXAM);
+                    intent.putExtra("soCau", soCau);
+                    intent.putExtra("time", time);
+                    startActivityForResult(intent, CODE_CHAM_DIEM);
+
+                } else {
+                    int num = sharedPreferences.getInt(Configuaration.KEY_FREE_TESTS_NUM, 0);
+                    if (num < Configuaration.FREE_TESTS_NUM) {
+                        num++;
+                        editor.putInt(Configuaration.KEY_FREE_TESTS_NUM, num);
+                        editor.apply();
+                        Intent intent = new Intent(getActivity(), QuestionActivity.class);
+                        intent.putParcelableArrayListExtra(
+                                "listCate", (ArrayList<? extends Parcelable>) categories);
+                        intent.putExtra("type", Configuaration.TYPE_EXAM);
+                        intent.putExtra("soCau", soCau);
+                        intent.putExtra("time", time);
+                        startActivityForResult(intent, CODE_CHAM_DIEM);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage(getString(R.string.loginToExam));
+                        builder.setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            startActivity(intent);
+                        });
+                        builder.setNegativeButton(
+                                getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
+                        builder.show();
+                    }
+                }
+
             }
 
         });

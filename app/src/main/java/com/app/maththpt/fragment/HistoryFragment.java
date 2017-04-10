@@ -74,9 +74,11 @@ public class HistoryFragment extends Fragment {
                 historyViewModel.setVisiableError(false);
             } else {
                 historyViewModel.setVisiableError(true);
+                historyViewModel.setMessageError(getString(R.string.no_data));
             }
         } else {
             historyViewModel.setVisiableError(true);
+            historyViewModel.setMessageError(getString(R.string.needLogin));
         }
 
 

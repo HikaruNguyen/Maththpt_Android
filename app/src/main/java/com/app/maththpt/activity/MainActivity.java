@@ -162,14 +162,12 @@ public class MainActivity extends AppCompatActivity
             }
             navHeaderMainViewModel.notifyChange();
             activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(true);
-            activityMainBinding.navView.getMenu().findItem(R.id.nav_history).setVisible(true);
         } else {
             navHeaderMainViewModel.getUserName = getString(R.string.login);
             navHeaderMainViewModel.getEmail = getString(R.string.app_name);
             navHeaderMainViewModel.getUserAvatar = "";
             navHeaderMainViewModel.notifyChange();
             activityMainBinding.navView.getMenu().findItem(R.id.nav_logout).setVisible(false);
-            activityMainBinding.navView.getMenu().findItem(R.id.nav_history).setVisible(false);
         }
 
     }
@@ -224,7 +222,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_tests) {
             clearBackStack(getSupportFragmentManager());
             changeFragment(new TestsFragment());

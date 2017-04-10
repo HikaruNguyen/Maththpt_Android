@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_14sp"
             android:layout_centerInParent="true"
-            android:text="@string/no_data"
+            android:text="@{historyViewModel.messageError}"
             android:visibility="@{historyViewModel.visiableError}" />
 
         <com.app.maththpt.widget.CRecyclerView

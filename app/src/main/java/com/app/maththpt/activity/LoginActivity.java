@@ -210,8 +210,11 @@ public class LoginActivity extends BaseActivity {
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CODE_REGISTER) {
-            loginViewModel.username = data.getStringExtra("username");
-            loginViewModel.notifyChange();
+            if(resultCode==RESULT_OK){
+                loginViewModel.username = data.getStringExtra("username");
+                loginViewModel.notifyChange();
+            }
+
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
