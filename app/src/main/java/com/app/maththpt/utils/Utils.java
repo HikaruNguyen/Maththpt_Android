@@ -50,9 +50,9 @@ public class Utils {
 
     public static String replaceMath(String string) {
         if (string != null) {
-            string = string
-                    .replace("xmlns=\"http://www.w3.org/1998/Math/MathML\"", "")
-                    .replace("xmlns='http://www.w3.org/1998/Math/MathML'", "");
+//            string = string
+//                    .replace("xmlns=\"http://www.w3.org/1998/Math/MathML\"", "xmlns='http://www.w3.org/1998/Math/MathML' display='block'")
+//                    .replace("xmlns='http://www.w3.org/1998/Math/MathML'", "xmlns='http://www.w3.org/1998/Math/MathML' display='block'");
             if (string.startsWith("<p>")) {
                 string = string.substring(3, string.length());
             }

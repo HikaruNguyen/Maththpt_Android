@@ -185,10 +185,12 @@ public class QuestionWVFragment extends Fragment {
 
             }
         } else if (event.type == CheckAnswerQuestionEvent.TYPE_DETAIL) {
-            Toast.makeText(
-                    getActivity(),
-                    getString(R.string.no_data),
-                    Toast.LENGTH_SHORT).show();
+            if (position == event.position) {
+                Toast.makeText(
+                        getActivity(),
+                        getString(R.string.no_data),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
