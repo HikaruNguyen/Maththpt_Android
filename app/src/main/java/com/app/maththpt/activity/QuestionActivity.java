@@ -360,7 +360,8 @@ public class QuestionActivity extends BaseActivity {
                         mDetailTestsResult.data.get(i).question,
                         mDetailTestsResult.data.get(i).image,
                         answerList,
-                        Integer.parseInt(mDetailTestsResult.data.get(i).cateID));
+                        Integer.parseInt(mDetailTestsResult.data.get(i).cateID),
+                        mDetailTestsResult.data.get(i).answerDetail);
                 list.add(question);
             }
             genQuestion();

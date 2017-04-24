@@ -17,19 +17,22 @@ public class Question implements Serializable, Parcelable {
     public List<Answer> answerList;
     public Integer cateID;
     public boolean isCorrect;
+    public String answerDetail;
 
     public Question(Integer id) {
         this.id = id;
     }
 
     public Question(
-            Integer id, String question, String image, List<Answer> answerList, Integer cateID) {
+            Integer id, String question, String image, List<Answer> answerList, Integer cateID,
+            String answerDetail) {
         this.id = id;
         this.question = question;
         this.image = image;
         this.answerList = answerList;
         this.cateID = cateID;
         isCorrect = false;
+        this.answerDetail = answerDetail;
     }
 
 
@@ -40,6 +43,7 @@ public class Question implements Serializable, Parcelable {
         isCorrect = in.readByte() != 0;
         id = in.readInt();
         cateID = in.readInt();
+        answerDetail = in.readString();
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {
@@ -67,5 +71,6 @@ public class Question implements Serializable, Parcelable {
         parcel.writeByte((byte) (isCorrect ? 1 : 0));
         parcel.writeInt(id);
         parcel.writeInt(cateID);
+        parcel.writeString(answerDetail);
     }
 }

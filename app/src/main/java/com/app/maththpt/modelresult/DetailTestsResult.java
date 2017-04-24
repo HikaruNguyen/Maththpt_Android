@@ -20,5 +20,6 @@ public class DetailTestsResult extends BaseResult {
         public String answerC;
         public String answerD;
         public String answerTrue;
+        public String answerDetail;
     }
 }

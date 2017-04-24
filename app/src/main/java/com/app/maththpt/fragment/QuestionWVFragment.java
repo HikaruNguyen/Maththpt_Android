@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.maththpt.R;
+import com.app.maththpt.activity.AnswerDetailActivity;
 import com.app.maththpt.databinding.FragmentQuestionBinding;
-import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.eventbus.CheckAnswerQuestionEvent;
+import com.app.maththpt.eventbus.ShareQuestionEvent;
 import com.app.maththpt.model.Question;
 import com.app.maththpt.utils.MathUtils;
 import com.app.maththpt.utils.Utils;
@@ -186,10 +187,18 @@ public class QuestionWVFragment extends Fragment {
             }
         } else if (event.type == CheckAnswerQuestionEvent.TYPE_DETAIL) {
             if (position == event.position) {
-                Toast.makeText(
-                        getActivity(),
-                        getString(R.string.no_data),
-                        Toast.LENGTH_SHORT).show();
+                if (question.answerDetail != null
+                        && !Utils.replaceMath(question.answerDetail.trim()).isEmpty()) {
+                    Intent intent = new Intent(getActivity(), AnswerDetailActivity.class);
+                    intent.putExtra("answerDetail", question.answerDetail);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(
+                            getActivity(),
+                            getString(R.string.no_data),
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
