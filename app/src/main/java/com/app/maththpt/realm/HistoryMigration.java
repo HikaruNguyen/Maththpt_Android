@@ -27,9 +27,16 @@ public class HistoryMigration implements RealmMigration {
                     });
             oldVersion++;
         }
-//        if (oldVersion == 2) {
-//            RealmObjectSchema personSchema = schema.get("Point");
-//            personSchema.setNullable("isSynced", true); // fullName is nullable now.
-//        }
+        if (oldVersion == 1) {
+            RealmObjectSchema recipeSchema = schema.get("Point");
+            recipeSchema.addField("id", int.class, FieldAttribute.PRIMARY_KEY)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+                            obj.setInt("isSynced", 0);
+                        }
+                    });
+            oldVersion++;
+        }
     }
 }

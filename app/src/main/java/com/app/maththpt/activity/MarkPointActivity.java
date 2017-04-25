@@ -289,6 +289,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 .modules(Realm.getDefaultModule(), new HistoryModule())
                 .schemaVersion(MyApplication.with(this).REALM_VERSION)
 //                .migration(new HistoryMigration())
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realmHistory = Realm.getInstance(settingConfig);
         if (list != null && list.size() > 0) {

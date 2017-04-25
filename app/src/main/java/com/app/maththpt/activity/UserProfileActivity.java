@@ -232,10 +232,10 @@ public class UserProfileActivity extends BaseActivity {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
-                .deleteRealmIfMigrationNeeded()
                 .schemaVersion(MyApplication.with(this).REALM_VERSION)
+//                .migration(new HistoryMigration())
+                .deleteRealmIfMigrationNeeded()
                 .build();
-
         Realm realm = Realm.getInstance(settingConfig);
         listPoint = realm
                 .where(Point.class)

@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
+import com.app.maththpt.config.MathThptService;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.Point;
+import com.app.maththpt.modelresult.BaseResult;
 import com.app.maththpt.realm.CategoryModule;
-import com.app.maththpt.realm.HistoryMigration;
 import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.utils.FacebookUtils;
@@ -18,15 +19,24 @@ import com.app.maththpt.utils.Utils;
 import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.Sort;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
+    MathThptService apiService;
+    private Subscription mSubscription;
+    private BaseResult mBaseResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,25 +66,72 @@ public class SplashActivity extends AppCompatActivity {
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
                 .schemaVersion(MyApplication.with(this).REALM_VERSION)
-                .migration(new HistoryMigration())
+//                .migration(new HistoryMigration())
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         CLog.d(TAG, "version realm: " + realm.getVersion());
         List<Point> listPoints = realm
                 .where(Point.class)
+                .equalTo("isSynced", 0)
                 .findAllSorted("time", Sort.DESCENDING);
         if (listPoints != null && listPoints.size() > 0) {
             List<Point> list = new ArrayList<>();
             for (int i = 0; i < listPoints.size(); i++) {
-                list.add(new Point(
-                        listPoints.get(i).point,
-                        listPoints.get(i).time,
-                        listPoints.get(i).userID));
+                if (listPoints.get(i).isSynced == 0) {
+                    list.add(new Point(
+                            listPoints.get(i).point,
+                            listPoints.get(i).time,
+                            listPoints.get(i).userID));
+                }
             }
             Gson gson = new Gson();
             String datajson = gson.toJson(list);
-            CLog.d(TAG, "json object: " + datajson);
-//            new Thread(new Task()).start();
+            CLog.d(TAG, "json object: " + URLEncoder.encode(datajson));
+            CLog.d(TAG, "json object: " + URLDecoder.decode(URLEncoder.encode(datajson)));
+            apiService = MyApplication.with(this).getMaththptSerivce();
+            if (mSubscription != null && !mSubscription.isUnsubscribed())
+                mSubscription.unsubscribe();
+            mSubscription = apiService.postSyncHistory(URLEncoder.encode(datajson))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<BaseResult>() {
+                        @Override
+                        public void onCompleted() {
+//                            if (mBaseResult.success && mBaseResult.status == 200) {
+////                                realm.beginTransaction();
+////                                for (int i = 0; i < list.size(); i++) {
+////                                    list.get(i).isSynced = 1;
+////                                    realm.copyToRealmOrUpdate(list.get(i));
+////                                }
+////                                realm.commitTransaction();
+//                            } else {
+//                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(intent);
+//                                finish();
+//                            }
+                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onNext(BaseResult baseResult) {
+                            if (baseResult != null) {
+                                mBaseResult = baseResult;
+                            }
+                        }
+                    });
         } else {
             new Thread(new Task()).start();
         }
@@ -125,5 +182,12 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
+        mSubscription = null;
     }
 }

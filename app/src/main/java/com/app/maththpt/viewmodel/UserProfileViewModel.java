@@ -53,8 +53,9 @@ public class UserProfileViewModel extends BaseViewModel {
         RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
-                .deleteRealmIfMigrationNeeded()
                 .schemaVersion(MyApplication.with(activity).REALM_VERSION)
+//                .migration(new HistoryMigration())
+                .deleteRealmIfMigrationNeeded()
                 .build();
 
         Realm realm = Realm.getInstance(settingConfig);

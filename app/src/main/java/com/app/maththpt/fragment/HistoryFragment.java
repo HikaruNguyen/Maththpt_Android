@@ -61,7 +61,8 @@ public class HistoryFragment extends Fragment {
                     .name("history.realm")
                     .modules(Realm.getDefaultModule(), new HistoryModule())
                     .schemaVersion(MyApplication.with(getActivity()).REALM_VERSION)
-//                .migration(new HistoryMigration())
+//                    .migration(new HistoryMigration())
+                    .deleteRealmIfMigrationNeeded()
                     .build();
 
             Realm realm = Realm.getInstance(settingConfig);

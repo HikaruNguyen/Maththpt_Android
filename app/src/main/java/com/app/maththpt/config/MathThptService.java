@@ -64,8 +64,12 @@ public interface MathThptService {
     @FormUrlEncoded
     @POST("user/registerFb.php")
     Observable<LoginResult> postRegisterFb(@Field("fullname") String fullname,
-                                          @Field("email") String email,
-                                          @Field("fbId") String fbId);
+                                           @Field("email") String email,
+                                           @Field("fbId") String fbId);
+
+    @FormUrlEncoded
+    @POST("data/sync-history.php")
+    Observable<BaseResult> postSyncHistory(@Field("datajson") String datajson);
 
     class Factory {
 
