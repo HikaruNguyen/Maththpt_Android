@@ -100,6 +100,7 @@ public class UserProfileActivity extends BaseActivity {
                 .name("statisticalPoint.realm")
                 .modules(Realm.getDefaultModule(), new StatisticalModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(this).REALM_VERSION)
                 .build();
 
         Realm realStatistical = Realm.getInstance(settingConfig);
@@ -232,6 +233,7 @@ public class UserProfileActivity extends BaseActivity {
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(this).REALM_VERSION)
                 .build();
 
         Realm realm = Realm.getInstance(settingConfig);

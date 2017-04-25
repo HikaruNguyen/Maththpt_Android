@@ -176,6 +176,7 @@ public class QuestionActivity extends BaseActivity {
                     .name("contentTest.realm")
                     .modules(Realm.getDefaultModule(), new CacheTestsModule())
                     .deleteRealmIfMigrationNeeded()
+                    .schemaVersion(MyApplication.with(this).REALM_VERSION)
                     .build();
 
         } else {
@@ -183,6 +184,7 @@ public class QuestionActivity extends BaseActivity {
                     .name("contentCate.realm")
                     .modules(Realm.getDefaultModule(), new CacheCategoryModule())
                     .deleteRealmIfMigrationNeeded()
+                    .schemaVersion(MyApplication.with(this).REALM_VERSION)
                     .build();
         }
         realm = Realm.getInstance(settingConfig);

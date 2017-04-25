@@ -10,6 +10,7 @@ public class Point extends RealmObject {
     public float point;
     public String time;
     public String userID;
+    public int isSynced;
 
     public Point() {
     }
@@ -19,4 +20,5 @@ public class Point extends RealmObject {
         this.time = time;
         this.userID = userID;
     }
+
 }

@@ -98,6 +98,7 @@ public class TestsFragment extends Fragment {
                 .name("tests.realm")
                 .modules(Realm.getDefaultModule(), new TestsModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(getActivity()).REALM_VERSION)
                 .build();
 
         realm = Realm.getInstance(settingConfig);

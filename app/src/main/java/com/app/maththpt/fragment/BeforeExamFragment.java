@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.app.maththpt.R;
 import com.app.maththpt.activity.LoginActivity;
 import com.app.maththpt.activity.MainActivity;
+import com.app.maththpt.activity.MyApplication;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.adapter.CategoryCheckAdapter;
 import com.app.maththpt.config.Configuaration;
@@ -166,6 +167,7 @@ public class BeforeExamFragment extends Fragment {
                 .name("category.realm")
                 .modules(Realm.getDefaultModule(), new CategoryModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(getActivity()).REALM_VERSION)
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         List<Category> list = realm.where(Category.class).findAll();

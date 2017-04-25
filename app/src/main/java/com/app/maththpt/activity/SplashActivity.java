@@ -8,14 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import com.app.maththpt.R;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Category;
+import com.app.maththpt.model.Point;
 import com.app.maththpt.realm.CategoryModule;
+import com.app.maththpt.realm.HistoryMigration;
+import com.app.maththpt.realm.HistoryModule;
+import com.app.maththpt.utils.CLog;
 import com.app.maththpt.utils.FacebookUtils;
+import com.app.maththpt.utils.Utils;
 import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.Sort;
 
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = SplashActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +42,43 @@ public class SplashActivity extends AppCompatActivity {
 
         }
         initCategory();
-        new Thread(new Task()).start();
+        if (Utils.isNetworkConnected(this)) {
+            syncData();
+        } else {
+            new Thread(new Task()).start();
+        }
+//        new Thread(new Task()).start();
+    }
+
+    private void syncData() {
+        Realm.init(this);
+        RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                .name("history.realm")
+                .modules(Realm.getDefaultModule(), new HistoryModule())
+                .schemaVersion(MyApplication.with(this).REALM_VERSION)
+                .migration(new HistoryMigration())
+                .build();
+        Realm realm = Realm.getInstance(settingConfig);
+        CLog.d(TAG, "version realm: " + realm.getVersion());
+        List<Point> listPoints = realm
+                .where(Point.class)
+                .findAllSorted("time", Sort.DESCENDING);
+        if (listPoints != null && listPoints.size() > 0) {
+            List<Point> list = new ArrayList<>();
+            for (int i = 0; i < listPoints.size(); i++) {
+                list.add(new Point(
+                        listPoints.get(i).point,
+                        listPoints.get(i).time,
+                        listPoints.get(i).userID));
+            }
+            Gson gson = new Gson();
+            String datajson = gson.toJson(list);
+            CLog.d(TAG, "json object: " + datajson);
+//            new Thread(new Task()).start();
+        } else {
+            new Thread(new Task()).start();
+        }
+
     }
 
     private void initCategory() {
@@ -40,6 +87,7 @@ public class SplashActivity extends AppCompatActivity {
                 .name("category.realm")
                 .modules(Realm.getDefaultModule(), new CategoryModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(this).REALM_VERSION)
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         realm.beginTransaction();

@@ -21,6 +21,7 @@ public class MyApplication extends Application {
     private static final String TAG = MyApplication.class.getSimpleName();
     private MathThptService mathThptService;
     private Scheduler defaultSubscribeScheduler;
+    public int REALM_VERSION = 1;
 
     @Override
     public void onCreate() {

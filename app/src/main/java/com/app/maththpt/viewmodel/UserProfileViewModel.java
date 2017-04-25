@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.databinding.Bindable;
 
 import com.app.maththpt.R;
+import com.app.maththpt.activity.MyApplication;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.realm.HistoryModule;
 
@@ -53,6 +54,7 @@ public class UserProfileViewModel extends BaseViewModel {
                 .name("history.realm")
                 .modules(Realm.getDefaultModule(), new HistoryModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(activity).REALM_VERSION)
                 .build();
 
         Realm realm = Realm.getInstance(settingConfig);

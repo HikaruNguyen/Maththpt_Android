@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.app.maththpt.R;
 import com.app.maththpt.activity.MainActivity;
+import com.app.maththpt.activity.MyApplication;
 import com.app.maththpt.adapter.CategoryAdapter;
 import com.app.maththpt.databinding.FragmentCategoryBinding;
 import com.app.maththpt.model.Category;
@@ -56,6 +57,7 @@ public class CategoryFragment extends Fragment {
                 .name("category.realm")
                 .modules(Realm.getDefaultModule(), new CategoryModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(getActivity()).REALM_VERSION)
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
         List<Category> list = realm.where(Category.class).findAll();

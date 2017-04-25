@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.app.maththpt.BR;
 import com.app.maththpt.R;
+import com.app.maththpt.activity.MyApplication;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Tests;
@@ -35,6 +36,7 @@ public class TestsAdapter extends BaseRecyclerAdapter<Tests, TestsAdapter.ViewHo
                 .name("tests.realm")
                 .modules(Realm.getDefaultModule(), new TestsModule())
                 .deleteRealmIfMigrationNeeded()
+                .schemaVersion(MyApplication.with(context).REALM_VERSION)
                 .build();
         realm = Realm.getInstance(settingConfig);
     }
