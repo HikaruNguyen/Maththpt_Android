@@ -500,6 +500,8 @@ public class QuestionActivity extends BaseActivity {
                 "listAnswer", (ArrayList<? extends Parcelable>) questionList);
         intent.putParcelableArrayListExtra(
                 "listCate", (ArrayList<? extends Parcelable>) listCategory);
+        intent.putExtra("numQuestion", soCau);
+        intent.putExtra("timeQuestion", time + "");
         startActivityForResult(intent, CODE_CHAM_DIEM);
     }
 

@@ -65,6 +65,8 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     private ChamDiemViewModel chamDiemViewModel;
     private String userID;
     InterstitialAd mInterstitialAd;
+    private int numQuestion;
+    private String timeQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +162,8 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
         Intent intent = getIntent();
         list = intent.getParcelableArrayListExtra("listAnswer");
         listCategory = intent.getParcelableArrayListExtra("listCate");
+        numQuestion = intent.getIntExtra("numQuestion", 0);
+        timeQuestion = intent.getStringExtra("timeQuestion");
         SharedPreferences sharedPreferences = getSharedPreferences(Configuaration.Pref, MODE_PRIVATE);
         userID = sharedPreferences.getString(Configuaration.KEY_ID, "");
     }
@@ -301,7 +305,24 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
             chamDiemViewModel.setYourPoint((float) (soCauDung * 10.0 / list.size()));
             long dtMili = System.currentTimeMillis();
             if (!userID.isEmpty()) {
-                Point point = new Point((float) (soCauDung * 10.0 / list.size()), dtMili + "", userID);
+                int nextID = 0;
+                try {
+                    nextID = realmHistory.where(Point.class).max("id").intValue() + 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    nextID = 1;
+                }
+                String cateIDs = "";
+                if (listCategory.size() > 0) {
+                    cateIDs = listCategory.get(0).id + "";
+                }
+                if (listCategory.size() > 1) {
+                    for (int i = 1; i < listCategory.size(); i++) {
+                        cateIDs += "-" + listCategory.get(i).id;
+                    }
+                }
+                Point point = new Point(nextID, (float) (soCauDung * 10.0 / list.size()),
+                        dtMili + "", userID, numQuestion, timeQuestion, cateIDs, soCauDung, 0);
                 realmHistory.beginTransaction();
                 realmHistory.insert(point);
                 realmHistory.commitTransaction();
