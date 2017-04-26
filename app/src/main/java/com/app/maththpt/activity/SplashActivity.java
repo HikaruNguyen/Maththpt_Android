@@ -15,7 +15,6 @@ import com.app.maththpt.realm.CategoryModule;
 import com.app.maththpt.realm.HistoryModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.utils.FacebookUtils;
-import com.app.maththpt.utils.Utils;
 import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
 
@@ -52,12 +51,12 @@ public class SplashActivity extends AppCompatActivity {
 
         }
         initCategory();
-        if (Utils.isNetworkConnected(this)) {
-            syncData();
-        } else {
-            new Thread(new Task()).start();
-        }
-//        new Thread(new Task()).start();
+//        if (Utils.isNetworkConnected(this)) {
+//            syncData();
+//        } else {
+//            new Thread(new Task()).start();
+//        }
+        new Thread(new Task()).start();
     }
 
     private void syncData() {

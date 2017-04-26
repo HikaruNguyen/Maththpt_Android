@@ -354,8 +354,8 @@ public class QuestionActivity extends BaseActivity {
                 } else if (Integer.parseInt(mDetailTestsResult.data.get(i).answerTrue) == 4) {
                     answerList.add(new Answer(mDetailTestsResult.data.get(i).answerA, false));
                     answerList.add(new Answer(mDetailTestsResult.data.get(i).answerB, false));
-                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, true));
-                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerC, false));
+                    answerList.add(new Answer(mDetailTestsResult.data.get(i).answerD, true));
                 }
                 Question question = new Question(
                         Integer.parseInt(mDetailTestsResult.data.get(i).id),
