@@ -74,7 +74,7 @@ public class CustomeWebView extends WebView {
         WebSettings webSettings = this.getSettings();
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setLoadWithOverviewMode(true);
 //        Resources res = getResources();
