@@ -71,7 +71,6 @@ public class SplashActivity extends AppCompatActivity {
         realm = Realm.getInstance(settingConfig);
         listPoints = realm
                 .where(Point.class)
-                .equalTo("isSynced", 0)
                 .findAllSorted("time", Sort.DESCENDING);
         if (listPoints != null && listPoints.size() > 0) {
 //            List<Point> list = new ArrayList<>();
@@ -81,7 +80,8 @@ public class SplashActivity extends AppCompatActivity {
             }
             if (listPoints.size() > 1) {
                 for (int i = 1; i < listPoints.size(); i++) {
-                    param += ";" + listPoints.get(i).getParamSync();
+                    if (listPoints.get(i).isSynced == 0)
+                        param += ";" + listPoints.get(i).getParamSync();
                 }
             }
             CLog.d(TAG, "param: " + param);
@@ -90,52 +90,56 @@ public class SplashActivity extends AppCompatActivity {
 //            CLog.d(TAG, "json object: " + URLEncoder.encode(datajson));
 //            CLog.d(TAG, "json object: " + URLDecoder.decode(URLEncoder.encode(datajson)));
 
-
-            apiService = MyApplication.with(this).getMaththptSerivce();
-            if (mSubscription != null && !mSubscription.isUnsubscribed())
-                mSubscription.unsubscribe();
-            mSubscription = apiService.postSyncHistory(param)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<BaseResult>() {
-                        @Override
-                        public void onCompleted() {
-                            if (mBaseResult.success && mBaseResult.status == 200) {
-                                realm.beginTransaction();
-                                for (int i = 0; i < listPoints.size(); i++) {
-                                    listPoints.get(i).isSynced = 1;
+            if (!param.isEmpty()) {
+                apiService = MyApplication.with(this).getMaththptSerivce();
+                if (mSubscription != null && !mSubscription.isUnsubscribed())
+                    mSubscription.unsubscribe();
+                mSubscription = apiService.postSyncHistory(param)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<BaseResult>() {
+                            @Override
+                            public void onCompleted() {
+                                if (mBaseResult.success && mBaseResult.status == 200) {
+                                    realm.beginTransaction();
+                                    for (int i = 0; i < listPoints.size(); i++) {
+                                        listPoints.get(i).isSynced = 1;
+                                        realm.copyToRealmOrUpdate(listPoints.get(i));
+                                    }
+//                                for (int i = 0; i < listPoints.size(); i++) {
+//                                    realm.copyToRealmOrUpdate(listPoints.get(i));
+//                                }
+                                    realm.commitTransaction();
                                 }
+                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
 
-                                for (int i = 0; i < listPoints.size(); i++) {
-                                    realm.copyToRealmOrUpdate(listPoints.get(i));
+                            @Override
+                            public void onError(Throwable e) {
+                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                            @Override
+                            public void onNext(BaseResult baseResult) {
+                                if (baseResult != null) {
+                                    mBaseResult = baseResult;
                                 }
-                                realm.commitTransaction();
                             }
-                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                        }
+                        });
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                new Thread(new Task()).start();
+            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                        }
-
-                        @Override
-                        public void onNext(BaseResult baseResult) {
-                            if (baseResult != null) {
-                                mBaseResult = baseResult;
-                            }
-                        }
-                    });
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
         } else {
             new Thread(new Task()).start();
         }
