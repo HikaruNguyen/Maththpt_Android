@@ -33,6 +33,9 @@ import com.app.maththpt.realm.CacheCategoryModule;
 import com.app.maththpt.realm.CacheTestsModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.QuestionViewModel;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,7 +73,7 @@ public class QuestionActivity extends BaseActivity {
     public static ProgressDialog progressDialog;
     private Menu menu;
     private boolean isReview = false;
-
+    InterstitialAd mInterstitialAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +84,37 @@ public class QuestionActivity extends BaseActivity {
         activityQuestionBinding.setQuestionViewModel(questionViewModel);
         bindData();
         event();
+        initInterstitial();
+    }
+    private void initInterstitial() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
+
+        requestNewInterstitial();
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("SEE_YOUR_LOGCAT_TO_GET_YOUR_DEVICE_ID")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+    private void loadInterstitialAd() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+
+        }
+
+    }
     private void event() {
         activityQuestionBinding.viewpager.addOnPageChangeListener(
                 new ViewPager.OnPageChangeListener() {
@@ -557,6 +589,7 @@ public class QuestionActivity extends BaseActivity {
             builder.setNegativeButton(getString(R.string.late), (dialog, which) -> dialog.dismiss());
             builder.show();
         } else {
+            loadInterstitialAd();
             finish();
         }
     }
