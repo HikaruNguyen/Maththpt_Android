@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
@@ -45,7 +48,7 @@ public class BeforeExamFragment extends Fragment {
     private static final int CODE_CHAM_DIEM = 12;
     private CategoryCheckAdapter adapter;
     private int soCau = 50;
-    private long time = 15 * 60 * 1000;
+    private long time = 90 * 60 * 1000;
     private FragmentBeforeExamBinding beforeExamBinding;
     private BeforeExamViewModel beforeExamViewModel;
 
@@ -144,6 +147,32 @@ public class BeforeExamFragment extends Fragment {
                     soCau = newVal;
                 });
             }
+            EditText input = findInput(np);
+            TextWatcher tw = new TextWatcher() {
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before,
+                                          int count) {
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count,
+                                              int after) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().length() != 0) {
+                        Integer value = Integer.parseInt(s.toString());
+                        if (value >= np.getMinValue()) {
+                            np.setValue(value);
+                            beforeExamViewModel.setNumber(value);
+                            soCau = value;
+                        }
+                    }
+                }
+            };
+            input.addTextChangedListener(tw);
         });
 
         beforeExamBinding.lnThoiGian.setOnClickListener(view -> {
@@ -159,6 +188,19 @@ public class BeforeExamFragment extends Fragment {
             mTimePicker.updateTime(0, 15);
             mTimePicker.show();
         });
+    }
+
+    private EditText findInput(ViewGroup np) {
+        int count = np.getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = np.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                findInput((ViewGroup) child);
+            } else if (child instanceof EditText) {
+                return (EditText) child;
+            }
+        }
+        return null;
     }
 
     private void bindData() {
