@@ -87,4 +87,5 @@
     <string name="interstitial_ad_unit_id">ca-app-pub-1264100138002498/2434285766</string>
     <string name="loginToExam">Bạn cần đăng nhập để tiếp tục sử dụng chức năng này!</string>
     <string name="dapAnChiTiet">Đáp án chi tiết</string>
+    <string name="clickback">Nhấn \'back\' lần nữa để thoát</string>
 </resources>

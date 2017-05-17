@@ -15,7 +15,7 @@ public class BeforeExamViewModel extends BaseViewModel {
 
     private int number;
     private long time;
-    private static final String FORMAT = "%02d giờ %02d phút";
+    private static final String FORMAT = "%02d phút";
 
     public BeforeExamViewModel(Activity activity, int number, long time) {
         super(activity);
@@ -31,8 +31,8 @@ public class BeforeExamViewModel extends BaseViewModel {
     @Bindable
     public String getTime() {
         return "" + String.format(FORMAT,
-                TimeUnit.MILLISECONDS.toHours(time),
-                TimeUnit.MILLISECONDS.toMinutes(time) - TimeUnit.HOURS.toMinutes(
+                TimeUnit.MILLISECONDS.toHours(time) * 60 +
+                        TimeUnit.MILLISECONDS.toMinutes(time) - TimeUnit.HOURS.toMinutes(
                         TimeUnit.MILLISECONDS.toHours(time))
         );
     }
