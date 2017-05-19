@@ -21,7 +21,7 @@ public class Tests extends RealmObject {
     @Ignore
     public boolean isNew;
     public boolean isSeen;
-
+    public boolean isCompleted;
     public Tests() {
         isSeen = false;
     }

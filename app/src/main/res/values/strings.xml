@@ -88,4 +88,5 @@
     <string name="loginToExam">Bạn cần đăng nhập để tiếp tục sử dụng chức năng này!</string>
     <string name="dapAnChiTiet">Đáp án chi tiết</string>
     <string name="clickback">Nhấn \'back\' lần nữa để thoát</string>
+    <string name="completed">Đã hoàn thành</string>
 </resources>

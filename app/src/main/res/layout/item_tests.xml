@@ -30,15 +30,28 @@
                 android:text="@{test.displayname}"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
-                android:typeface='@{test.isSeen ? "normal" : "bold"}' />/>
+                android:typeface='@{test.isSeen ? "normal" : "bold"}' />
 
             <TextView
                 android:id="@+id/tvAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{test.author}"
+                android:textColor="@color/black"
                 android:textSize="@dimen/text_size_12sp"
                 android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tvCompleted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/margin_5dp"
+                android:drawableRight="@mipmap/ic_complete"
+                android:text="@string/completed"
+              android:layout_gravity="right"
+                android:textSize="@dimen/text_size_12sp"
+                android:textStyle="italic"
+                android:visibility="@{test.isCompleted? View.VISIBLE:View.GONE}" />
         </LinearLayout>
 
         <com.app.maththpt.widget.BadgeView

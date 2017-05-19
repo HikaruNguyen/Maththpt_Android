@@ -140,16 +140,19 @@ public class TestsFragment extends Fragment {
                                     realm.copyToRealmOrUpdate(mTestResult.data.get(i));
                                     realm.commitTransaction();
                                     mTestResult.data.get(i).isNew = true;
+                                    mTestResult.data.get(i).isCompleted = false;
                                 } else {
                                     mTestResult.data.get(i).isNew = false;
                                     Tests tests = realm
                                             .where(Tests.class)
                                             .equalTo("id", mTestResult.data.get(i).id).findFirst();
                                     mTestResult.data.get(i).isSeen = tests.isSeen;
+                                    mTestResult.data.get(i).isCompleted = tests.isCompleted;
 
                                 }
                             }
-                            Collections.sort(mTestResult.data, Tests.TestsComparator.decending(Tests.TestsComparator.getComparator(SEEN_SORT, ID_SORT)));
+                            Collections.sort(mTestResult.data, Tests.TestsComparator.decending(
+                                    Tests.TestsComparator.getComparator(SEEN_SORT, ID_SORT)));
                             testsBinding.rvTests.setAdapter(adapter);
                             adapter.addAll(mTestResult.data);
                         } else {

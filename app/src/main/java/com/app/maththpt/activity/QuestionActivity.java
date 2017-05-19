@@ -28,9 +28,11 @@ import com.app.maththpt.model.CacheCategory;
 import com.app.maththpt.model.CacheTests;
 import com.app.maththpt.model.Category;
 import com.app.maththpt.model.Question;
+import com.app.maththpt.model.Tests;
 import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.realm.CacheCategoryModule;
 import com.app.maththpt.realm.CacheTestsModule;
+import com.app.maththpt.realm.TestsModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.QuestionViewModel;
 import com.google.android.gms.ads.AdListener;
@@ -74,6 +76,7 @@ public class QuestionActivity extends BaseActivity {
     private Menu menu;
     private boolean isReview = false;
     InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +89,7 @@ public class QuestionActivity extends BaseActivity {
         event();
         initInterstitial();
     }
+
     private void initInterstitial() {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
@@ -107,6 +111,7 @@ public class QuestionActivity extends BaseActivity {
 
         mInterstitialAd.loadAd(adRequest);
     }
+
     private void loadInterstitialAd() {
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
@@ -115,6 +120,7 @@ public class QuestionActivity extends BaseActivity {
         }
 
     }
+
     private void event() {
         activityQuestionBinding.viewpager.addOnPageChangeListener(
                 new ViewPager.OnPageChangeListener() {
@@ -128,6 +134,29 @@ public class QuestionActivity extends BaseActivity {
                     public void onPageSelected(int position) {
                         positionCurrent = position;
                         questionViewModel.setPostion(positionCurrent);
+                        if (type == Configuaration.TYPE_TESTS) {
+                            if (position >= list.size()-1) {
+                                Realm.init(QuestionActivity.this);
+                                RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                                        .name("tests.realm")
+                                        .modules(Realm.getDefaultModule(), new TestsModule())
+                                        .deleteRealmIfMigrationNeeded()
+                                        .schemaVersion(MyApplication.with(
+                                                QuestionActivity.this).REALM_VERSION)
+                                        .build();
+                                realm = Realm.getInstance(settingConfig);
+                                Tests tests = realm
+                                        .where(Tests.class)
+                                        .equalTo("id", Integer.parseInt(testID)).findFirst();
+                                if (tests != null) {
+                                    realm.beginTransaction();
+                                    tests.isCompleted = true;
+                                    realm.copyToRealmOrUpdate(tests);
+                                    realm.commitTransaction();
+
+                                }
+                            }
+                        }
                     }
 
                     @Override
