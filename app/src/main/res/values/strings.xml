@@ -90,4 +90,5 @@
     <string name="clickback">Nhấn \'back\' lần nữa để thoát</string>
     <string name="completed">Đã hoàn thành</string>
     <string name="detailPoint">Chi tiết điểm</string>
+    <string name="minute">Phút</string>
 </resources>

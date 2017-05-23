@@ -1,7 +1,6 @@
 package com.app.maththpt.fragment;
 
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -32,7 +31,6 @@ import com.app.maththpt.utils.FacebookUtils;
 import com.app.maththpt.viewmodel.BeforeExamViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -48,7 +46,7 @@ public class BeforeExamFragment extends Fragment {
     private static final int CODE_CHAM_DIEM = 12;
     private CategoryCheckAdapter adapter;
     private int soCau = 50;
-    private long time = 90 * 60 * 1000;
+    private long time = 90;
     private FragmentBeforeExamBinding beforeExamBinding;
     private BeforeExamViewModel beforeExamViewModel;
 
@@ -62,7 +60,7 @@ public class BeforeExamFragment extends Fragment {
                              Bundle savedInstanceState) {
         beforeExamBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_before_exam, container, false);
-        beforeExamViewModel = new BeforeExamViewModel(getActivity(), soCau, time);
+        beforeExamViewModel = new BeforeExamViewModel(getActivity(), soCau, time * 60 * 1000);
         beforeExamBinding.setBeforeExamViewModel(beforeExamViewModel);
         View view = beforeExamBinding.getRoot();
         initUI();
@@ -94,7 +92,7 @@ public class BeforeExamFragment extends Fragment {
                             "listCate", (ArrayList<? extends Parcelable>) categories);
                     intent.putExtra("type", Configuaration.TYPE_EXAM);
                     intent.putExtra("soCau", soCau);
-                    intent.putExtra("time", time);
+                    intent.putExtra("time", time * 60 * 1000);
                     startActivityForResult(intent, CODE_CHAM_DIEM);
 
                 } else {
@@ -108,7 +106,7 @@ public class BeforeExamFragment extends Fragment {
                                 "listCate", (ArrayList<? extends Parcelable>) categories);
                         intent.putExtra("type", Configuaration.TYPE_EXAM);
                         intent.putExtra("soCau", soCau);
-                        intent.putExtra("time", time);
+                        intent.putExtra("time", time * 60 * 1000);
                         startActivityForResult(intent, CODE_CHAM_DIEM);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -176,17 +174,63 @@ public class BeforeExamFragment extends Fragment {
         });
 
         beforeExamBinding.lnThoiGian.setOnClickListener(view -> {
-            Calendar mcurrentTime = Calendar.getInstance();
-            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-            int minute = mcurrentTime.get(Calendar.MINUTE);
-            TimePickerDialog mTimePicker;
-            mTimePicker = new TimePickerDialog(getActivity(), (view1, hourOfDay, minute1) -> {
-                beforeExamViewModel.setTime((hourOfDay * 60 * 60 + minute1 * 60) * 1000);
-                time = (hourOfDay * 60 * 60 + minute1 * 60) * 1000;
-            }, hour, minute, true);
-            mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
-            mTimePicker.updateTime(0, 15);
-            mTimePicker.show();
+//            Calendar mcurrentTime = Calendar.getInstance();
+//            int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+//            int minute = mcurrentTime.get(Calendar.MINUTE);
+//            TimePickerDialog mTimePicker;
+//            mTimePicker = new TimePickerDialog(getActivity(), (view1, hourOfDay, minute1) -> {
+//                beforeExamViewModel.setTime((hourOfDay * 60 * 60 + minute1 * 60) * 1000);
+//                time = (hourOfDay * 60 * 60 + minute1 * 60) * 1000;
+//            }, hour, minute, true);
+//            mTimePicker.setTitle(getString(R.string.thoiGianLamBai));
+//            mTimePicker.updateTime(0, 15);
+//            mTimePicker.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.thoiGianLamBai));
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_thoigian, null);
+            builder.setView(dialogView);
+
+            builder.setPositiveButton(
+                    getString(R.string.ok), (dialogInterface, i) -> dialogInterface.dismiss());
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            NumberPicker np = (NumberPicker) dialog.findViewById(R.id.numberPicker);
+            if (np != null) {
+                np.setMinValue(15);
+                np.setMaxValue(180);
+                np.setValue((int) time);
+                np.setOnValueChangedListener((picker, oldVal, newVal) -> {
+                    beforeExamViewModel.setTime(newVal * 60 * 1000);
+                    time = newVal;
+                });
+            }
+            EditText input = findInput(np);
+            TextWatcher tw = new TextWatcher() {
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before,
+                                          int count) {
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count,
+                                              int after) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().length() != 0) {
+                        Integer value = Integer.parseInt(s.toString());
+                        if (value >= np.getMinValue()) {
+                            np.setValue(value);
+                            beforeExamViewModel.setTime(value * 60 * 1000);
+                            time = value;
+                        }
+                    }
+                }
+            };
+            input.addTextChangedListener(tw);
         });
     }
 
