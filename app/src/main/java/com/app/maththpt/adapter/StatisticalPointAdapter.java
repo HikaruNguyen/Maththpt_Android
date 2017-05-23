@@ -47,7 +47,12 @@ public class StatisticalPointAdapter extends
 
         public void bindData(StatisticalPoint StatisticalPoint) {
             tvName.setText(StatisticalPoint.getCateName());
-            tvPoint.setText(String.format("%.1f", StatisticalPoint.getRatio()) + "%");
+            if (StatisticalPoint.getRatio() < 0) {
+                tvPoint.setText(mContext.getString(R.string.no_data));
+            } else {
+                tvPoint.setText(String.format("%.1f", StatisticalPoint.getRatio()) + "%");
+            }
+
 //                    + "("+StatisticalPoint.trueQuestion/StatisticalPoint.sumQuestion+")" );
         }
 

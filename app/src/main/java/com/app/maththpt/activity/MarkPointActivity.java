@@ -67,6 +67,7 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
     InterstitialAd mInterstitialAd;
     private int numQuestion;
     private String timeQuestion;
+    private List<DetailPoint> chiTietDiems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,15 +216,15 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
 
     private void bindData() {
         Realm.init(this);
+        getStatistical();
         getPoint();
         mTfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         mTfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-        getStatistical();
         initChart();
     }
 
     private void getStatistical() {
-        List<DetailPoint> chiTietDiems = new ArrayList<>();
+        chiTietDiems = new ArrayList<>();
 //        StatisticalPointDBHelper.StatisticalPointDatabase statisticalPointDatabase
 //                = new StatisticalPointDBHelper.StatisticalPointDatabase(this);
 //        statisticalPointDatabase.open();
@@ -284,7 +285,6 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
 
         }
         adapter.addAll(chiTietDiems);
-//        statisticalPointDatabase.close();
     }
 
     private void getPoint() {
@@ -323,8 +323,9 @@ public class MarkPointActivity extends BaseActivity implements OnChartValueSelec
                 }
                 Point point = new Point(nextID, (float) (soCauDung * 10.0 / list.size()),
                         dtMili + "", userID, numQuestion, timeQuestion, cateIDs, soCauDung, 0);
+                point.detailPoint = point.getDetailPoint(chiTietDiems);
                 realmHistory.beginTransaction();
-                realmHistory.insert(point);
+                realmHistory.copyToRealmOrUpdate(point);
                 realmHistory.commitTransaction();
             }
 

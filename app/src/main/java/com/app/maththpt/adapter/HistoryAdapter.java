@@ -2,6 +2,7 @@ package com.app.maththpt.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.app.maththpt.BR;
 import com.app.maththpt.R;
+import com.app.maththpt.activity.DetailHistoryActivity;
 import com.app.maththpt.model.Point;
 import com.app.maththpt.utils.CLog;
 
@@ -53,6 +55,11 @@ public class HistoryAdapter extends BaseRecyclerAdapter<Point, HistoryAdapter.Vi
 
             mViewDataBinding = viewDataBinding;
             mViewDataBinding.executePendingBindings();
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, DetailHistoryActivity.class);
+                intent.putExtra("detailHistory", list.get(getAdapterPosition()).detailPoint);
+                mContext.startActivity(intent);
+            });
         }
 
         ViewDataBinding getViewDataBinding() {

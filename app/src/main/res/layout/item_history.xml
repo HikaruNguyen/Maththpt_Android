@@ -16,15 +16,13 @@
         android:padding="@dimen/margin_16dp">
 
         <TextView
-            android:id="@+id/tvPoint"
             android:layout_width="match_parent"
-            android:textColor="@color/black"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:textSize="@dimen/text_size_14sp"
             app:displayPoint="@{point.point}" />
 
         <TextView
-            android:id="@+id/tvDateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_12sp"
