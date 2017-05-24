@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 
 import com.app.maththpt.R;
 import com.app.maththpt.adapter.DetailPointAdapter;
 import com.app.maththpt.databinding.ActivityDetailHistoryBinding;
 import com.app.maththpt.model.DetailPoint;
 import com.app.maththpt.model.Point;
+import com.app.maththpt.utils.Utils;
 import com.app.maththpt.viewmodel.DetailPointViewModel;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,6 +20,9 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +44,41 @@ public class DetailHistoryActivity extends BaseActivity {
                 this, R.layout.activity_detail_history);
         detailPointViewModel = new DetailPointViewModel();
         detailHistoryBinding.setDetailPointViewModel(detailPointViewModel);
+        ads();
         getData();
         initUI();
         bindData();
+
+    }
+
+    private boolean isLoadAdsSuccess = false;
+
+    private void ads() {
+        banner();
+    }
+
+    private void banner() {
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdOpened() {
+                // Save app state before going to the ad overlay.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                isLoadAdsSuccess = true;
+            }
+        });
+        if (Utils.isNetworkConnected(DetailHistoryActivity.this)
+                || isLoadAdsSuccess) {
+            mAdView.setVisibility(View.VISIBLE);
+        } else {
+            mAdView.setVisibility(View.GONE);
+        }
     }
 
     private void bindData() {
