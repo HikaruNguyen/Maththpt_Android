@@ -15,6 +15,7 @@ import com.app.maththpt.R;
 import com.app.maththpt.activity.QuestionActivity;
 import com.app.maththpt.config.Configuaration;
 import com.app.maththpt.model.Category;
+import com.app.maththpt.viewmodel.ItemCategoryViewModel;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class CategoryAdapter extends BaseRecyclerAdapter<Category, CategoryAdapt
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         ViewDataBinding viewDataBinding = holder.getViewDataBinding();
-        viewDataBinding.setVariable(BR.category, list.get(position));
+        viewDataBinding.setVariable(BR.itemCategoryViewModel,
+                new ItemCategoryViewModel(mContext, list.get(position)));
     }
 
     @Override
@@ -69,4 +71,6 @@ public class CategoryAdapter extends BaseRecyclerAdapter<Category, CategoryAdapt
     public static void setImageResource(ImageView imageView, int resource) {
         imageView.setImageResource(resource);
     }
+
+
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.app.maththpt.BuildConfig;
 import com.app.maththpt.modelresult.BaseResult;
+import com.app.maththpt.modelresult.CategoryResult;
 import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.modelresult.LoginResult;
 import com.app.maththpt.modelresult.TestsResult;
@@ -32,6 +33,10 @@ import rx.Observable;
  */
 
 public interface MathThptService {
+    @GET("content/get-category.php")
+    Observable<CategoryResult> getCategory();
+
+
     @GET("content/get-test.php")
     Observable<TestsResult> getTests();
 

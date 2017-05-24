@@ -3,6 +3,8 @@ package com.app.maththpt.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
@@ -18,6 +20,9 @@ public class Category extends RealmObject implements Parcelable {
     public int icon;
     @Ignore
     public boolean isChecked;
+    @SerializedName("countQuestion")
+    public int countTotalQuestion;
+    public int countViewQuestion;
 
     public Category() {
         isChecked = true;
@@ -72,6 +77,8 @@ public class Category extends RealmObject implements Parcelable {
         parcel.writeInt(id);
         parcel.writeString(name);
         parcel.writeInt(icon);
+        parcel.writeInt(countTotalQuestion);
+        parcel.writeInt(countViewQuestion);
         parcel.writeByte((byte) (isChecked ? 1 : 0));
     }
 }

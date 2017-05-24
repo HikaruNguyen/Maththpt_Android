@@ -32,6 +32,7 @@ import com.app.maththpt.model.Tests;
 import com.app.maththpt.modelresult.DetailTestsResult;
 import com.app.maththpt.realm.CacheCategoryModule;
 import com.app.maththpt.realm.CacheTestsModule;
+import com.app.maththpt.realm.CategoryModule;
 import com.app.maththpt.realm.TestsModule;
 import com.app.maththpt.utils.CLog;
 import com.app.maththpt.viewmodel.QuestionViewModel;
@@ -76,6 +77,8 @@ public class QuestionActivity extends BaseActivity {
     private Menu menu;
     private boolean isReview = false;
     InterstitialAd mInterstitialAd;
+    private int maxQuestionCategory;
+    private Category category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +138,7 @@ public class QuestionActivity extends BaseActivity {
                         positionCurrent = position;
                         questionViewModel.setPostion(positionCurrent);
                         if (type == Configuaration.TYPE_TESTS) {
-                            if (position >= list.size()-1) {
+                            if (position >= list.size() - 1) {
                                 Realm.init(QuestionActivity.this);
                                 RealmConfiguration settingConfig = new RealmConfiguration.Builder()
                                         .name("tests.realm")
@@ -155,6 +158,10 @@ public class QuestionActivity extends BaseActivity {
                                     realm.commitTransaction();
 
                                 }
+                            }
+                        } else if (type == Configuaration.TYPE_CATEGORY) {
+                            if (maxQuestionCategory < position + 1) {
+                                maxQuestionCategory = position+1;
                             }
                         }
                     }
@@ -185,6 +192,20 @@ public class QuestionActivity extends BaseActivity {
         if (type == Configuaration.TYPE_CATEGORY) {
             title = intent.getStringExtra("title");
             cateID = intent.getIntExtra("cateID", 0);
+            Realm.init(this);
+            RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                    .name("category.realm")
+                    .modules(Realm.getDefaultModule(), new CategoryModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .schemaVersion(MyApplication.with(this).REALM_VERSION)
+                    .build();
+            realm = Realm.getInstance(settingConfig);
+
+            category = realm
+                    .where(Category.class)
+                    .equalTo("id", cateID)
+                    .findFirst();
+            maxQuestionCategory = category.countViewQuestion;
         } else if (type == Configuaration.TYPE_EXAM) {
             title = getString(R.string.exam);
             cateID = 0;
@@ -568,8 +589,24 @@ public class QuestionActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if (countDownTimer != null)
-            countDownTimer.cancel();
+        if (type == Configuaration.TYPE_EXAM) {
+            if (countDownTimer != null)
+                countDownTimer.cancel();
+        } else if (type == Configuaration.TYPE_CATEGORY) {
+            Realm.init(this);
+            RealmConfiguration settingConfig = new RealmConfiguration.Builder()
+                    .name("category.realm")
+                    .modules(Realm.getDefaultModule(), new CategoryModule())
+                    .deleteRealmIfMigrationNeeded()
+                    .schemaVersion(MyApplication.with(this).REALM_VERSION)
+                    .build();
+            realm = Realm.getInstance(settingConfig);
+            realm.beginTransaction();
+            category.countViewQuestion
+                    = maxQuestionCategory;
+            realm.copyToRealmOrUpdate(category);
+            realm.commitTransaction();
+        }
         if (QuestionActivity.progressDialog != null
                 && QuestionActivity.progressDialog.isShowing()) {
             QuestionActivity.progressDialog.dismiss();

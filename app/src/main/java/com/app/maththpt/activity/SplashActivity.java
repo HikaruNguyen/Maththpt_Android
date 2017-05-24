@@ -47,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         }
-        initCategory();
+//        initCategory();
         if (Utils.isNetworkConnected(this)) {
             syncData();
         } else {

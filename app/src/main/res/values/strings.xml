@@ -91,4 +91,5 @@
     <string name="completed">Đã hoàn thành</string>
     <string name="detailPoint">Chi tiết điểm</string>
     <string name="minute">Phút</string>
+    <string name="soCauDaLam">Số câu đã làm:</string>
 </resources>

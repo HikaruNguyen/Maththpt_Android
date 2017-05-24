@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.app.maththpt.fragment.CategoryFragment">
 
+    <data>
+
+        <variable
+            name="categoryViewModel"
+            type="com.app.maththpt.viewmodel.CategoryViewModel" />
+    </data>
+
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptr_tests"
         android:layout_width="match_parent"
@@ -14,16 +21,24 @@
         app:ptr_ratio_of_header_height_to_refresh="1.2"
         app:ptr_resistance="1.7">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{categoryViewModel.messageError}"
+                android:textSize="@dimen/text_size_14sp"
+                android:visibility="@{categoryViewModel.errorVisiable}" />
 
             <com.app.maththpt.widget.CRecyclerView
                 android:id="@+id/rvChuyenDe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </LinearLayout>
+        </RelativeLayout>
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 </layout>
 
