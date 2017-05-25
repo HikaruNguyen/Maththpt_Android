@@ -52,6 +52,8 @@ public class Category extends RealmObject implements Parcelable {
         id = in.readInt();
         name = in.readString();
         icon = in.readInt();
+        countTotalQuestion = in.readInt();
+        countViewQuestion = in.readInt();
         isChecked = in.readByte() != 0;
     }
 

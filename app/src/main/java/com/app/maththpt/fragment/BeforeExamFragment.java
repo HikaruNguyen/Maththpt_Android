@@ -88,11 +88,11 @@ public class BeforeExamFragment extends Fragment {
                 String token = sharedPreferences.getString(Configuaration.KEY_TOKEN, "");
                 if (!FacebookUtils.getFacebookID().isEmpty() || !token.isEmpty()) {
                     Intent intent = new Intent(getActivity(), QuestionActivity.class);
-                    intent.putParcelableArrayListExtra(
-                            "listCate", (ArrayList<? extends Parcelable>) categories);
-                    intent.putExtra("type", Configuaration.TYPE_EXAM);
                     intent.putExtra("soCau", soCau);
                     intent.putExtra("time", time * 60 * 1000);
+                    intent.putExtra("type", Configuaration.TYPE_EXAM);
+                    intent.putParcelableArrayListExtra(
+                            "listCate", (ArrayList<? extends Parcelable>) categories);
                     startActivityForResult(intent, CODE_CHAM_DIEM);
 
                 } else {
@@ -102,11 +102,11 @@ public class BeforeExamFragment extends Fragment {
                         editor.putInt(Configuaration.KEY_FREE_TESTS_NUM, num);
                         editor.apply();
                         Intent intent = new Intent(getActivity(), QuestionActivity.class);
-                        intent.putParcelableArrayListExtra(
-                                "listCate", (ArrayList<? extends Parcelable>) categories);
                         intent.putExtra("type", Configuaration.TYPE_EXAM);
                         intent.putExtra("soCau", soCau);
                         intent.putExtra("time", time * 60 * 1000);
+                        intent.putParcelableArrayListExtra(
+                                "listCate", (ArrayList<? extends Parcelable>) categories);
                         startActivityForResult(intent, CODE_CHAM_DIEM);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
