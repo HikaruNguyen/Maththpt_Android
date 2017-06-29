@@ -256,7 +256,16 @@ public class BeforeExamFragment extends Fragment {
                 .schemaVersion(MyApplication.with(getActivity()).REALM_VERSION)
                 .build();
         Realm realm = Realm.getInstance(settingConfig);
-        List<Category> list = realm.where(Category.class).findAll();
+        List<Category> list = realm.copyFromRealm(realm.where(Category.class).findAll());
+        if (list == null || list.size() <= 0) {
+            list.add(new Category(1, "Khảo sát đồ thị hàm số", true));
+            list.add(new Category(2, "Lũy thừa, logarit", true));
+            list.add(new Category(3, "Nguyên hàm, tích phân", true));
+            list.add(new Category(4, "Số phức", true));
+            list.add(new Category(5, "Thể tích khối đa diện", true));
+            list.add(new Category(6, "Thể tích khối tròn xoay", true));
+            list.add(new Category(7, "Phương pháp tọa độ trong không gian Oxyz", true));
+        }
         adapter.addAll(list);
     }
 
