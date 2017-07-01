@@ -108,9 +108,9 @@ public interface MathThptService {
 //                                ,String.format("max-age=%d, only-if-cached, max-stale=%d", 120, 0))
                         .build();
             });
-            httpClient.connectTimeout(5, TimeUnit.SECONDS);
-            httpClient.readTimeout(5, TimeUnit.SECONDS);
-            httpClient.writeTimeout(5, TimeUnit.SECONDS);
+            httpClient.connectTimeout(10, TimeUnit.SECONDS);
+            httpClient.readTimeout(10, TimeUnit.SECONDS);
+            httpClient.writeTimeout(10, TimeUnit.SECONDS);
 
             if (BuildConfig.DEBUG) {
                 httpClient.addInterceptor(logging);
